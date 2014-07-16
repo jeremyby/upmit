@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  note: MyText
+  goal_id: 
+  state: 1
+  starts_at: 2014-06-16 20:14:54
+
+two:
+  note: MyText
+  goal_id: 
+  state: 1
+  starts_at: 2014-06-16 20:14:54

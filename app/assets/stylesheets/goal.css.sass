@@ -1,0 +1,267 @@
+@import shared
+
+.goal-wrapper
+  .wrapp
+    margin-top: 100px
+    
+  .logo-image
+    img
+      border: 3px solid #c3cddb
+      margin-bottom: 28px
+  
+  .new-goal
+    border-left: 1px solid #edeff1
+    box-shadow: inset 3px 0px 4px -1px #fafafa
+    
+    /* native placeholders */
+    input:-moz-placeholder,
+    input:-ms-input-placeholder,
+    input::-webkit-input-placeholder
+      +transition-property(all)
+      +transition-duration(0.4s)
+    
+    .row
+      margin: 0
+      
+    .alert
+      margin-bottom: 50px
+      font-size: 13px
+    
+    h3
+      font-size: 18px
+      color: #696d73
+      font-style: italic
+    
+      
+    label
+      display: inline-block
+      float: left
+      cursor: auto
+      text-align: left
+      
+      &.checkbox-inline
+        font-size: 13px
+        padding-top: 1px
+      
+    .input[type="text"]
+      font-weight: 600
+    
+    .title
+      margin-bottom: 0
+      
+      label
+        line-height: 44px
+        font-size: 26px
+        font-weight: normal
+        text-align: right
+        padding: 0 5px 0 12px
+    
+    #goal_title    
+      font-size: 24px
+      font-style: italic
+      
+      height: 44px
+      
+      display: inline
+      
+      border-width: 0 0 1px 0
+      +border-radius(0)
+      +box-shadow(none)
+      
+      &.normal,
+      &.error
+        font-style: normal
+      
+      &.error:-moz-placeholder
+        color: red
+      &.error::-moz-placeholder
+        color: red
+      &.error:-ms-input-placeholder
+        color: red
+      &.error::-webkit-input-placeholder
+        color: red
+        
+    
+    .details
+      display: none
+    
+    .frequency,
+    .duration
+      margin-top: 20px
+      padding: 0
+      
+      border: 1px solid #fff
+      +border-radius(3px)
+      
+      h3
+        cursor: pointer
+        padding: 6px 12px
+        
+        i
+          line-height: 24px
+          color: #aaa
+          
+          +transition-property(all)
+          +transition-duration(0.4s)
+
+      .details
+        padding: 6px 0 12px 0
+      
+      &:hover,
+      &.active
+        border-color: #e0e0e0
+        
+        h3
+          color: #333
+          background: #f0f0f0
+          
+          i
+            color: #666
+    
+    .frequency
+      .details
+        .radio
+          margin: 0 0 0 18px
+          
+          label
+            cursor: pointer
+            
+            input
+              cursor: pointer
+          
+          &.week
+            margin-top: 8px
+            margin-bottom: 2px
+            
+            label.head
+              margin-right: 20px
+    
+        label.checkbox-inline.disabled
+          color: #999
+    
+    .duration
+      .inputs
+        padding: 6px 18px
+        
+        .date
+          margin-top: 8px
+          
+          font-weight: 200
+          font-size: 12px
+          color: #999
+      
+      .slider.slider-horizontal
+        width: 100%
+      
+      #goal_duration
+        .slider-selection
+          background: #BABABA
+      
+      .btn-toolbar
+        margin-top: 5px
+        button
+          color: #999
+    
+    .starts
+      padding: 0
+      margin-top: 25px
+      
+      label
+        font-size: 18px
+        font-weight: 500
+        font-style: italic
+        color: #696d73
+        cursor: default
+        
+        padding: 0 10px
+        
+        &.btn.btn-default
+          cursor: pointer
+          font-style: normal
+          
+          padding: 4px 10px
+          
+          font-size: 14px
+          
+          &.active
+            color: #444
+            
+            i
+              color: red
+          
+          &.left
+            +border-left-radius(5px)
+          
+          &.right
+            +border-right-radius(5px)
+      
+    
+    .actions
+      margin-bottom: 25px
+      margin-top: 30px
+      
+      text-align: right
+      padding: 0 9px 0 0
+      
+      // background: #eee
+      
+      span
+        color: #7e91aa
+        display: inline-block
+        vertical-align: middle
+        margin: 0 0 0 8px
+    
+      input.reset
+        color: #7e91aa
+        font-weight: 500
+        text-transform: lowercase
+
+/* responsive
+@media (max-width: 768px)
+  .goal-wrapper
+    #pad-wrapper
+      padding: 0px 20px
+    
+    .new-goal
+      border: 0 none
+      box-shadow: none
+      margin-top: 40px
+      
+      h2.iwill
+        margin-left: 0
+      
+      .ui-select
+        width: 90%
+      
+      label
+        width: 100%
+      
+      .actions
+        text-align: center
+      
+      .title
+        label
+          text-align: left
+      
+      form
+        margin-left: 0
+        padding: 0px 10px 0px 10px
+
+@media (min-width: 768px) and (max-width: 979px)
+  .goal-wrapper .new-goal .ui-select
+    width: 77%
+    
+  .logo-box
+    margin-bottom: 20px
+    
+  .goal-wrapper .new-goal
+    border-left: 0px
+    box-shadow: none
+    
+
+  .goal-wrapper .new-goal .alert
+    margin-left: 0
+
+@media (min-width: 979px)
+  .goal-wrapper .new-goal .alert
+    margin-left: 30px

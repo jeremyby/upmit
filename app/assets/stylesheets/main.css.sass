@@ -1,0 +1,112 @@
+@import shared
+
+// Main stats up of screen
+#main-stats
+  background-color: #fdfdfd
+  border-bottom: 1px solid #efeef3
+
+  .stats-row
+    box-shadow: inset -1px 0px 5px 2px #f9f9f9
+    margin: 0
+    
+    .stat
+      text-align: center
+      padding: 20px 0px
+      border-right: 1px solid #e8e9ee
+      box-shadow: 1px 0px 0px 0px white
+
+      &.last
+        border-right: 0px
+      
+      .data
+        color: #29323a
+        text-transform: uppercase
+        font-weight: 600
+        font-size: 16px
+        
+        .number 
+          color: #32a0ee
+          font-size: 24px
+          margin-right: 5px 
+        
+      
+      .date
+        margin-left: 50px
+      
+        color: rgb(180, 184, 187)
+        font-weight: lighter
+        font-family:  'Lato', 'Open Sans'
+        font-style: italic
+        font-size: 13px
+
+
+.section
+  border-top: 1px solid #edeff1
+  margin-top: 100px
+  padding-top: 45px
+  box-shadow: inset 0px 3px 4px -1px #fafafa
+  
+
+/* UI elements section
+#pad-wrapper
+  .row
+    h4
+      margin: 0 0 25px 0
+      
+    .goal
+      margin: 15px 0
+      text-align: center
+      
+      .donut
+        width: 180px
+        margin: 0 auto
+
+
+/* responsive
+
+@media (max-width: 480px)
+
+@media (max-width: 768px)
+  #main-stats
+    margin-left: -15px
+    margin-right: -15px
+  #pad-wrapper
+    .ui-elements
+      .knobs
+        text-align: center
+        .knob-wrapper
+          float: inherit
+      .showcase
+        text-align: center
+    .table-products .table
+      .img
+        display: none
+      input[type="checkbox"]
+        margin-right: 10px
+      .label
+        display: none
+
+@media (min-width: 768px) and (max-width: 979px)
+
+@media (max-width: 979px)
+  #main-stats .stat .data
+    padding-right: 17px
+    .number
+      font-size: 18px
+  #pad-wrapper .knob-wrapper .info
+    display: none
+  .pointer
+    top: 5%
+  .table-products .head
+    margin-bottom: 20px
+
+@media (min-width: 980px)
+  #pad-wrapper .ui-elements .knob-wrapper + .knob-wrapper
+    margin-left: 5px
+
+@media (min-width: 1200px)
+  #pad-wrapper .ui-elements
+    .showcase
+      width: 53%
+    .knob-wrapper + .knob-wrapper
+      margin-left: 35px

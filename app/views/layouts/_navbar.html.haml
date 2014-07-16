@@ -1,0 +1,77 @@
+%header.navbar.navbar-inverse(role="banner")
+  .navbar-header
+    %button#menu-toggler.navbar-toggle(data-toggle="collapse" type="button")
+      %span.sr-only Toggle navigation
+      %span.icon-bar
+      %span.icon-bar
+      %span.icon-bar
+    %a.navbar-brand(href="/")
+      %img(alt="logo" src="/assets/logo.png")
+      
+  %ul.nav.navbar-nav.pull-right.hidden-xs
+    %li.notification-dropdown.hidden-xs.hidden-sm
+      %a.trigger(href="#")
+        %i.fa.fa-exclamation-triangle
+        %span.count 8
+      .pop-dialog
+        .pointer.right
+          .arrow
+          .arrow_border
+        .body
+          %a.close-icon(href="#")
+            %i.icon-remove-sign
+          .notifications
+            %h3 You have 6 new notifications
+            %a.item(href="#")
+              %i.icon-signin
+              New user registration
+              %span.time
+                %i.icon-time
+                13 min.
+            %a.item(href="#")
+              %i.icon-signin
+              New user registration
+              %span.time
+                %i.icon-time
+                18 min.
+            %a.item(href="#")
+              %i.icon-envelope-alt
+              New message from Alejandra
+              %span.time
+                %i.icon-time
+                28 min.
+            %a.item(href="#")
+              %i.icon-signin
+              New user registration
+              %span.time
+                %i.icon-time
+                49 min.
+            %a.item(href="#")
+              %i.icon-download-alt
+              New order placed
+              %span.time
+                %i.icon-time
+                1 day.
+            .footer
+              %a.logout(href="#") View all notifications
+    %li.dropdown
+      %a.dropdown-toggle.hidden-xs.hidden-sm(data-toggle="dropdown" href="#")
+        Your account
+        %b.caret
+      %ul.dropdown-menu
+        %li
+          %a(href="personal-info.html") Personal info
+        %li
+          %a(href="#") Account settings
+        %li
+          %a(href="#") Billing
+        %li
+          %a(href="#") Export your data
+        %li
+          = link_to 'Log out', logout_path, method: :delete
+    %li.settings.hidden-xs.hidden-sm
+      %a(href="personal-info.html" role="button")
+        %i.fa.fa-cog
+    %li.settings.hidden-xs.hidden-sm
+      %a(href="signin.html" role="button")
+        %i.fa.fa-share-alt

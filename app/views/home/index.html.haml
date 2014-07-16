@@ -1,0 +1,248 @@
+:sass
+  body
+    background: #000
+    color: #fff
+    font-size: 18px
+
+
+.background-image-overlay
+
+#outer-background-container(data-default-background-img="/assets/other_images/bg5.jpg" style="background-image:url(/assets/other_images/bg5.jpg);")
+
+/ Outer Container
+#outer-container.homer
+
+  / Left Sidebar
+  %section#left-sidebar
+    .logo
+      %a.link-scroll(href="#intro")
+        %img(alt="Twilli Air" src="/assets/logo.png")
+
+    / Menu Icon for smaller viewports
+    #mobile-menu-icon.visible-xs{onclick: "toggle_main_menu();"}
+      %span.glyphicon.glyphicon-th
+    
+    %ul#main-menu
+      %li#menu-item-text.menu-item.scroll
+        %a(href="#text") Text
+      %li#menu-item-carousel.menu-item.scroll
+        %a(href="#carousel") Carousel
+      %li#menu-item-grid.menu-item.scroll
+        %a(href="#grid") Grid
+      %li#menu-item-featured.menu-item.scroll
+        %a(href="#featured") Featured
+      %li#menu-item-contact.menu-item.scroll
+        %a(href="#contact") Start Now!
+
+  %section#main-content.clearfix
+    %article#intro.section-wrapper.clearfix(data-custom-background-img="/assets/other_images/bg5.jpg")
+      .content-wrapper.clearfix
+        .col-sm-10.col-md-9.pull-right
+          %section.feature-text
+            %h1 Up + Commit
+            %p 
+              Upmit helps you to make important changes about yourself, so you can be the 
+              %strong better
+              you. 
+            %p
+              %a.link-scroll.btn.btn-outline-inverse.btn-lg(href="#text") find out more
+
+    %article#text.section-wrapper.clearfix(data-custom-background-img="/assets/other_images/bg1.jpg")
+      .content-wrapper.clearfix
+        .col-sm-10.col-md-9.pull-right
+          %h1.section-title Text Content
+          %p.feature-paragraph
+            %img.lazy.pull-right(alt="Lorem Ipsum" data-img-src="/assets/other_images/transp-image5b.png")
+            Etiam at ligula sit amet arcu laoreet consequat. Duis dictum lorem metus, vitae dapibus risus imperdiet nec.
+            %a(href="#carousel") Suspendisse molestie lorem odio
+            , sit amet. Laoreet consequat. Duis dictum lorem metus, vitae dapibus.
+          %h4 Duis dictum lorem metus
+          %p Suspendisse molestie lorem odio, sit amet. Duis dictum lorem metus, vitae dapibus risus imperdiet nec. Suspendisse molestie lorem odio. Etiam scelerisque lacus tempor, rhoncus diam vel, gravida felis. Fusce tristique sem et leo. Pellentesque sed malesuada turpis. Quisque eget lacus sit amet dui.
+          %p
+            %a.btn.btn-outline-inverse.btn-sm(href="#") read more
+          
+
+
+    %article#carousel.section-wrapper.clearfix(data-custom-background-img="/assets/other_images/bg6.jpg")
+      .content-wrapper.clearfix
+        #features-carousel.carousel.slide.with-title-indicators.max-height(data-height-percent="70" data-ride="carousel")
+          / Indicators - slide navigation
+          %ol.carousel-indicators.title-indicators
+            %li.active(data-slide-to="0" data-target="#features-carousel") Lorem Ipsum
+            %li(data-slide-to="1" data-target="#features-carousel") Suspendisse
+            %li(data-slide-to="2" data-target="#features-carousel") Maecenas
+            %li(data-slide-to="3" data-target="#features-carousel") Scelerisque
+          / Wrapper for slides
+          .carousel-inner
+            / CAROUSEL SLIDE 1
+            .item.active
+              .carousel-text-content
+                %img.icon(alt="Lorem Ipsum" src="/assets/other_images/transp-image1.png")
+                %h2.title Lorem Ipsum
+                %p Suspendisse molestie lorem odio, sit amet. Duis dictum lorem metus, vitae dapibus risus imperdiet nec. Suspendisse molestie lorem odio.
+                %p
+                  %a.btn.btn-outline-inverse.btn-sm(href="#") read more
+                
+            / CAROUSEL SLIDE 2
+            .item
+              .carousel-text-content
+                %img.icon(alt="Lorem Ipsum" src="/assets/other_images/transp-image6.png")
+                %h2.title Suspendisse molestie
+                %p Etiam at ligula sit amet arcu laoreet consequat. Duis dictum lorem metus, vitae dapibus risus imperdiet nec. Duis dictum lorem metus.
+                %p
+                  %a.btn.btn-outline-inverse.btn-sm(href="#") read more
+                #modal-content-3.content-to-populate-in-modal
+
+            / CAROUSEL SLIDE 3
+            .item
+              .carousel-text-content
+                %img.icon(alt="Lorem Ipsum" src="/assets/other_images/transp-image7.png")
+                %h2.title Maecenas id dolor
+                %p Fusce erat augue, fermentum sit amet congue a, ullamcorper ac enim. Maecenas id dolor imperdiet, mollis felis ut, pellentesque ante. Sed id congue arcu. Nulla eget commodo sem. Suspendisse suscipit, sem ac.
+                %p
+                  %a.btn.btn-outline-inverse.btn-sm(href="#") read more
+                
+            / CAROUSEL SLIDE 4
+            .item
+              .carousel-text-content
+                %img.icon(alt="Lorem Ipsum" src="/assets/other_images/transp-image4.png")
+                %h2.title Sed scelerisque
+                %p Aenean a est fringilla, malesuada eros vel, condimentum augue. Sed lorem sapien, vestibulum quis nisl volutpat, fermentum adipiscing massa. Cras ac faucibus nisl. Proin ac convallis sapien.
+                %p
+                  %a.btn.btn-outline-inverse.btn-sm(href="") read more
+
+          / Controls
+          %a.left.carousel-control(data-slide="prev" href="#features-carousel")
+          %a.right.carousel-control(data-slide="next" href="#features-carousel")
+
+    %article#grid.section-wrapper.clearfix(data-custom-background-img="/assets/other_images/bg2.jpg")
+      .content-wrapper.clearfix
+        .col-sm-11.col-md-10.pull-right
+          %h1.section-title Grid
+          / grid
+          %section.grid.row.clearfix.clearfix-for-2cols
+            / grid item
+            .grid-item.col-md-6
+              .item-content.clearfix
+                %span.icon.glyphicon.glyphicon-stats
+                .text-content
+                  %h5 Lorem ipsum dolor sit amet
+                  %p Nullam ac rhoncus sapien, non gravida purus. Aliquam adipiscing eros non elit imperdiet congue. Integer ultricies.
+
+            .grid-item.col-md-6
+              .item-content.clearfix
+                %span.icon.glyphicon.glyphicon-record
+                .text-content
+                  %h5 Aliquam adipiscing eros non elit
+                  %p Nullam ac rhoncus sapien, non gravida purus. Alinon elit imperdiet congue. Integer ultricies sed ligula eget tempus.
+
+            .grid-item.col-md-6
+              .item-content.clearfix
+                %span.icon.glyphicon.glyphicon-lock
+                .text-content
+                  %h5 Integer ultricies sed ligula
+                  %p Aliquam adipiscing eros non elit imperdiet congue. Integer ultricies sed ligula ligula eget.
+
+            .grid-item.col-md-6
+              .item-content.clearfix
+                %span.icon.glyphicon.glyphicon-file
+                .text-content
+                  %h5 Lorem ipsum dolor sit amet
+                  %p Nullam ac rhoncus. Aliquam adipiscing eros non elit imperdiet congue. Integer ultricies sed ligula eget tempus.
+
+    %article#featured.section-wrapper.clearfix(data-custom-background-img="/assets/other_images/bg3.jpg")
+      .content-wrapper.clearfix
+        .col-sm-11.pull-right
+          %h1.section-title Featured
+          / feature columns
+          %section.feature-columns.row.clearfix
+            / feature 1
+            %article.feature-col.col-md-4
+              %a.thumbnail.linked(href="#")
+                .image-container
+                  %img.lazy.item-thumbnail(alt="Lorem Ipsum" data-img-src="/assets/other_images/project-3.jpg")
+                .caption
+                  %h5 Image Carousel
+                  %p This feature contains an image carousel when you open popup.
+
+            / feature 2
+            %article.feature-col.col-md-4
+              %a.thumbnail.linked(href="#")
+                .image-container
+                  %img.lazy.item-thumbnail(alt="Lorem Ipsum" data-img-src="/assets/other_images/project-2.jpg")
+                .caption
+                  %h5 Nullam ac rhoncus
+                  %p Nullam ac rhoncus. Aliquam adipiscing eros non elit imperdiet congue. Integer ultricies.
+
+            / feature 3
+            %article.feature-col.col-md-4
+              %a.thumbnail.linked(href="#")
+                .image-container
+                  %img.lazy.item-thumbnail(alt="Lorem Ipsum" data-img-src="/assets/other_images/project-4.jpg")
+                .caption
+                  %h5 Aliquam adipiscing
+                  %p Nullam ac rhoncus. Aliquam adipiscing eros non elit imperdiet.
+
+    %article#contact.section-wrapper.clearfix(data-custom-background-img="/assets/other_images/bg4.jpg")
+      .content-wrapper.clearfix
+        %h1.section-title Contact
+        / CONTACT DETAILS
+        .contact-details.col-sm-5.col-md-3
+          %p
+            123A,
+            %br
+            Molestie Lorem Avenue,
+            %br
+            Aliquam
+            %br
+            AAA0010
+          %p Tel: (+20) 21 301 524
+          %p
+            %a(href="mailto:info@loremipsum.com") info@loremipsum.com
+
+        / CONTACT FORM
+        .col-sm-7.col-md-9
+          / IMPORTANT: change the email address at the top of the assets/php/mail.php file to the email address that you want this form to send to
+          %form.form-style.validate-form.clearfix(action="/assets/php/mail.php" method="POST" role="form")
+            / form left col
+            .col-md-6
+              .form-group
+                %input#form-name.text-field.form-control.validate-field.required(data-validation-type="string" name="name" placeholder="Full Name" type="text")
+              .form-group
+                %input#form-email.text-field.form-control.validate-field.required(data-validation-type="email" name="email" placeholder="Email Address" type="email")
+              .form-group
+                %input#form-contact-number.text-field.form-control.validate-field.phone(data-validation-type="phone" name="contact_number" placeholder="Contact Number" type="tel")
+
+            .col-md-6
+              .form-group
+                %textarea.form-control.validate-field.required(name="message" placeholder="Message...")
+              .form-group
+                %img.form-loader(src="/assets/theme_images/loader-form.GIF")
+                %button.btn.btn-sm.btn-outline-inverse(type="submit") Submit
+              .form-group.form-general-error-container
+
+  / Footer
+  %section#footer
+    / Go to Top
+    #go-to-top(onclick="scroll_to_top();")
+      %span.icon.glyphicon.glyphicon-chevron-up
+    %ul.social-icons
+      %li
+        %a(href="#" target="_blank" title="Facebook")
+          %img(alt="Facebook" src="/assets/theme_images/social_icons/facebook.png")
+      %li
+        %a(href="#" target="_blank" title="Twitter")
+          %img(alt="Twitter" src="/assets/theme_images/social_icons/twitter.png")
+      %li
+        %a(href="#" target="_blank" title="Google+")
+          %img(alt="Google+" src="/assets/theme_images/social_icons/googleplus.png")
+    / copyright text
+    .footer-text-line © 2014 Upmit
+
+/ Modal
+/ DO NOT MOVE, EDIT OR REMOVE - this is needed in order for popup content to be populated in it
+#common-modal.modal.fade(aria-hidden="true" role="dialog" tabindex="-1")
+  .modal-dialog
+    .modal-content
+      %button.close(aria-hidden="true" data-dismiss="modal" type="button") ×
+      .modal-body

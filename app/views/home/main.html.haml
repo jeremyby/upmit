@@ -1,0 +1,38 @@
+/ main container
+.content
+  / upper main stats
+  #main-stats
+    .row.stats-row
+      .col-md-3.col-sm-3.stat
+        .data
+          %span.number= current_user.goals.size
+          Goals
+        .date
+          Ongoing
+      .col-md-3.col-sm-3.stat
+        .data
+          %span.number 245
+          Days
+        .date
+          committed
+
+      .col-md-3.col-sm-3.stat
+        .data
+          %span.number $86
+          Deposit
+        .date
+          so far
+      .col-md-3.col-sm-3.stat
+        .data
+          %span.number $86
+          Earned back
+        .date
+          so far
+
+              
+  #pad-wrapper
+    - unless @goals.blank?
+      .row.col-md-12
+        %h4.pull-left.clearfix
+          Activities
+      .row.col-md-12

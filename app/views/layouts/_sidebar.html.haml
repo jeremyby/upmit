@@ -1,0 +1,31 @@
+#sidebar-nav
+  %ul#dashboard-menu
+    = nav_link('home', 'Home', '/', 'fa-home')
+    
+    = nav_link('goals', 'Goals', goals_path, 'fa-star-o')
+    
+    %li
+      %a(href="chart-showcase.html")
+        %i.fa.fa-usd
+        %span Deposit
+    
+    %li
+      %a(href="settings.html")
+        %i.fa.fa-cog
+        %span Settings
+    
+    %li
+      %a.dropdown-toggle(href="#")
+        %i.fa.fa-share-alt
+        %span 
+          Extras
+          %i.fa.fa-chevron-down
+      %ul.submenu
+        %li
+          %a(href="code-editor.html") Code editor
+        %li
+          %a(href="grids.html") Grids
+        %li
+          %a(href="signin.html") Sign in
+        %li
+          %a(href="signup.html") Sign up

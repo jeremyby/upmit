@@ -1,0 +1,88 @@
+/ main container .wide-content is used for this layout without sidebar :)
+.content.wide-content
+  #pad-wrapper.goal-wrapper
+    .row
+      / title column
+      .col-md-3.logo-box
+        .logo-image.text-center
+          %img.img-circle(alt="Upmit" src="img/personal-info.png")
+          %h2 New Goal
+          
+      / form column
+      .col-md-9.new-goal
+        .alert.alert-info
+          %i.fa.fa-lightbulb-o.fa-lg
+          This page shows an example of an alternative layout with the main navbar on the top using
+          %strong .content.wide-content
+          for this main container
+        .form
+          = form_for @goal, url: goals_path, html: { class: "form-horizontal", role: "form" } do |f|
+            = f.hidden_field :timezone
+            
+            .form-group.title
+              %label.col-md-2 I will
+              .col-md-10
+                = f.text_field :title, class: 'form-control', placeholder: "run"
+            
+            .frequency.col-md-10.col-md-offset-2.clearfix
+              %h3 
+                %i.fa.fa-chevron-down.pull-right
+                %span everyday
+              
+              .details
+                .radio.day
+                  %label
+                    = f.radio_button :interval_unit, 'day'
+                    every
+                    = f.select :interval, goal_interval(3), class: 'form-control'
+                    %span day
+                .radio.week
+                  %label.head
+                    = f.radio_button :interval_unit, 'week'
+                    = f.select :weektimes, goal_interval(6), class: 'form-control'
+                    %span time
+                    a week
+                  = weekday_checkbox(f)
+            
+            .duration.col-md-10.col-md-offset-2
+              %h3
+                %i.fa.fa-chevron-down.pull-right
+                %span for 100 days
+              
+              .details
+                .inputs
+                  %input(id='goal_duration' name='goal[duration]' data-slider-id='duration_slider' type="text" data-slider-min="7" data-slider-max="#{ get_days(1.year) }" data-slider-step="1" value='100' data-slider-value="100")
+                  .date.pull-right
+                    
+                  .btn-toolbar(role='toolbar')
+                    .btn-group.btn-group-xs
+                      %button.btn.btn-default#7d(data-value='7') 7
+                      %button.btn.btn-default#14d(data-value='14') 14
+                      %button.btn.btn-default#21d(data-value='21') 21
+                      %button.btn.btn-default.active#100d(data-value='100') 100 days
+                    .btn-group.btn-group-xs
+                      %button.btn.btn-default#3w(data-value='#{ get_days(3.week) }') 3
+                      %button.btn.btn-default#5w(data-value='#{ get_days(5.week) }') 5
+                      %button.btn.btn-default#10w(data-value='#{ get_days(10.week) }') 10 weeks
+                    .btn-group.btn-group-xs
+                      %button.btn.btn-default#1m(data-value='#{ get_days(1.month) }') 1
+                      %button.btn.btn-default#3m(data-value='#{ get_days(3.month) }') 3
+                      %button.btn.btn-default#6m(data-value='#{ get_days(6.month) }') 6 months
+                    .btn-group.btn-group-xs
+                      %button.btn.btn-default#1y(data-value='#{ get_days(1.year) }') 1 year
+            
+            
+            .starts.col-md-10.col-md-offset-2
+              .btn-group.btn-group-small(data-toggle="buttons")
+                %label.btn starting
+                %label.btn.btn-default.left.active
+                  = f.radio_button :starts, '0'
+                  %span today
+                %label.btn.btn-default.right
+                  = f.radio_button :starts, '1'
+                  %span tomorrow
+            
+            .actions.col-md-10.col-md-offset-2
+              = f.submit 'Commit', class: 'btn btn-primary'
+              %span or
+              = reset_tag "cancel"

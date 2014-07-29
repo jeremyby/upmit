@@ -1,5 +1,6 @@
 class Commit < ActiveRecord::Base
   belongs_to :goal
+  belongs_to :user
   
   STATES = {
     1   => 'succeed',

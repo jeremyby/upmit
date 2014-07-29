@@ -1,0 +1,17 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  source: MyString
+  payer: MyString
+  token: MyString
+  goal: 
+  amount: 1
+  made_at: 2014-07-19 16:45:35
+
+two:
+  source: MyString
+  payer: MyString
+  token: MyString
+  goal: 
+  amount: 1
+  made_at: 2014-07-19 16:45:35

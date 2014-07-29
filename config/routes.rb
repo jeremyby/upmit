@@ -1,7 +1,4 @@
 Rails.application.routes.draw do
-  # You can have the root of your site routed with "root"
-  root to: "home#index"
-  
   devise_for :users
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
@@ -14,12 +11,23 @@ Rails.application.routes.draw do
     get "forgot_password", to: "devise/passwords#new"
   end
   
-  resources :goals, only: [:index, :new, :create]
+  resources :deposit, only: [:index]
   
-  resources :users, path: '' do
-    resources :goals, except: [:index, :new, :create]
+  resources :goals do
+    resources :deposit, except: [:index]  do
+      collection do
+        get 'confirm'
+        get 'cancel'
+        get 'done'
+      end
+    end
   end
   
+  # resources :users, path: '', only: [:show]
+  
+  
+  # You can have the root of your site routed with "root"
+  root to: "home#index"
 
 
   # Example of regular route:

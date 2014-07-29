@@ -11,14 +11,14 @@
           Ongoing
       .col-md-3.col-sm-3.stat
         .data
-          %span.number 245
+          %span.number= current_user.commits.size
           Days
         .date
           committed
 
       .col-md-3.col-sm-3.stat
         .data
-          %span.number $86
+          %span.number $#{ Deposit.where(user: current_user).sum(:amount)}
           Deposit
         .date
           so far

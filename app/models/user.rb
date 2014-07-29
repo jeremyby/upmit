@@ -5,26 +5,27 @@ class User < ActiveRecord::Base
     :recoverable, :rememberable, :trackable, :validatable, :omniauthable
 
   extend FriendlyId
-  friendly_id :username, use: :slugged
+  friendly_id :username_for_url, use: :slugged
 
   validates_presence_of :first_name, :last_name
 
   has_many :goals
+  has_many :commits
 
 
   def normalize_friendly_id(string)
-    s = string.downcase.split.join('-')
-    
-    if User.where("slug REGEXP ?", "^#{ s }$").count > 0
-      offset = User.where("slug REGEXP ?", "^#{ s }-[\d]*").count + 1
+    s = string.to_ascii.parameterize
+
+    if User.where("slug ~ ?", "^#{ s }$").count > 0
+      offset = User.where("slug ~ ?", "^#{ s }-[\d]*").count + 1
       s << "-#{offset}"
     end
     
     return s
   end
 
-  def username
-    "#{first_name} #{last_name}"
+  def username_for_url
+    self.username.blank? ? "#{first_name} #{last_name}" : self.username
   end
 
   def name

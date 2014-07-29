@@ -6,47 +6,57 @@ class GoalsController < ApplicationController
   end
   
   def new
-    @goal = Goal.new(interval_unit: 'day')
+    @goal = Goal.new(interval_unit: 'day', duration: 100, interval: 1)
   end
   
   def create
-    @goal = current_user.goals.build(params[:goal].permit(:title, :timezone, :duration))
+    @goal = current_user.goals.build(params[:goal].permit(:title, :timezone, :duration, :interval, :interval_unit, :weektimes))
+    @goal.weekdays = params[:goal][:weekdays] #weekdays cannot be mass-assigned. for it's an array?
     
     offset = params[:goal][:starts] == '1' ? 1 : 0
     
     now = Time.now
     
     if params[:goal][:interval_unit] == 'week'
-      start_time = now.in_time_zone(@goal.timezone).change(day: ((now.day - now.wday) + offset * 7)).beginning_of_day
-      schedule = IceCube::Schedule.new(start_time)
-      end_time = start_time + (@goal.duration - 1).days
+      start_date = now.in_time_zone(@goal.timezone)
+      @goal.start_time = (start_date - start_date.wday.days + (offset * 7).days).beginning_of_day
+      schedule = IceCube::Schedule.new(@goal.start_time)
+      end_time = @goal.start_time + (@goal.duration - 1).days
       
-      arr = params[:goal][:weekdays]
-      
-      if arr.blank? # weekly recurrence without setting weekdays
+      if @goal.weekdays.blank? # weekly recurrence without setting weekdays
         # create schedule that simply recurs every week,
         # but need to set goal.weektimes
         schedule.add_recurrence_rule IceCube::Rule.weekly.until(end_time)
-        @goal.weektimes = params[:goal][:weektimes].to_i
+        
+        @goal.occurrence = schedule.all_occurrences.size * @goal.weektimes.to_i
       else
-        schedule.add_recurrence_rule IceCube::Rule.weekly.day(arr.collect {|a| a.to_i}).until(end_time)
+        schedule.add_recurrence_rule IceCube::Rule.weekly.day(@goal.weekdays.collect {|d| d.to_i}).until(end_time)
+        
+        @goal.occurrence = schedule.all_occurrences.size
       end
     else
-      start_time = (now.in_time_zone(@goal.timezone) + offset.day).beginning_of_day
-      schedule = IceCube::Schedule.new(start_time)
-      end_time = start_time + (@goal.duration - 1).days
+      @goal.start_time = (now.in_time_zone(@goal.timezone) + offset.day).beginning_of_day
+      schedule = IceCube::Schedule.new(@goal.start_time)
+      end_time = @goal.start_time + (@goal.duration - 1).days
     
-      schedule.add_recurrence_rule IceCube::Rule.daily(params[:goal][:interval].to_i).until(end_time)
+      schedule.add_recurrence_rule IceCube::Rule.daily(@goal.interval.to_i).until(end_time)
+      
+      @goal.occurrence = schedule.all_occurrences.size
     end
     
-    @goal.occurrence = schedule.all_occurrences.size
     @goal.schedule_yaml = schedule.to_yaml
-    @goal.state = 0
     
     if @goal.save
-      redirect_to '/'
+      redirect_to new_goal_deposit_path(@goal)
     else
       render :new
     end
+  end
+  
+  def show
+    @goal = current_user.goals.find_by_slug(params[:id])
+    
+    go_404 if @goal.blank?
+    
   end
 end

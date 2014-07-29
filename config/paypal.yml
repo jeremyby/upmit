@@ -5,12 +5,12 @@ test: &default
 
   # Credentials for Classic APIs
   app_id: APP-80W284485P519543T
-  username: jeremyby_api1.gmail.com
-  password: DCDCEG2EUV387MVY
-  signature: A0vRMvRTFWJMDFGr.4rGunwMOEb1AGq9myGZf1BSPao7oT1RaooJx9G7
+  username: upcommit-facilitator_api1.gmail.com
+  password: 1405669912
+  signature: AFcWxV21C7fd0v3bYYYRCpSSRl31Ajbp1BYKjmMBzu2Bb8bJ9UbtTEtQ
   # # With Certificate
   # cert_path: "config/cert_key.pem"
-  sandbox_email_address: Platform.sdk.seller@gmail.com
+  sandbox_email_address: upcommit-facilitator@gmail.com
 
   # # IP Address
   # ip_address: 127.0.0.1
@@ -19,7 +19,12 @@ test: &default
 
 development:
   <<: *default
-
+ 
 production:
   <<: *default
+  
+  username: jeremyby_api1.gmail.com
+  password: DCDCEG2EUV387MVY
+  signature: A0vRMvRTFWJMDFGr.4rGunwMOEb1AGq9myGZf1BSPao7oT1RaooJx9G7
+  
   mode: live

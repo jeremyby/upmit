@@ -1,3 +1,7 @@
+:sass
+  #sidebar-nav
+    display: none
+
 / main container .wide-content is used for this layout without sidebar :)
 .content.wide-content
   #pad-wrapper.goal-wrapper
@@ -5,7 +9,7 @@
       / title column
       .col-md-3.logo-box
         .logo-image.text-center
-          %img.img-circle(alt="Upmit" src="img/personal-info.png")
+          %img(alt="New Goal" src="/assets/new_goal.png")
           %h2 New Goal
           
       / form column
@@ -26,32 +30,32 @@
             
             .frequency.col-md-10.col-md-offset-2.clearfix
               %h3 
+                %span= @goal.to_frequency
                 %i.fa.fa-chevron-down.pull-right
-                %span everyday
               
               .details
                 .radio.day
                   %label
                     = f.radio_button :interval_unit, 'day'
                     every
-                    = f.select :interval, goal_interval(3), class: 'form-control'
+                    = f.select :interval, goal_interval(3, @goal.interval), class: 'form-control'
                     %span day
                 .radio.week
                   %label.head
                     = f.radio_button :interval_unit, 'week'
-                    = f.select :weektimes, goal_interval(6), class: 'form-control'
+                    = f.select :weektimes, goal_interval(6, @goal.weektimes), class: 'form-control'
                     %span time
                     a week
                   = weekday_checkbox(f)
             
             .duration.col-md-10.col-md-offset-2
               %h3
+                %span for #{ @goal.duration } days
                 %i.fa.fa-chevron-down.pull-right
-                %span for 100 days
               
               .details
                 .inputs
-                  %input(id='goal_duration' name='goal[duration]' data-slider-id='duration_slider' type="text" data-slider-min="7" data-slider-max="#{ get_days(1.year) }" data-slider-step="1" value='100' data-slider-value="100")
+                  %input(id='goal_duration' name='goal[duration]' data-slider-id='duration_slider' type="text" data-slider-min="7" data-slider-max="#{ get_days(1.year) }" data-slider-step="1" value='#{ @goal.duration }' data-slider-value='#{ @goal.duration }')
                   .date.pull-right
                     
                   .btn-toolbar(role='toolbar')
@@ -59,7 +63,7 @@
                       %button.btn.btn-default#7d(data-value='7') 7
                       %button.btn.btn-default#14d(data-value='14') 14
                       %button.btn.btn-default#21d(data-value='21') 21
-                      %button.btn.btn-default.active#100d(data-value='100') 100 days
+                      %button.btn.btn-default#100d(data-value='100') 100 days
                     .btn-group.btn-group-xs
                       %button.btn.btn-default#3w(data-value='#{ get_days(3.week) }') 3
                       %button.btn.btn-default#5w(data-value='#{ get_days(5.week) }') 5
@@ -75,14 +79,14 @@
             .starts.col-md-10.col-md-offset-2
               .btn-group.btn-group-small(data-toggle="buttons")
                 %label.btn starting
-                %label.btn.btn-default.left.active
-                  = f.radio_button :starts, '0'
+                %label.btn.btn-default.left(class='#{ "active" if @goal.starts != 1 }')
+                  = f.radio_button :starts, 0
                   %span today
-                %label.btn.btn-default.right
-                  = f.radio_button :starts, '1'
+                %label.btn.btn-default.right(class='#{ "active" if @goal.starts == 1 }')
+                  = f.radio_button :starts, 1
                   %span tomorrow
             
             .actions.col-md-10.col-md-offset-2
-              = f.submit 'Commit', class: 'btn btn-primary'
-              %span or
-              = reset_tag "cancel"
+              = button_tag class: 'btn btn-primary', type: 'submit', name: 'commit', data: {disable_with: 'Please wait...'} do
+                Create & Proceed to Deposit
+                %i.fa.fa-arrow-right

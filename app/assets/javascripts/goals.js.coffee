@@ -1,5 +1,5 @@
 
-$(document).ready ->
+$(document).ready ->  
   upmit.now = new Date()
   upmit.currentSample = 0
   
@@ -7,11 +7,11 @@ $(document).ready ->
   
   timezone = jstz.determine()
   $('#goal_timezone').val(timezone.name())
-
-  if $('#goal_title').length
-    rotate_goal_samples()
   
-  show_end_date(100)
+  rotate_goal_samples() unless $('#goal_title').length
+  
+  update_frequency_title()
+  
   
   $('#goal_title').on('focus', ->
     $(this).removeClass('error')
@@ -31,6 +31,9 @@ $(document).ready ->
     $('.frequency').toggleClass('active')
     $('.frequency .details').toggle('blind')
     $('.frequency h3 i').toggleClass('fa-rotate-180')
+    
+    update_frequency_day_inverval()
+    update_frequency_week_times()
   ).on('mousedown', (e) ->
     e.preventDefault()
   )
@@ -43,17 +46,12 @@ $(document).ready ->
     if $('.duration').hasClass('active')
       $('#goal_duration').slider()
       
+      update_slider($('#goal_duration').data('slider-value'))
+      
       $('#goal_duration').on('slide', (slideEvt) ->
         update_slider_value(slideEvt.value)
       ).on('slideStop', (slideEvt) ->
-        update_slider_value(slideEvt.value)
-        
-        button = $(".duration button[data-value='#{ slideEvt.value }']")
-        
-        if button.length > 0
-          set_slider_button(button)
-        else
-          $('.duration button').removeClass('active')
+        update_slider(slideEvt.value)
       )
     else
       setTimeout(->
@@ -93,8 +91,7 @@ $(document).ready ->
   $('.frequency .day select').on('change', ->
     $('#goal_interval_unit_day').prop('checked', true)
     
-    $('.frequency .day span').html(if $('.frequency .day select').val() > 1 then 'days' else 'day')
-    
+    update_frequency_day_inverval()
     update_frequency_title()
   )
   
@@ -102,7 +99,7 @@ $(document).ready ->
   $('.frequency .week select').on('change', ->
     $('#goal_interval_unit_week').prop('checked', true)
     
-    $('.frequency .week span').html(if $('.frequency .week select').val() > 1 then 'times' else 'time')
+    update_frequency_week_times()
     
     w = $('.frequency label.checkbox-inline input:checked').length
     $('.frequency label.checkbox-inline input').prop('checked', false) unless w == $('.frequency .week select').val()
@@ -125,9 +122,9 @@ $(document).ready ->
     show_end_date($('#goal_duration').data('sliderValue'))
   )
   
-  $('.actions input:submit').on('click', (e) ->
+  $('.actions :submit').on('click', (e) ->
     if $('#goal_title').val().length == 0
-      $('#goal_title').attr('placeholder', "describe my goal first").addClass('error')
+      $('#goal_title').attr('placeholder', "need to describe the goal here...").addClass('error')
       clearTimeout(upmit.timeoutid)
       
       e.preventDefault()
@@ -143,6 +140,13 @@ rotater = ->
   $('#goal_title').attr('placeholder', upmit.samples[upmit.currentSample++ % upmit.samples.length])
   rotate_goal_samples()
 
+update_frequency_day_inverval = ->
+  $('.frequency .day span').html(if $('.frequency .day select').val() > 1 then 'days' else 'day')
+  
+update_frequency_week_times = ->
+  $('.frequency .week span').html(if $('.frequency .week select').val() > 1 then 'times' else 'time')
+  
+
 update_frequency_title = ->
   if $('input[name="goal[interval_unit]"]:checked').val() == 'day'
     d = $('.frequency .day select').val()
@@ -152,7 +156,7 @@ update_frequency_title = ->
     else
       str = 'everyday'
       
-    $('.starts label.left span').text('today')
+    $('.starts label.left span').text('today').attr('title', '')
     $('.starts label.right span').text('tomorrow')
   else
     w = $('.frequency .week select').val()
@@ -171,7 +175,8 @@ update_frequency_title = ->
       .data('placement', "bottom")
       
       $('.starts label.left').tooltip()
-      
+    else
+      $('.starts label.left').attr('title', '')
     
     $('.starts label.right span').text('next week')
     
@@ -180,6 +185,16 @@ update_frequency_title = ->
 set_slider_button = (el) ->
   $('.duration button').removeClass('active')
   el.addClass('active')
+
+update_slider = (value) ->
+  update_slider_value(value)
+  
+  button = $(".duration button[data-value='#{ value }']")
+  
+  if button.length > 0
+    set_slider_button(button)
+  else
+    $('.duration button').removeClass('active')
 
 update_slider_value = (value) ->
   $(".duration h3 span").text("for #{ value } days")

@@ -3,13 +3,23 @@
 .goal-wrapper
   .wrapp
     margin-top: 100px
-    
-  .logo-image
-    img
-      border: 3px solid #c3cddb
-      margin-bottom: 28px
+  
+  .goal
+    .donut
+      height: 180px
+      width: 180px
+  
+  .logo-box
+    margin-bottom: 20px
+  
+    .logo-image
+      img
+        +opacity(0.8)
+        margin: 15px 0 30px 0
   
   .new-goal
+    padding: 0 15px 20px 15px
+  
     border-left: 1px solid #edeff1
     box-shadow: inset 3px 0px 4px -1px #fafafa
     
@@ -65,21 +75,24 @@
       display: inline
       
       border-width: 0 0 1px 0
+      border-color: #7DBCF0
       +border-radius(0)
       +box-shadow(none)
       
-      &.normal,
-      &.error
+      &:focus
+        border-color: #ccc
+      
+      &.normal
         font-style: normal
       
       &.error:-moz-placeholder
-        color: red
+        color: #F54D42
       &.error::-moz-placeholder
-        color: red
+        color: #F54D42
       &.error:-ms-input-placeholder
-        color: red
+        color: #F54D42
       &.error::-webkit-input-placeholder
-        color: red
+        color: #F54D42
         
     
     .details
@@ -99,7 +112,7 @@
         
         i
           line-height: 24px
-          color: #aaa
+          color: #57A4F0
           
           +transition-property(all)
           +transition-duration(0.4s)
@@ -115,8 +128,10 @@
           color: #333
           background: #f0f0f0
           
-          i
-            color: #666
+      &.active
+        i
+          color: #999
+
     
     .frequency
       .details
@@ -201,7 +216,7 @@
       margin-top: 30px
       
       text-align: right
-      padding: 0 9px 0 0
+      padding: 0
       
       // background: #eee
       
@@ -251,17 +266,17 @@
   .goal-wrapper .new-goal .ui-select
     width: 77%
     
-  .logo-box
-    margin-bottom: 20px
-    
   .goal-wrapper .new-goal
     border-left: 0px
     box-shadow: none
     
-
   .goal-wrapper .new-goal .alert
     margin-left: 0
 
 @media (min-width: 979px)
+  .logo-box
+    margin-bottom: 0
+    padding-top: 100px
+
   .goal-wrapper .new-goal .alert
     margin-left: 30px

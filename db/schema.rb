@@ -11,11 +11,15 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140715040905) do
+ActiveRecord::Schema.define(version: 20140719084535) do
+
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
 
   create_table "commits", force: true do |t|
     t.text     "note"
     t.integer  "goal_id",                null: false
+    t.integer  "user_id",                null: false
     t.integer  "state",      default: 0, null: false
     t.datetime "starts_at",              null: false
     t.datetime "created_at"
@@ -23,6 +27,19 @@ ActiveRecord::Schema.define(version: 20140715040905) do
   end
 
   add_index "commits", ["goal_id"], name: "index_commits_on_goal_id", using: :btree
+  add_index "commits", ["user_id"], name: "index_commits_on_user_id", using: :btree
+
+  create_table "deposits", force: true do |t|
+    t.string   "source",                 null: false
+    t.string   "payer",                  null: false
+    t.string   "token",                  null: false
+    t.integer  "goal_id",                null: false
+    t.integer  "user_id",                null: false
+    t.integer  "amount",                 null: false
+    t.integer  "state",      default: 1, null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "friendly_id_slugs", force: true do |t|
     t.string   "slug",                      null: false
@@ -38,19 +55,22 @@ ActiveRecord::Schema.define(version: 20140715040905) do
   add_index "friendly_id_slugs", ["sluggable_type"], name: "index_friendly_id_slugs_on_sluggable_type", using: :btree
 
   create_table "goals", force: true do |t|
-    t.string   "title",                     null: false
+    t.string   "title",                       null: false
     t.text     "description"
-    t.text     "schedule_yaml",             null: false
-    t.integer  "user_id",                   null: false
-    t.string   "timezone",                  null: false
-    t.integer  "state",         default: 0, null: false
-    t.datetime "start_time",                null: false
+    t.text     "schedule_yaml",               null: false
+    t.integer  "user_id",                     null: false
+    t.string   "timezone",                    null: false
+    t.integer  "state",         default: 0,   null: false
+    t.string   "weekdays"
+    t.string   "interval",      default: "1", null: false
+    t.string   "interval_unit",               null: false
+    t.datetime "start_time",                  null: false
     t.string   "slug"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "weektimes"
-    t.integer  "duration"
-    t.integer  "occurrence"
+    t.integer  "duration",                    null: false
+    t.integer  "occurrence",                  null: false
   end
 
   add_index "goals", ["user_id"], name: "index_goals_on_user_id", using: :btree
@@ -59,6 +79,7 @@ ActiveRecord::Schema.define(version: 20140715040905) do
     t.string   "avatar"
     t.string   "first_name"
     t.string   "last_name"
+    t.string   "username"
     t.string   "slug"
     t.datetime "created_at"
     t.datetime "updated_at"

@@ -2,7 +2,7 @@
   body
     background: #000
     color: #fff
-    font-size: 18px
+    font-size: 17px
 
 
 .background-image-overlay
@@ -16,41 +16,43 @@
   %section#left-sidebar
     .logo
       %a.link-scroll(href="#intro")
-        %img(alt="Twilli Air" src="/assets/logo.png")
+        %img(alt="Upmit" src="/assets/logo-home.png")
 
     / Menu Icon for smaller viewports
     #mobile-menu-icon.visible-xs{onclick: "toggle_main_menu();"}
-      %span.glyphicon.glyphicon-th
+      %i.fa.fa-th
     
     %ul#main-menu
-      %li#menu-item-text.menu-item.scroll
-        %a(href="#text") Text
+      %li#menu-item-better.menu-item.scroll
+        %a(href="#better") better you
       %li#menu-item-carousel.menu-item.scroll
-        %a(href="#carousel") Carousel
+        %a(href="#carousel") how it works
       %li#menu-item-grid.menu-item.scroll
         %a(href="#grid") Grid
       %li#menu-item-featured.menu-item.scroll
         %a(href="#featured") Featured
       %li#menu-item-contact.menu-item.scroll
-        %a(href="#contact") Start Now!
+        %a(href="#signup") start now!
 
   %section#main-content.clearfix
     %article#intro.section-wrapper.clearfix(data-custom-background-img="/assets/other_images/bg5.jpg")
       .content-wrapper.clearfix
-        .col-sm-10.col-md-9.pull-right
+        .col-sm-8.col-md-7.pull-right
           %section.feature-text
             %h1 Up + Commit
             %p 
-              Upmit helps you to make important changes about yourself, so you can be the 
-              %strong better
-              you. 
+              Upmit helps you make real changes about yourself, 
+              so you can be
+              %a.link-scroll(href='#better')
+                %strong the better you
             %p
-              %a.link-scroll.btn.btn-outline-inverse.btn-lg(href="#text") find out more
+              %a.link-scroll.btn.btn-outline-inverse.btn-lg(href="#signup") sign up
+              %a.btn.btn-outline-inverse.btn-lg(href="/login") log in
 
-    %article#text.section-wrapper.clearfix(data-custom-background-img="/assets/other_images/bg1.jpg")
+    %article#better.section-wrapper.clearfix(data-custom-background-img="/assets/other_images/bg1.jpg")
       .content-wrapper.clearfix
         .col-sm-10.col-md-9.pull-right
-          %h1.section-title Text Content
+          %h1.section-title Be the Better You
           %p.feature-paragraph
             %img.lazy.pull-right(alt="Lorem Ipsum" data-img-src="/assets/other_images/transp-image5b.png")
             Etiam at ligula sit amet arcu laoreet consequat. Duis dictum lorem metus, vitae dapibus risus imperdiet nec.
@@ -65,23 +67,22 @@
 
     %article#carousel.section-wrapper.clearfix(data-custom-background-img="/assets/other_images/bg6.jpg")
       .content-wrapper.clearfix
-        #features-carousel.carousel.slide.with-title-indicators.max-height(data-height-percent="70" data-ride="carousel")
+        #features-carousel.carousel.slide.with-title-indicators.max-height(data-height-percent="60" data-ride="carousel")
           / Indicators - slide navigation
           %ol.carousel-indicators.title-indicators
-            %li.active(data-slide-to="0" data-target="#features-carousel") Lorem Ipsum
-            %li(data-slide-to="1" data-target="#features-carousel") Suspendisse
-            %li(data-slide-to="2" data-target="#features-carousel") Maecenas
-            %li(data-slide-to="3" data-target="#features-carousel") Scelerisque
+            %li.active(data-slide-to="0" data-target="#features-carousel") Create a goal
+            %li(data-slide-to="1" data-target="#features-carousel") Make the deposit
+            %li(data-slide-to="2" data-target="#features-carousel") Stick to your goal
+            %li(data-slide-to="3" data-target="#features-carousel") Earn your money back
           / Wrapper for slides
           .carousel-inner
             / CAROUSEL SLIDE 1
             .item.active
               .carousel-text-content
-                %img.icon(alt="Lorem Ipsum" src="/assets/other_images/transp-image1.png")
-                %h2.title Lorem Ipsum
+                %img.icon(alt="goal" src="/assets/goal.png")
+                %h2.title Create a goal
                 %p Suspendisse molestie lorem odio, sit amet. Duis dictum lorem metus, vitae dapibus risus imperdiet nec. Suspendisse molestie lorem odio.
-                %p
-                  %a.btn.btn-outline-inverse.btn-sm(href="#") read more
+
                 
             / CAROUSEL SLIDE 2
             .item
@@ -183,9 +184,9 @@
                   %h5 Aliquam adipiscing
                   %p Nullam ac rhoncus. Aliquam adipiscing eros non elit imperdiet.
 
-    %article#contact.section-wrapper.clearfix(data-custom-background-img="/assets/other_images/bg4.jpg")
+    %article#signup.section-wrapper.clearfix(data-custom-background-img="/assets/other_images/bg4.jpg")
       .content-wrapper.clearfix
-        %h1.section-title Contact
+        %h1.section-title Sign Up
         / CONTACT DETAILS
         .contact-details.col-sm-5.col-md-3
           %p
@@ -225,24 +226,21 @@
   %section#footer
     / Go to Top
     #go-to-top(onclick="scroll_to_top();")
-      %span.icon.glyphicon.glyphicon-chevron-up
+      %i.icon.fa.fa-chevron-up.fa-lg
     %ul.social-icons
       %li
         %a(href="#" target="_blank" title="Facebook")
           %img(alt="Facebook" src="/assets/theme_images/social_icons/facebook.png")
       %li
-        %a(href="#" target="_blank" title="Twitter")
+        %a(href="https://twitter.com/upmit" target="_blank" title="Twitter")
           %img(alt="Twitter" src="/assets/theme_images/social_icons/twitter.png")
-      %li
-        %a(href="#" target="_blank" title="Google+")
-          %img(alt="Google+" src="/assets/theme_images/social_icons/googleplus.png")
     / copyright text
     .footer-text-line © 2014 Upmit
-
-/ Modal
-/ DO NOT MOVE, EDIT OR REMOVE - this is needed in order for popup content to be populated in it
-#common-modal.modal.fade(aria-hidden="true" role="dialog" tabindex="-1")
-  .modal-dialog
-    .modal-content
-      %button.close(aria-hidden="true" data-dismiss="modal" type="button") ×
-      .modal-body
+    
+    / Modal
+    / DO NOT MOVE, EDIT OR REMOVE - this is needed in order for popup content to be populated in it
+    #common-modal.modal.fade(aria-hidden="true" role="dialog" tabindex="-1")
+      .modal-dialog
+        .modal-content
+          %button.close(aria-hidden="true" data-dismiss="modal" type="button") ×
+          .modal-body

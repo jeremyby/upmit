@@ -1,0 +1,62 @@
+!!! 5
+%html(lang="en")
+  %head
+    %meta(charset="utf-8")
+    %meta(http-equiv="X-UA-Compatible" content="IE=edge")
+    %meta(name="viewport" content="width=device-width, initial-scale=1")
+    
+    %title Upmit
+    
+    = stylesheet_link_tag     'http://fonts.useso.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800', media: 'all'
+    = stylesheet_link_tag     'application', media: 'all',   'data-turbolinks-track' => true
+    = javascript_include_tag  'https://www.paypalobjects.com/js/external/dg.js',                 'data-turbolinks-track' => true
+    
+    
+    :javascript
+      var closer = function() {
+        if(window.opener){
+          window.close();
+        }
+        else{
+         if(top.upmit.dg.isOpen() == true){
+             top.upmit.dg.closeFlow();
+             return true;
+          }
+        }
+      }
+    
+    - if @redirecter.blank?
+      :javascript
+        var closeme = function(){
+          closer();
+        };
+    - else
+      :javascript
+        var closeme = function(){
+          top.window.location = "#{ @redirecter }"
+        };
+    
+    - if action?('cancel')
+      :javascript
+        window.onload = function() {
+          closeme();
+        }
+    - elsif action?('confirm') #other action - error, do not close the lightbox
+      - if flash[:error].blank?
+        :javascript
+          window.onload = function() {
+            setTimeout(function(){closeme();}, 3000)
+          }
+
+    = csrf_meta_tags
+
+  %body.payment
+    - unless action?('cancel')
+      %header.navbar.navbar-inverse(role="banner")
+        .navbar-header
+          %a(href='#' onclick='javascript: closeme();') &times;
+          .navbar-brand
+            %img(alt="logo" src="/assets/logo.png")
+      .content
+        #pad-wrapper
+          = yield

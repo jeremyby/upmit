@@ -1,0 +1,33 @@
+/ main container
+.content
+  #pad-wrapper
+    - if flash[:alert].present?
+      .row
+        .alert.alert-success.alert-dismissible(role='alert')
+          %button.close(type="button" data-dismiss="alert")
+            %span(aria-hidden="true") &times;
+            %span.sr-only Close
+          = flash[:alert]
+    
+    - if @goal.pending?
+      .row
+        .alert.alert-info(role='alert')
+          %i.fa.fa-lightbulb-o.fa-lg
+          The goal is pending deposit. Please 
+          = link_to 'make the deposit', new_goal_deposit_path(@goal), class: 'alert-link'
+          so we can start logging the your progress. 
+          
+    .row
+      .col-md-8
+        %h3
+          Goal
+          
+          %small
+            I will
+            = "#{ @goal.title } #{ @goal }"
+      .goal.col-md-4
+        - past, failed, succeed = @goal.commits.past.size, @goal.commits.failed.size, @goal.commits.succeed.size
+        - percentage = (past * 100 / @goal.occurrence)
+        - fgcolor = get_fg_color(past == 0 ? 0 : failed * 100 / past)
+      
+        .donut(data-dimension="180" data-text="#{ percentage }%" data-info="#{ pluralize @goal.occurrence - past, 'time' } to go" data-width="24" data-fontsize="26" data-percent="#{ percentage }" data-fgcolor="#{ fgcolor }" data-bgcolor="#eee" data-fill="#ddd")

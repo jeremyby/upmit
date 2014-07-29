@@ -1,0 +1,54 @@
+
+/ main container .wide-content is used for this layout without sidebar :)
+.content
+  #pad-wrapper.new_deposit
+    .row.title
+      .col-md-11.text-center      
+        %img(alt="New Deposit" src="/assets/piggy.png")
+        %h3 Make Deposit
+        
+    .row.goal
+      .col-md-10.col-md-offset-2
+        %h4 
+          Your Goal:
+          %small
+            I will
+            = @goal.title
+            = @goal.to_s
+    .row
+      .col-md-8.col-md-offset-2.cal
+        .col-md-4.col-xs-4.text-right
+          .number= @goal.occurrence
+        .col-md-8
+          .note days of action
+    
+    .row
+      .col-md-8.col-md-offset-2.cal
+        .col-md-4.col-xs-4.text-right
+          .number 
+            %span &times;
+            %i.fa.fa-usd>
+            1
+        .col-md-8
+          .note deposit per day
+    
+    .row
+      .col-md-8.col-xs-10.col-md-offset-2.col-xs-offset-1.cal#total
+        .col-md-4.col-xs-4.text-right
+          .number 
+            %span =
+            %strong<
+              %i.fa.fa-usd
+              = @goal.occurrence
+        .col-md-1
+          .note total
+    .row
+      .col-md-4.col-xs-6.col-md-offset-6.col-xs-offset-5
+        .paypal
+          = form_for @deposit, url: goal_deposit_index_path(@goal), method: :post do |f|
+            / https://www.paypal.com/en_US/i/btn/btn_dg_pay_w_paypal.gif
+            %input#paypal_submit(type="image" src='/assets/btn_dg_pay_w_paypal.gif' border='0' align='top' alt='Pay with PayPal')
+
+          %small Your payment will be processed by Paypal.com. The deposit can be paid with all major credit cards and is free of any charge.
+            
+

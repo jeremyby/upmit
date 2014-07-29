@@ -9,6 +9,9 @@ class CreateGoals < ActiveRecord::Migration
       t.string      :timezone,        null: false
       t.integer     :state,           null: false,        default: 0
       
+      t.string      :weekdays
+      t.string      :interval,        null: false,        default: 1
+      t.string      :interval_unit,   null: false
       t.datetime    :start_time,      null: false
       t.string      :slug,            unique: true,       index: true
 

@@ -23,8 +23,8 @@ development:
 production:
   <<: *default
   
-  username: jeremyby_api1.gmail.com
-  password: DCDCEG2EUV387MVY
-  signature: A0vRMvRTFWJMDFGr.4rGunwMOEb1AGq9myGZf1BSPao7oT1RaooJx9G7
-  
-  mode: live
+  # username: jeremyby_api1.gmail.com
+  # password: DCDCEG2EUV387MVY
+  # signature: A0vRMvRTFWJMDFGr.4rGunwMOEb1AGq9myGZf1BSPao7oT1RaooJx9G7
+  # 
+  # mode: live

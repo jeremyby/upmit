@@ -7,7 +7,7 @@
 
 .background-image-overlay
 
-#outer-background-container(data-default-background-img="/assets/other_images/bg5.jpg" style="background-image:url(/assets/other_images/bg5.jpg);")
+#outer-background-container(data-default-background-img="#{ asset_path('bg5.jpg') }" style="background-image:url(#{ asset_path('bg5.jpg') });")
 
 / Outer Container
 #outer-container.homer
@@ -16,7 +16,7 @@
   %section#left-sidebar
     .logo
       %a.link-scroll(href="#intro")
-        %img(alt="Upmit" src="/assets/logo-home.png")
+        = image_tag asset_path('logo-home.png'), alt: 'Upmit'
 
     / Menu Icon for smaller viewports
     #mobile-menu-icon.visible-xs{onclick: "toggle_main_menu();"}
@@ -35,7 +35,7 @@
         %a(href="#signup") start now!
 
   %section#main-content.clearfix
-    %article#intro.section-wrapper.clearfix(data-custom-background-img="/assets/other_images/bg5.jpg")
+    %article#intro.section-wrapper.clearfix(data-custom-background-img="#{ asset_path('bg5.jpg') }")
       .content-wrapper.clearfix
         .col-sm-8.col-md-7.pull-right
           %section.feature-text
@@ -49,12 +49,12 @@
               %a.link-scroll.btn.btn-outline-inverse.btn-lg(href="#signup") sign up
               %a.btn.btn-outline-inverse.btn-lg(href="/login") log in
 
-    %article#better.section-wrapper.clearfix(data-custom-background-img="/assets/other_images/bg1.jpg")
+    %article#better.section-wrapper.clearfix(data-custom-background-img="#{ asset_path('bg1.jpg') }")
       .content-wrapper.clearfix
         .col-sm-10.col-md-9.pull-right
           %h1.section-title Be the Better You
           %p.feature-paragraph
-            %img.lazy.pull-right(alt="Lorem Ipsum" data-img-src="/assets/other_images/transp-image5b.png")
+            %img.lazy.pull-right(alt="Lorem Ipsum" data-img-src="#{ asset_path('transp-image5b.png') }")
             Etiam at ligula sit amet arcu laoreet consequat. Duis dictum lorem metus, vitae dapibus risus imperdiet nec.
             %a(href="#carousel") Suspendisse molestie lorem odio
             , sit amet. Laoreet consequat. Duis dictum lorem metus, vitae dapibus.
@@ -65,7 +65,7 @@
           
 
 
-    %article#carousel.section-wrapper.clearfix(data-custom-background-img="/assets/other_images/bg6.jpg")
+    %article#carousel.section-wrapper.clearfix(data-custom-background-img="#{ asset_path('bg6.jpg') }")
       .content-wrapper.clearfix
         #features-carousel.carousel.slide.with-title-indicators.max-height(data-height-percent="60" data-ride="carousel")
           / Indicators - slide navigation
@@ -79,7 +79,7 @@
             / CAROUSEL SLIDE 1
             .item.active
               .carousel-text-content
-                %img.icon(alt="goal" src="/assets/goal.png")
+                = image_tag asset_path('goal.png'), alt: 'Goal', class: 'icon'
                 %h2.title Create a goal
                 %p Suspendisse molestie lorem odio, sit amet. Duis dictum lorem metus, vitae dapibus risus imperdiet nec. Suspendisse molestie lorem odio.
 
@@ -87,7 +87,7 @@
             / CAROUSEL SLIDE 2
             .item
               .carousel-text-content
-                %img.icon(alt="Lorem Ipsum" src="/assets/other_images/transp-image6.png")
+                %img.icon(alt="Lorem Ipsum" src="#{ asset_path('transp-image6.png') }")
                 %h2.title Suspendisse molestie
                 %p Etiam at ligula sit amet arcu laoreet consequat. Duis dictum lorem metus, vitae dapibus risus imperdiet nec. Duis dictum lorem metus.
                 %p
@@ -97,7 +97,7 @@
             / CAROUSEL SLIDE 3
             .item
               .carousel-text-content
-                %img.icon(alt="Lorem Ipsum" src="/assets/other_images/transp-image7.png")
+                %img.icon(alt="Lorem Ipsum" src="#{ asset_path('transp-image7.png') }")
                 %h2.title Maecenas id dolor
                 %p Fusce erat augue, fermentum sit amet congue a, ullamcorper ac enim. Maecenas id dolor imperdiet, mollis felis ut, pellentesque ante. Sed id congue arcu. Nulla eget commodo sem. Suspendisse suscipit, sem ac.
                 %p
@@ -106,7 +106,7 @@
             / CAROUSEL SLIDE 4
             .item
               .carousel-text-content
-                %img.icon(alt="Lorem Ipsum" src="/assets/other_images/transp-image4.png")
+                %img.icon(alt="Lorem Ipsum" src="#{ asset_path('transp-image4.png') }")
                 %h2.title Sed scelerisque
                 %p Aenean a est fringilla, malesuada eros vel, condimentum augue. Sed lorem sapien, vestibulum quis nisl volutpat, fermentum adipiscing massa. Cras ac faucibus nisl. Proin ac convallis sapien.
                 %p
@@ -116,7 +116,7 @@
           %a.left.carousel-control(data-slide="prev" href="#features-carousel")
           %a.right.carousel-control(data-slide="next" href="#features-carousel")
 
-    %article#grid.section-wrapper.clearfix(data-custom-background-img="/assets/other_images/bg2.jpg")
+    %article#grid.section-wrapper.clearfix(data-custom-background-img="#{ asset_path('bg2.jpg') }")
       .content-wrapper.clearfix
         .col-sm-11.col-md-10.pull-right
           %h1.section-title Grid
@@ -151,7 +151,7 @@
                   %h5 Lorem ipsum dolor sit amet
                   %p Nullam ac rhoncus. Aliquam adipiscing eros non elit imperdiet congue. Integer ultricies sed ligula eget tempus.
 
-    %article#featured.section-wrapper.clearfix(data-custom-background-img="/assets/other_images/bg3.jpg")
+    %article#featured.section-wrapper.clearfix(data-custom-background-img="#{ asset_path('bg3.jpg') }")
       .content-wrapper.clearfix
         .col-sm-11.pull-right
           %h1.section-title Featured
@@ -161,7 +161,7 @@
             %article.feature-col.col-md-4
               %a.thumbnail.linked(href="#")
                 .image-container
-                  %img.lazy.item-thumbnail(alt="Lorem Ipsum" data-img-src="/assets/other_images/project-3.jpg")
+                  %img.lazy.item-thumbnail(alt="Lorem Ipsum" data-img-src="#{ asset_path('project-3.jpg') }")
                 .caption
                   %h5 Image Carousel
                   %p This feature contains an image carousel when you open popup.
@@ -170,7 +170,7 @@
             %article.feature-col.col-md-4
               %a.thumbnail.linked(href="#")
                 .image-container
-                  %img.lazy.item-thumbnail(alt="Lorem Ipsum" data-img-src="/assets/other_images/project-2.jpg")
+                  %img.lazy.item-thumbnail(alt="Lorem Ipsum" data-img-src="#{ asset_path('project-2.jpg') }")
                 .caption
                   %h5 Nullam ac rhoncus
                   %p Nullam ac rhoncus. Aliquam adipiscing eros non elit imperdiet congue. Integer ultricies.
@@ -179,12 +179,12 @@
             %article.feature-col.col-md-4
               %a.thumbnail.linked(href="#")
                 .image-container
-                  %img.lazy.item-thumbnail(alt="Lorem Ipsum" data-img-src="/assets/other_images/project-4.jpg")
+                  %img.lazy.item-thumbnail(alt="Lorem Ipsum" data-img-src="#{ asset_path('project-4.jpg') }")
                 .caption
                   %h5 Aliquam adipiscing
                   %p Nullam ac rhoncus. Aliquam adipiscing eros non elit imperdiet.
 
-    %article#signup.section-wrapper.clearfix(data-custom-background-img="/assets/other_images/bg4.jpg")
+    %article#signup.section-wrapper.clearfix(data-custom-background-img="#{ asset_path('bg4.jpg') }")
       .content-wrapper.clearfix
         %h1.section-title Sign Up
         / CONTACT DETAILS
@@ -230,10 +230,10 @@
     %ul.social-icons
       %li
         %a(href="#" target="_blank" title="Facebook")
-          %img(alt="Facebook" src="/assets/theme_images/social_icons/facebook.png")
+          = image_tag asset_path('facebook.png'), alt: 'Facebook'
       %li
         %a(href="https://twitter.com/upmit" target="_blank" title="Twitter")
-          %img(alt="Twitter" src="/assets/theme_images/social_icons/twitter.png")
+          = image_tag asset_path('twitter.png'), alt: 'Twitter'
     / copyright text
     .footer-text-line © 2014 Upmit
     

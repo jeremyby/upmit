@@ -19,7 +19,6 @@
 //= require lib/jquery.easing.1.3
 //= require lib/jquery.backstretch.min
 //= require lib/jquery.circliful
-//= require lib/dg.js
 
 //= require bootstrap
 

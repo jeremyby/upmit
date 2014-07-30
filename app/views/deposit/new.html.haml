@@ -4,7 +4,7 @@
   #pad-wrapper.new_deposit
     .row.title
       .col-md-11.text-center      
-        %img(alt="New Deposit" src="/assets/piggy.png")
+        %img(alt="New Deposit" src="#{asset_path('piggy.png')}")
         %h3 Make Deposit
         
     .row.goal
@@ -47,7 +47,7 @@
         .paypal
           = form_for @deposit, url: goal_deposit_index_path(@goal), method: :post do |f|
             / https://www.paypal.com/en_US/i/btn/btn_dg_pay_w_paypal.gif
-            %input#paypal_submit(type="image" src='/assets/btn_dg_pay_w_paypal.gif' border='0' align='top' alt='Pay with PayPal')
+            %input#paypal_submit(type="image" src='#{ asset_path('btn_dg_pay_w_paypal.gif') }' border='0' align='top' alt='Pay with PayPal')
 
           %small Your payment will be processed by Paypal.com. The deposit can be paid with all major credit cards and is free of any charge.
             

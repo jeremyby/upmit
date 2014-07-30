@@ -56,7 +56,7 @@
         .navbar-header
           %a(href='#' onclick='javascript: closeme();') &times;
           .navbar-brand
-            %img(alt="logo" src="/assets/logo.png")
+            = image_tag asset_path('logo.png'), alt: 'Upmit'
       .content
         #pad-wrapper
           = yield

@@ -16,9 +16,6 @@ gem 'compass-rails'
 # Bootstrap CSS Framework
 gem 'bootstrap-sass', git: 'https://github.com/twbs/bootstrap-sass.git'
 
-# Font Awesome
-gem 'font-awesome-sass'
-
 # Use Uglifier as compressor for JavaScript assets
 gem 'uglifier'
 

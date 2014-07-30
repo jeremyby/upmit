@@ -29,7 +29,6 @@ class DepositController < ApplicationController
     if response.success?
       redirect_to "https://www.sandbox.paypal.com/incontext?useraction=commit&token=#{ response.Token }"
     else
-      flash[:error] = response.Errors.inspect
       render 'error'
     end
   end

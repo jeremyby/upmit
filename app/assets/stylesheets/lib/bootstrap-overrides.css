@@ -12,7 +12,6 @@ h1,h2,h3,h4,h5,h6{
     h4 { font-size:1.28em }
     h5 { font-size:1.05em }
     h6 { font-size:1em }
-  }
 }
 @media (min-width: 992px) {
   h1 { font-size:3.1em }

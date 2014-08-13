@@ -1,0 +1,3 @@
+class WeektimeGoal < Goal
+  
+end

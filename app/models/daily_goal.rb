@@ -1,0 +1,3 @@
+class DailyGoal < Goal
+  
+end

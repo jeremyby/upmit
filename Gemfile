@@ -13,9 +13,6 @@ gem 'pg'
 gem 'sass-rails'
 gem 'compass-rails'
 
-# Bootstrap CSS Framework
-gem 'bootstrap-sass', git: 'https://github.com/twbs/bootstrap-sass.git'
-
 # Use Uglifier as compressor for JavaScript assets
 gem 'uglifier'
 
@@ -54,13 +51,14 @@ gem 'puma'
 gem 'devise'
 gem 'omniauth'
 
-
 gem 'paypal-sdk-merchant', git: 'https://github.com/paypal/merchant-sdk-ruby.git'
 
 gem 'friendly_id'
 gem 'stringex'
 
 gem 'ice_cube'
+
+gem 'delayed_job_active_record'
 
 
 group :development, :test do
@@ -75,5 +73,3 @@ end
 group :production do
   gem 'rails_12factor'
 end
-
-ruby '2.0.0'

@@ -20,8 +20,6 @@
 //= require lib/jquery.backstretch.min
 //= require lib/jquery.circliful
 
-//= require bootstrap
-
 //= require lib/detectmobilebrowser
 //= require lib/owl-carousel/owl.carousel.min
 //= require lib/bootstrap-slider

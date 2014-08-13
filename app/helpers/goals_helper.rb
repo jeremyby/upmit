@@ -23,4 +23,8 @@ module GoalsHelper
     t = Time.now
     (((t + lap) - t) / 86400).to_i
   end
+  
+  def get_goal_legend(g)
+    image_tag asset_path("/assets/legends/#{g.legend}.png")
+  end
 end

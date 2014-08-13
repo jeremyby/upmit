@@ -42,7 +42,7 @@
 
 .section
   border-top: 1px solid #edeff1
-  margin-top: 100px
+  margin-top: 45px
   padding-top: 45px
   box-shadow: inset 0px 3px 4px -1px #fafafa
   
@@ -50,8 +50,70 @@
 /* UI elements section
 #pad-wrapper
   .row
+    .active-goal
+      display: table
+    
+      padding: 25px 0
+      // margin-bottom: 25px
+      
+      +border-radius(6px)
+      border: 1px solid #fff
+
+      +transition-property(all)
+      +transition-duration(0.4s)
+      
+      .info,
+      .occur,
+      .prog
+        float: none
+        display: table-cell
+        vertical-align: top
+      
+      .info
+        text-align: center
+
+        padding: 0 15px
+        
+        width: 260px
+        
+        // border-right: 1px solid #e0e0e0
+        // +box-shadow(#fafafa -3px 0px 4px -1px inset)
+      
+        .legend
+          +opacity(0.8)
+        
+          margin-bottom: 5px
+        
+        .title
+          // font-weight: bold
+        
+        .freq,
+        .freq:hover
+          color: #888
+      
+      .occur
+        padding-left: 10px
+        
+      
+      .prog
+        vertical-align: middle
+        padding: 0 15px 0 20px
+      
+      
+      &:hover
+        border-color: #e0e0e0
+        background: #f9f9f9
+      
+        .legend
+          +opacity(1)
+  
+  
+  
     h4
       margin: 0 0 25px 0
+      
+      
+    
       
     .goal
       margin: 15px 0

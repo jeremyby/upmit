@@ -24,11 +24,17 @@
     box-shadow: inset 3px 0px 4px -1px #fafafa
     
     /* native placeholders */
-    input:-moz-placeholder,
-    input:-ms-input-placeholder,
+    input:-moz-placeholder
+      +transition-property(all)
+      +transition-duration(0.5s)
+      
+    input:-ms-input-placeholder
+      +transition-property(all)
+      +transition-duration(0.5s)
+    
     input::-webkit-input-placeholder
       +transition-property(all)
-      +transition-duration(0.4s)
+      +transition-duration(0.5s)
     
     .row
       margin: 0
@@ -68,7 +74,6 @@
     
     #goal_title    
       font-size: 24px
-      font-style: italic
       
       height: 44px
       
@@ -82,12 +87,15 @@
       &:focus
         border-color: #ccc
       
-      &.normal
-        font-style: normal
       
+      &:-moz-placeholder
+        font-style: italic
+      &:-ms-input-placeholder
+        font-style: italic
+      &::-webkit-input-placeholder
+        font-style: italic
+          
       &.error:-moz-placeholder
-        color: #F54D42
-      &.error::-moz-placeholder
         color: #F54D42
       &.error:-ms-input-placeholder
         color: #F54D42
@@ -213,9 +221,9 @@
     
     .actions
       margin-bottom: 25px
-      margin-top: 30px
+      margin-top: 50px
       
-      text-align: right
+      text-align: center
       padding: 0
       
       // background: #eee

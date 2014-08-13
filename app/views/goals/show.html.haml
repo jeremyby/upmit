@@ -9,7 +9,7 @@
             %span.sr-only Close
           = flash[:alert]
     
-    - if @goal.pending?
+    - if @goal.inactive?
       .row
         .alert.alert-info(role='alert')
           %i.fa.fa-lightbulb-o.fa-lg

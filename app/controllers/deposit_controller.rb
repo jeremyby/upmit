@@ -13,7 +13,12 @@ class DepositController < ApplicationController
   end
   
   def new
-    @deposit = @goal.build_deposit(user: current_user)
+    if @goal.deposit.blank?
+      @deposit = @goal.build_deposit(user: current_user)
+    else
+      flash[:alert] = 'Deposit was already made.'
+      redirect_to user_goal_path(current_user, @goal)
+    end
   end
 
   def create
@@ -62,11 +67,11 @@ class DepositController < ApplicationController
 
       # checkout_response.DoExpressCheckoutPaymentResponseDetails
       # checkout_response.FMFDetails
-
+      
       @deposit.save!
-    
+
       flash[:alert] = 'You have made the deposit. The goal is active now!'
-      @redirecter = goal_url(@goal)
+      @redirecter = user_goal_url(current_user, @goal)
     rescue => error
       flash[:error] = error
       render 'error' 

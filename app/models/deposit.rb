@@ -9,7 +9,7 @@ class Deposit < ActiveRecord::Base
   
   acts_as_stateable states: STATES
   
-  after_commit :activate_goal, on: :create
+  after_commit :activate_goal, on: :create, :if => Proc.new { |d| d.goal.inactive? }
   
   after_commit :complete_goal, on: :update, :if => Proc.new { |d| d.completed? }
   

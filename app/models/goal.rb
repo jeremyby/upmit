@@ -15,15 +15,21 @@ class Goal < ActiveRecord::Base
   
   belongs_to :user
   has_one :deposit
-  has_many :commits
+  has_many :commits, dependent: :destroy
   
   validates_presence_of :title, :timezone, :user_id
+  
+  before_create :select_legend
+  
+  # Create the first commit when the state of the goal is updated
+  # from 'inactive' to 'active'
+  after_commit :create_first_commit, on: :update, :if => Proc.new { |g| g.previous_changes['state'] == [0, 10] }
   
   WEEKDAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
   
   STATES = {
     10  => 'active',
-    0   => 'pending',
+    0   => 'inactive',
     -1  => 'completed',
     -10 => 'cancelled'
   }
@@ -41,6 +47,46 @@ class Goal < ActiveRecord::Base
     ]
   end
   
+  def self.active_now
+    now = Time.now.utc
+    
+    Goal.joins(:commits).where(
+                              '(goals.weektimes is NULL AND commits.state = 0 AND commits.starts_at < ? AND commits.starts_at >= ?)
+                              OR (goals.weektimes is NOT NULL AND commits.state = 0 AND commits.starts_at < ? AND commits.starts_at >= ?)',
+                              now, now - 48.hours, 
+                              now, now - now.wday.days - 7.days
+                            ).group('goals.id').order('goals.id desc')
+  end
+  
+  
+  def schedule
+    IceCube::Schedule.from_yaml(self.schedule_yaml)
+  end
+  
+  
+  def last_commits
+    now = Time.now.utc
+    
+    self.commits.joins(:goal).where(
+                              '(goals.weektimes is NULL AND commits.starts_at < ? AND commits.starts_at >= ?)
+                              OR (goals.weektimes is NOT NULL AND commits.starts_at < ? AND commits.starts_at >= ?)',
+                              now - 24.hours, now - 48.hours, 
+                              now - 24.hours, now - now.wday.days - 7.days
+                            )
+  end
+  
+  def active_commits
+    now = Time.now.utc
+    
+    self.commits.joins(:goal).where(
+                              '(goals.weektimes is NULL AND commits.starts_at < ? AND commits.starts_at >= ?)
+                              OR (goals.weektimes is NOT NULL AND commits.starts_at < ? AND commits.starts_at >= ?)',
+                              now, now - 24.hours, 
+                              now, now - now.wday.days - 6.days
+                            )
+  end
+  
+  # output & format
   def to_frequency
     str = ''
     
@@ -60,23 +106,52 @@ class Goal < ActiveRecord::Base
      return str
   end
   
-  def to_s
-    self.to_frequency + " for #{ self.duration } days"
-  end
-  
-  def schedule
-    IceCube::Schedule.from_yaml(self.schedule_yaml)
-  end
-  
   def start_time_string
     self.start_time.strftime("%Y-%m-%d")
   end
   
-  # Create the first commit when the state of the goal is updated
-  # from 'pending' to 'active'
-  after_commit :create_first_commit, on: :update, :if => Proc.new { |g| g.previous_changes['state'] == [0, 10] }
+  def to_s
+    self.to_frequency + " for #{ self.duration } days"
+  end
+  
+  private  
+  def select_legend
+    legend = ''
+    
+    LEGEND_MAP.each do |key, arr|
+      arr.each do |a|
+        legend = key if self.title.include?(a)
+      end
+      
+      break unless legend.blank?
+    end
+    
+    legend = 'default' if legend.blank?
+
+    self.legend = legend
+  end
   
   def create_first_commit
-    self.commits.create(starts_at: self.schedule.first)
+    # Create the first commitment in real time
+    # while leave the rest to delayed job
+    weektimes = self.weektimes.blank? ? 1 : self.weektimes
+    
+    weektimes.times do
+      self.commits.create(user_id: self.user_id, starts_at: self.schedule.first)
+    end
+    
+    self.delay.batch_create_all_commits
+  end
+  
+  def batch_create_all_commits
+    all = self.schedule.all_occurrences[1..(self.occurrence - 1)]
+    
+    weektimes = self.weektimes.blank? ? 1 : self.weektimes
+    
+    all.each do |o|
+      weektimes.times do
+        self.commits.create(user_id: self.user_id, starts_at: o)
+      end
+    end
   end
 end

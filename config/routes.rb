@@ -1,19 +1,20 @@
 Rails.application.routes.draw do
-  devise_for :users
+  devise_for :users, skip: [:sessions]
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
   # 
 
   devise_scope :user do
-    get "login", to: "devise/sessions#new"
-    delete "logout", to: "devise/sessions#destroy"
+    get "login", to: "devise/sessions#new", as: :new_user_session
+    post 'login', to: "devise/sessions#create", as: :user_session
+    delete "logout", to: "devise/sessions#destroy", as: :destroy_user_session
     get "signup", to: "devise/registrations#new"
     get "forgot_password", to: "devise/passwords#new"
   end
   
   resources :deposit, only: [:index]
   
-  resources :goals do
+  resources :goals, except: [:show] do
     resources :deposit, except: [:index]  do
       collection do
         get 'confirm'
@@ -23,7 +24,9 @@ Rails.application.routes.draw do
     end
   end
   
-  # resources :users, path: '', only: [:show]
+  resources :users, path: '', only: [:show] do
+    resources :goals, only: [:show]
+  end
   
   
   # You can have the root of your site routed with "root"

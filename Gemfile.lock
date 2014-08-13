@@ -5,13 +5,6 @@ GIT
     paypal-sdk-merchant (1.116.0)
       paypal-sdk-core (~> 0.3.0)
 
-GIT
-  remote: https://github.com/twbs/bootstrap-sass.git
-  revision: 4730db67a8136b87a55180a467dcbaefc73c3026
-  specs:
-    bootstrap-sass (3.2.0.1)
-      sass (~> 3.2)
-
 GEM
   remote: http://rubygems.org/
   specs:
@@ -61,6 +54,11 @@ GEM
       sass (~> 3.2.19)
     compass-rails (2.0.0)
       compass (>= 0.12.2)
+    delayed_job (4.0.2)
+      activesupport (>= 3.0, < 4.2)
+    delayed_job_active_record (4.0.1)
+      activerecord (>= 3.0, < 4.2)
+      delayed_job (>= 3.0, < 4.1)
     devise (3.2.4)
       bcrypt (~> 3.0)
       orm_adapter (~> 0.1)
@@ -215,7 +213,7 @@ GEM
       polyglot (>= 0.3.1)
     turbolinks (2.2.2)
       coffee-rails
-    tzinfo (1.2.1)
+    tzinfo (1.2.2)
       thread_safe (~> 0.1)
     uglifier (2.5.3)
       execjs (>= 0.3.0)
@@ -228,9 +226,9 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  bootstrap-sass!
   coffee-rails
   compass-rails
+  delayed_job_active_record
   devise
   friendly_id
   guard-livereload

@@ -8,7 +8,7 @@ $(document).ready ->
   timezone = jstz.determine()
   $('#goal_timezone').val(timezone.name())
   
-  rotate_goal_samples() unless $('#goal_title').length
+  rotate_goal_samples() unless $('#goal_title').length && $('#goal_title').val().length
   
   update_frequency_title()
   
@@ -16,14 +16,8 @@ $(document).ready ->
   $('#goal_title').on('focus', ->
     $(this).removeClass('error')
     clearTimeout(upmit.timeoutid)
-  ).on('keydown', ->
-    $(this).addClass('normal')
-  ).on('keyup', ->
-    if $(this).val().length == 0
-      $(this).removeClass('normal')
   ).on('focusout', ->
     if $(this).val().length == 0
-      $(this).removeClass('normal')
       rotate_goal_samples()
   )
   
@@ -134,7 +128,7 @@ rotate_goal_samples = ->
   if upmit.timeoutid
     clearTimeout(upmit.timeoutid)
     
-  upmit.timeoutid = setTimeout(rotater, 3000)
+  upmit.timeoutid = setTimeout(rotater, 2500)
 
 rotater = ->
   $('#goal_title').attr('placeholder', upmit.samples[upmit.currentSample++ % upmit.samples.length])

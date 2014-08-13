@@ -1,6 +1,8 @@
 module Stateable
   def acts_as_stateable(options)
     options[:states].each do |state|
+      scope state[1], -> { where(state: state[0]) }
+      
       define_method("#{state[1]}?") do
         self.state == state[0]
       end

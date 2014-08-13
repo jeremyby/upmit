@@ -68,7 +68,7 @@
         %li
           %a(href="#") Export your data
         %li
-          = link_to 'Log out', logout_path, method: :delete
+          = link_to 'Log out', destroy_user_session_path, method: :delete
     %li.settings.hidden-xs.hidden-sm
       %a(href="personal-info.html" role="button")
         %i.fa.fa-cog

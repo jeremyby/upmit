@@ -10,8 +10,8 @@
     .row.goal
       .col-md-10.col-md-offset-2
         %h4 
-          Your Goal:
-          %small
+          The Goal:
+          %span          
             I will
             = @goal.title
             = @goal.to_s
@@ -27,7 +27,7 @@
         .col-md-4.col-xs-4.text-right
           .number 
             %span &times;
-            %i.fa.fa-usd>
+            %i.fa.fa-usd
             1
         .col-md-8
           .note deposit per day
@@ -37,7 +37,7 @@
         .col-md-4.col-xs-4.text-right
           .number 
             %span =
-            %strong<
+            %strong
               %i.fa.fa-usd
               = @goal.occurrence
         .col-md-1
@@ -46,9 +46,8 @@
       .col-md-4.col-xs-6.col-md-offset-6.col-xs-offset-5
         .paypal
           = form_for @deposit, url: goal_deposit_index_path(@goal), method: :post do |f|
-            / https://www.paypal.com/en_US/i/btn/btn_dg_pay_w_paypal.gif
-            %input#paypal_submit(type="image" src='#{ asset_path('btn_dg_pay_w_paypal.gif') }' border='0' align='top' alt='Pay with PayPal')
+            %input#paypal_submit(type="image" src='#{PAYPAL_BUTTON}/btn_dg_pay_w_paypal.gif' border='0' align='top' alt='Pay with PayPal')
 
-          %small Your payment will be processed by Paypal.com. The deposit can be paid with all major credit cards and is free of any charge.
+          %small Your payment will be processed by Paypal.com. The deposit can be made with all major credit cards with or without a Paypal account.
             
 

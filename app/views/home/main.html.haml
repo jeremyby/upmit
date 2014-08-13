@@ -5,13 +5,13 @@
     .row.stats-row
       .col-md-3.col-sm-3.stat
         .data
-          %span.number= current_user.goals.size
+          %span.number= current_user.goals.active.size
           Goals
         .date
-          Ongoing
+          active
       .col-md-3.col-sm-3.stat
         .data
-          %span.number= current_user.commits.size
+          %span.number= current_user.commits.active.size
           Days
         .date
           committed
@@ -21,18 +21,52 @@
           %span.number $#{ Deposit.where(user: current_user).sum(:amount)}
           Deposit
         .date
-          so far
+          at stake
       .col-md-3.col-sm-3.stat
         .data
-          %span.number $86
+          %span.number $#{ Deposit.completed.where(user: current_user).sum(:amount)}
           Earned back
         .date
           so far
 
               
   #pad-wrapper
-    - unless @goals.blank?
-      .row.col-md-12
-        %h4.pull-left.clearfix
-          Activities
-      .row.col-md-12
+    - unless @active.blank?
+      / .row.col-md-12
+      /   %a.pull-right(href='#{ new_goal_path }')
+      /     %button.btn.btn-success
+      /       %i.fa.fa-plus
+      /       New Goal
+      /   
+      /   %h3
+      /     Your active goals
+      
+      - @active.each do |goal|
+        .row
+          .active-goal
+            %a(href='#{ user_goal_path(current_user, goal) }')
+              .info
+                .legend= get_goal_legend(goal)
+                .title= goal.title
+                .freq= goal.to_frequency
+                  
+            .occur
+              - last, today, next_occur = Commit.get_occurrence_of(goal)
+              
+              - unless last.blank?
+                .last_occur
+                  last:
+                  = last.first.inspect
+              
+              - unless last.blank?
+                .today_occur
+                  today:
+                  = today.first.inspect
+                
+              - unless next_occur.blank?
+                .next_occur
+                  next:
+                  = next_occur.first.inspect
+                  
+            .prog #{ goal.commits.past.size }/#{ goal.occurrence }
+              

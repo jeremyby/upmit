@@ -1,0 +1,4 @@
+<% last, today, next_occur = Commit.get_occurrence_of(@commit.goal) %>
+
+$('#goal-<%= @commit.goal_id %> .last-occur').replaceWith("<div class='occur last-occur'><%= j send(@commit.goal.describe_last_occur, @commit.goal, last) %></div>")
+// $('#goal-<%= @commit.goal_id %> .last-occur').fadeOut('slow')

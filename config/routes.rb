@@ -24,6 +24,11 @@ Rails.application.routes.draw do
     end
   end
   
+  resources :commits, only: [] do
+    post 'check'
+    post 'fail'
+  end
+  
   resources :users, path: '', only: [:show] do
     resources :goals, only: [:show]
   end

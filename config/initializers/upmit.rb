@@ -16,17 +16,3 @@ when 'production'
   PAYPAL_DG = 'https://www.paypalobjects.com/js/external'
   PAYPAL_BUTTON = 'https://www.paypal.com/en_US/i/btn'
 end
-
-# Dumb filter for goal legend
-LEGEND_MAP = {
-  'run'       => ['run', 'jog'],
-  'swim'      => ['swim', 'pool'],
-  'smoke'     => ['smoke', 'cigarette'],
-  'dumbbell'  => ['work out', 'lift', 'gym'],
-  'happy'     => ['positive', 'happy', 'sad'],
-  'open'      => ['experience', 'new', 'try', 'open'],
-  'check'     => ['procrastinat', 'work'],
-  'plane'     => ['travel', 'up'],
-  'diet'      => ['diet', 'weight', 'pound', 'eat'],
-  'golf'      => ['golf']
-}

@@ -40,12 +40,42 @@ class Goal < ActiveRecord::Base
   
   serialize :weekdays
   
+  #####################################################################################
+  # 
+  # Class Methods
+  #
+  # ###################################################################################
   def self.samples
     [
       'run', 'work out', 'not smoke', 'stay positive','try something new', 'stay on diet',
       'smile to a stranger', 'make real progress at work', 'not procrastinate'
     ]
   end
+  
+  def self.build_for(user, hash)
+    @goal = if hash[:interval_unit] == 'week'
+      if hash[:weekdays].blank?
+        WeektimeGoal.new
+      else
+        WeekdayGoal.new
+      end
+    else
+      DailyGoal.new
+    end
+    
+    @goal.user = user
+    
+    offset = hash[:starts] == '1' ? 1 : 0
+    now = Time.now
+    
+    start_time, schedule = @goal.builder(offset, now, hash)
+    
+    @goal.start_time = start_time #giving value to goal will convert to UTC, therefore needing the temp start_time
+    @goal.schedule_yaml = schedule.to_yaml
+    
+    return @goal
+  end
+  
   
   def self.active_now
     now = Time.now.utc
@@ -58,12 +88,24 @@ class Goal < ActiveRecord::Base
                             ).group('goals.id').order('goals.id desc')
   end
   
-  
+  #####################################################################################
+  # 
+  # Building & Creating
+  #
+  # ###################################################################################
   def schedule
     IceCube::Schedule.from_yaml(self.schedule_yaml)
   end
   
+
   
+  
+  
+  #####################################################################################
+  # 
+  # Accessing
+  #
+  # ###################################################################################
   def last_commits
     now = Time.now.utc
     
@@ -86,7 +128,13 @@ class Goal < ActiveRecord::Base
                             )
   end
   
-  # output & format
+  
+  
+  #####################################################################################
+  # 
+  # Output & Format
+  #
+  # ###################################################################################
   def to_frequency
     str = ''
     
@@ -114,6 +162,12 @@ class Goal < ActiveRecord::Base
     self.to_frequency + " for #{ self.duration } days"
   end
   
+  
+  #####################################################################################
+  # 
+  # Callbacks
+  #
+  # ###################################################################################
   private  
   def select_legend
     legend = ''
@@ -126,19 +180,13 @@ class Goal < ActiveRecord::Base
       break unless legend.blank?
     end
     
-    legend = 'default' if legend.blank?
-
-    self.legend = legend
+    self.legend = legend.blank? ? 'default' : legend
   end
   
   def create_first_commit
     # Create the first commitment in real time
     # while leave the rest to delayed job
-    weektimes = self.weektimes.blank? ? 1 : self.weektimes
-    
-    weektimes.times do
-      self.commits.create(user_id: self.user_id, starts_at: self.schedule.first)
-    end
+    self.commits.create(user_id: self.user_id, starts_at: self.schedule.first)
     
     self.delay.batch_create_all_commits
   end
@@ -146,12 +194,8 @@ class Goal < ActiveRecord::Base
   def batch_create_all_commits
     all = self.schedule.all_occurrences[1..(self.occurrence - 1)]
     
-    weektimes = self.weektimes.blank? ? 1 : self.weektimes
-    
     all.each do |o|
-      weektimes.times do
-        self.commits.create(user_id: self.user_id, starts_at: o)
-      end
+      self.commits.create(user_id: self.user_id, starts_at: o)
     end
   end
 end

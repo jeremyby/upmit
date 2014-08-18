@@ -5,26 +5,37 @@
     .row.stats-row
       .col-md-3.col-sm-3.stat
         .data
-          %span.number= current_user.goals.active.size
-          Goals
+          - active_goals = current_user.goals.active.size
+          
+          %span.number= active_goals
+          = 'goal'.pluralize(active_goals)
+        
         .date
           active
+
       .col-md-3.col-sm-3.stat
         .data
-          %span.number= current_user.commits.active.size
-          Days
+          - active_commits = current_user.commits.active.size
+
+          %span.number= active_commits
+          = 'day'.pluralize(active_commits)
+
         .date
           committed
 
       .col-md-3.col-sm-3.stat
         .data
-          %span.number $#{ Deposit.where(user: current_user).sum(:amount)}
-          Deposit
+          - completed_goals = current_user.goals.completed.size
+
+          %span.number= completed_goals
+          = 'goal'.pluralize(completed_goals)
+
         .date
-          at stake
+          completed
+
       .col-md-3.col-sm-3.stat
         .data
-          %span.number $#{ Deposit.completed.where(user: current_user).sum(:amount)}
+          %span.number $#{ current_user.commits.succeed.size }
           Earned back
         .date
           so far
@@ -32,41 +43,49 @@
               
   #pad-wrapper
     - unless @active.blank?
-      / .row.col-md-12
-      /   %a.pull-right(href='#{ new_goal_path }')
-      /     %button.btn.btn-success
-      /       %i.fa.fa-plus
-      /       New Goal
-      /   
-      /   %h3
-      /     Your active goals
+      .row.current
+        .col-md-12
+          %a.pull-right(href='#{ new_goal_path }')
+            %button.btn.btn-info
+              %i.fa.fa-plus
+              New Goal
+        
+          %h4 Recent activities
       
-      - @active.each do |goal|
-        .row
-          .active-goal
-            %a(href='#{ user_goal_path(current_user, goal) }')
-              .info
-                .legend= get_goal_legend(goal)
-                .title= goal.title
-                .freq= goal.to_frequency
-                  
-            .occur
-              - last, today, next_occur = Commit.get_occurrence_of(goal)
-              
-              - unless last.blank?
-                .last_occur
-                  last:
-                  = last.first.inspect
-              
-              - unless last.blank?
-                .today_occur
-                  today:
-                  = today.first.inspect
-                
-              - unless next_occur.blank?
-                .next_occur
-                  next:
-                  = next_occur.first.inspect
-                  
-            .prog #{ goal.commits.past.size }/#{ goal.occurrence }
+    - @active.each do |goal|
+      .row(id='goal-#{ goal.id }')
+        .active-goal.col-md-12
+          %a(href='#{ user_goal_path(current_user, goal) }')
+            .info.col-md-2
+              .legend= get_goal_legend(goal)
+              .title= goal.title
+              .freq= goal.to_frequency
+
+          .occurs.col-md-8
+            - last, today, next_occur = Commit.get_occurrence_of(goal)
+
+            - if last.to_ary.count {|c| c.active?} > 0
+              .occur.last-occur
+                = send(goal.describe_last_occur, goal, last)
+
+
+            .occur.today-occur
+              - if today.blank?
+                = content_tag(:span, 'Today', class: 'label label-info')
+                Not scheduled.
+              - else
+                = send(goal.describe_today_occur, goal, today)
+
+            - if false  
+              .occur.report
+                = send(goal.occur_report, goal, last, next_occur)
+
+
+
+          .prog.col-md-2
+            %span.past= goal.commits.past.size
+            \/
+            %span.total>= goal.occurrence
+        
+
               

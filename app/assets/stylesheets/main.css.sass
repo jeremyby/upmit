@@ -50,11 +50,15 @@
 /* UI elements section
 #pad-wrapper
   .row
+    &.current
+      margin: 70px -15px 0 -15px
+    
+      padding: 0 5px 0 0
+  
     .active-goal
       display: table
-    
+      width: 100%
       padding: 25px 0
-      // margin-bottom: 25px
       
       +border-radius(6px)
       border: 1px solid #fff
@@ -62,43 +66,105 @@
       +transition-property(all)
       +transition-duration(0.4s)
       
+      a:hover
+        text-decoration: none
+        
+        .title
+          text-decoration: underline
+      
       .info,
-      .occur,
+      .occurs,
       .prog
         float: none
         display: table-cell
-        vertical-align: top
+        vertical-align: middle
       
       .info
+        padding-left: 25px
+      
         text-align: center
-
-        padding: 0 15px
-        
-        width: 260px
-        
-        // border-right: 1px solid #e0e0e0
-        // +box-shadow(#fafafa -3px 0px 4px -1px inset)
       
         .legend
           +opacity(0.8)
         
-          margin-bottom: 5px
+          margin-bottom: 10px
         
         .title
-          // font-weight: bold
+          margin-bottom: 2px
         
-        .freq,
-        .freq:hover
-          color: #888
+        .freq
+          color: #999
+          font-style: italic
+          text-decoration: none
+          font-size: 12px
       
-      .occur
-        padding-left: 10px
+      .occurs
+        padding: 0 20px
+      
+        .occur
+          padding: 0
+          
+          line-height: 2em
+          
+          +opacity(0.99)
+          
+          
+          &.report
+            color: #999
+            font-size: 12px
+          
+            
+          span.label
+            padding: 0.1em 0.5em 0.2em
+            margin-right: .5em
+            
+            font-size: 12px
+            
+            +opacity(0.8)
+            
+            &.label-info
+              padding: 0 0.4em 0.1em
+              color: #333
+              background: #fff
+              border: 1px solid #999
         
+          .check_in
+            display: none
+          
+            margin-left: 10px
+            
+            .btn
+              padding: 3px 8px
+              
+              font-size: 12px
+              
+              +transition-property(all)
+              +transition-duration(0.5s)
+          
+          i
+            margin-right: 3px
+            
+            &.fa-check
+              color: green
+            &.fa-times
+              color: red
+              
       
       .prog
-        vertical-align: middle
-        padding: 0 15px 0 20px
-      
+        text-align: center
+        
+        font-size: 18px
+        
+        color: #999
+        
+        .past
+          font-size: 22px
+          
+          color: #32a0ee
+          
+        .total
+          font-style: italic
+          
       
       &:hover
         border-color: #e0e0e0
@@ -106,8 +172,15 @@
       
         .legend
           +opacity(1)
-  
-  
+        
+        .occur
+          +opacity(1)
+        
+          span.label
+            +opacity(0.95)
+            
+          .check_in
+            display: inline-block
   
     h4
       margin: 0 0 25px 0

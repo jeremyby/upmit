@@ -35,7 +35,7 @@ end
 # 1st goal of first user, daily
 g = User.first.goals.build(
   {
-    title: 'make real progress at work', timezone: 'Asia/Shanghai', state: 10, duration: 100, interval_unit: 'day'
+    title: 'make real progress at work', timezone: 'Asia/Shanghai', state: 10, duration: 100, interval_unit: 'day', type: 'DailyGoal'
   }
 )
 
@@ -53,7 +53,7 @@ g.deposit.completed!
 # 2nd goal of first user, weekdays
 g = User.first.goals.build(
   {
-    title: 'run for 10 minutes', timezone: 'Asia/Shanghai', state: 10, duration: 184, interval_unit: 'week', weekdays: [1, 3, 5]
+    title: 'run for 10 minutes', timezone: 'Asia/Shanghai', state: 10, duration: 184, interval_unit: 'week', weekdays: [1, 3, 5], type: 'WeekdayGoal'
   }
 )
 
@@ -71,7 +71,7 @@ create_goal(g, schedule)
 # 3rd goal of first user, twice a week
 g = User.first.goals.build(
   {
-    title: 'shopping', timezone: 'Asia/Shanghai', state: 10, duration: 365, interval_unit: 'week', weektimes: 2
+    title: 'shopping', timezone: 'Asia/Shanghai', state: 10, duration: 365, interval_unit: 'week', weektimes: 2, type: 'WeektimeGoal'
   }
 )
 
@@ -89,7 +89,7 @@ create_goal(g, schedule)
 # 4th goal of first user, same title of the 1st one
 g = User.first.goals.build(
   {
-    title: 'make real progress at work', timezone: 'Asia/Shanghai', state: 10, duration: 365, interval_unit: 'day'
+    title: 'make real progress at work', timezone: 'Asia/Shanghai', state: 10, duration: 365, interval_unit: 'day', type: 'DailyGoal'
   }
 )
 
@@ -104,7 +104,7 @@ create_goal(g, schedule)
 
 
 # 5th goal of first user, new goal
-g = User.first.goals.build({title: 'not smoke', timezone: 'Asia/Shanghai', duration: 100, interval_unit: 'day'})
+g = User.first.goals.build({title: 'not smoke', timezone: 'Asia/Shanghai', duration: 100, interval_unit: 'day', type: 'DailyGoal'})
 
 start_time = Time.now.in_time_zone(g.timezone).beginning_of_day
 schedule = IceCube::Schedule.new(start_time)

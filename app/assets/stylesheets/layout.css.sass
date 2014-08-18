@@ -282,9 +282,10 @@ body.menu
     padding-left: 15px
     margin-bottom: 0
     margin-left: 20px
+    
     > li > a
       display: block
-      padding: 19px 14px 15px 14px
+      padding: 17px 14px 17px 14px
       margin-left: -15px
       margin-bottom: 5px
       border-bottom: 1px solid #dae1e8
@@ -292,6 +293,7 @@ body.menu
       color: rgb(110, 130, 155)
       outline: 0px
       line-height: 21px
+      
     > li
       position: relative
       /* font awesome icon
@@ -312,6 +314,7 @@ body.menu
           text-shadow: 1px 1px 1px #fff
         i
           opacity: 1
+          
     .pointer
       position: absolute
       right: 9px
@@ -340,7 +343,7 @@ body.menu
         top: 0px
     a
       span
-        font-size: 12px
+        font-size: 13px
       
         margin-left: 35px
         transition: color .1s linear
@@ -349,6 +352,7 @@ body.menu
         -o-transition: color .1s linear
       &.ui-elements span
         margin-left: 25px
+        
       i
         position: absolute
         left: 0
@@ -359,6 +363,7 @@ body.menu
         -moz-transition: opacity .1s ease
         -webkit-transition: opacity .1s ease
         -o-transition: opacity .1s ease
+        
         &.icon-chevron-down
           position: relative
           float: right
@@ -367,6 +372,7 @@ body.menu
           color: rgb(104, 104, 104)
           width: initial
           height: initial
+          
     /* sidebar submenus
     > li.active,
     > li.open
@@ -428,65 +434,6 @@ body.menu
   &.wide-content
     margin-left: 0
     border-radius: 0
-  /* starts skins changer
-  .skins-nav
-    opacity: 1
-    -webkit-transition: right .3s
-    -moz-transition: right .3s
-    -ms-transition: right .3s
-    -o-transition: right .3s
-    transition: right .3s
-    position: fixed
-    right: -88px
-    top: 135px
-    font-size: 13px
-    z-index: 9999
-    &:hover
-      right: 0
-    a
-      display: block
-      color: #fff
-      text-decoration: none
-      padding-left: 10px
-      height: 37px
-      -webkit-border-radius: 4px 0 0 4px
-      -moz-border-radius: 4px 0 0 4px
-      border-radius: 4px 0 0 4px
-      margin-bottom: 3px
-      -webkit-transition: all .5s
-      -moz-transition: all .5s
-      -ms-transition: all .5s
-      -o-transition: all .5s
-      transition: all .5s
-      &.first_nav
-        background: rgba(95, 175, 228, 0.8)
-        &:hover
-          background: rgba(95, 175, 228, 1)
-      &.second_nav
-        background: rgba(36, 43, 77, 0.8)
-        &:hover
-          background: rgba(36, 43, 77, 1)
-      .icon
-        float: left
-        width: 9px
-        height: 10px
-        background: url("../../img/skin-nav-bullets.png") 0 0 no-repeat
-        margin: 15px 15px 0 5px
-      &.selected .icon
-        background-position: 0 -9px
-      .text
-        padding-right: 12px
-        white-space: nowrap
-        display: block
-        width: 115px
-        position: relative
-        top: 9px
-        -webkit-transition: width .2s
-        -moz-transition: width .2s
-        -ms-transition: width .2s
-        -o-transition: width .2s
-        transition: width .2s
-  /* end skin changer
 
 /* responsive
 @media (max-width: 1020px)

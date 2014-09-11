@@ -1,16 +1,22 @@
 / main container
 .content
   #pad-wrapper
-    - unless @active.blank?
-      .row
+    - if  current_user.goals.size == 0
+      = render 'home/jumbotron'
+
+    - elsif @active.blank?
+    
+    - else
+      .row.top
         .col-md-12
-          %a.pull-right(href='#{ new_goal_path }')
-            %button.btn.btn-success
+          %a(href='#{ new_goal_path }')
+            %button.btn.btn-info
               %i.fa.fa-plus
               New Goal
         
           %h4 Active
       
+      .row
         .col-md-12
           - @active.each do |goal|
             - past, failed, succeed = goal.commits.past.size, goal.commits.failed.size, goal.commits.succeed.size

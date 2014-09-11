@@ -1,0 +1,25 @@
+.content
+  #pad-wrapper
+    #add-email
+      .row
+        %h3 Finishing up
+      
+      .row
+        .col-m-10.col-m-offset-1
+          = form_for(current_user, :as => 'user', :url => finish_signup_path(current_user), :html => { role: 'form' }) do |f|
+            - if @show_errors && current_user.errors.any?
+              #error_explanation
+                - current_user.errors.full_messages.each do |msg|
+                  = msg
+                  %br
+            .form-group
+              .controls
+                = f.text_field :email, :autofocus => true, :value => '', class: 'form-control input-lg', placeholder: 'Email address'
+                %p.help-block Please provide your email address. No spam.
+              .controls
+                = f.label :follow_upmit, 'Follow @upmit so we can send you reminders via Twitter Direct Message'
+                = f.check_box :follow_upmit, checked: true
+                %p.help-block One time use only. We will never make change to your Twitter account in the future.
+                 
+            .actions
+              = f.submit 'Continue', :class => 'btn btn-primary'

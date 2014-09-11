@@ -1,9 +1,9 @@
 class WeekdayGoal < Goal
   def builder(offset, now, hash)
-    self.attributes = hash.permit(:title, :timezone, :duration, :interval, :interval_unit)
+    self.attributes = hash.permit(:title, :duration, :interval, :interval_unit)
     self.weekdays = hash[:weekdays] #weekdays cannot be mass-assigned. for it's an array?
 
-    today = now.in_time_zone(self.timezone)
+    today = now.in_time_zone(self.user.timezone)
     start_time = (today - today.wday.days + (offset * 7).days).beginning_of_day
     schedule = IceCube::Schedule.new(start_time)
     end_time = start_time + (self.duration - 1).days

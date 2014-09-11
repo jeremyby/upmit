@@ -11,19 +11,33 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140813040222) do
+ActiveRecord::Schema.define(version: 20140909100601) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
-  create_table "commits", force: true do |t|
-    t.text     "note"
-    t.integer  "goal_id",                null: false
-    t.integer  "user_id",                null: false
-    t.integer  "state",      default: 0, null: false
-    t.datetime "starts_at",              null: false
+  create_table "authorizations", force: true do |t|
+    t.integer  "user_id"
+    t.string   "provider",   null: false
+    t.string   "uid",        null: false
+    t.text     "token"
+    t.text     "secret"
+    t.text     "link"
     t.datetime "created_at"
     t.datetime "updated_at"
+  end
+
+  add_index "authorizations", ["user_id"], name: "index_authorizations_on_user_id", using: :btree
+
+  create_table "commits", force: true do |t|
+    t.text     "note"
+    t.integer  "goal_id",                 null: false
+    t.integer  "user_id",                 null: false
+    t.integer  "state",       default: 0, null: false
+    t.datetime "starts_at",               null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.datetime "reminded_at"
   end
 
   add_index "commits", ["goal_id"], name: "index_commits_on_goal_id", using: :btree
@@ -75,7 +89,6 @@ ActiveRecord::Schema.define(version: 20140813040222) do
     t.text     "description"
     t.text     "schedule_yaml",               null: false
     t.integer  "user_id",                     null: false
-    t.string   "timezone",                    null: false
     t.integer  "state",         default: 0,   null: false
     t.string   "weekdays"
     t.string   "interval",      default: "1", null: false
@@ -89,9 +102,22 @@ ActiveRecord::Schema.define(version: 20140813040222) do
     t.integer  "occurrence",                  null: false
     t.string   "legend"
     t.string   "type"
+    t.string   "hash_word"
   end
 
   add_index "goals", ["user_id"], name: "index_goals_on_user_id", using: :btree
+
+  create_table "reminders", force: true do |t|
+    t.text     "type",                     null: false
+    t.string   "recipient",                null: false
+    t.string   "recipient_id",             null: false
+    t.integer  "state",        default: 1, null: false
+    t.integer  "user_id",                  null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "reminders", ["user_id"], name: "index_reminders_on_user_id", using: :btree
 
   create_table "users", force: true do |t|
     t.string   "avatar"
@@ -111,6 +137,7 @@ ActiveRecord::Schema.define(version: 20140813040222) do
     t.datetime "last_sign_in_at"
     t.string   "current_sign_in_ip"
     t.string   "last_sign_in_ip"
+    t.string   "timezone"
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree

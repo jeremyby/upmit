@@ -6,11 +6,15 @@
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 
-User.create([
-              {first_name: 'Jeremy', last_name: 'Yang', email: 'jeremyby@gmail.com', password: '19781115', password_confirmation: '19781115'},
-              {first_name: 'Bin', last_name: 'Yang', email: 'b.yang@live.com', password: '19781115', password_confirmation: '19781115'},
-              {first_name: 'Jeremy', last_name: 'Yang', email: 'jeremyyang@gmail.com', password: '19781115', password_confirmation: '19781115'}
-])
+
+%w(User Goal Commit Deposit).each do |model|
+  model.constantize.destroy_all
+end
+
+
+User.create! first_name: 'Jeremy', last_name: 'Yang', email: 'jeremyby@gmail.com', password: '19781115', password_confirmation: '19781115', timezone: 'Asia/Shanghai'
+User.create! first_name: 'Bin', last_name: 'Yang', email: 'b.yang@live.com', password: '19781115', password_confirmation: '19781115', timezone: 'America/New_York'
+User.create! first_name: 'Jeremy', last_name: 'Yang', email: 'jeremyyang@gmail.com', password: '19781115', password_confirmation: '19781115', timezone: 'Asia/Shanghai'
 
 
 def create_goal(goal, schedule)
@@ -26,20 +30,16 @@ def create_goal(goal, schedule)
     weektimes = goal.weektimes.blank? ? 1 : goal.weektimes
     weektimes.times do
       goal.schedule.all_occurrences.each do |o|
-        goal.commits.create({state: 0, starts_at: o, user_id: 1})
+        goal.commits.create({state: 0, starts_at: o, user: User.first})
       end
     end
   end
 end
 
 # 1st goal of first user, daily
-g = User.first.goals.build(
-  {
-    title: 'make real progress at work', timezone: 'Asia/Shanghai', state: 10, duration: 100, interval_unit: 'day', type: 'DailyGoal'
-  }
-)
+g = User.first.goals.build title: 'make real progress at work', state: 10, duration: 100, interval_unit: 'day', type: 'DailyGoal'
 
-start_time = (Time.now.in_time_zone(g.timezone) - 110.days).beginning_of_day
+start_time = (Time.now.in_time_zone('Asia/Shanghai') - 110.days).beginning_of_day
 schedule = IceCube::Schedule.new(start_time)
 end_time = start_time + (g.duration - 1).days
 
@@ -51,13 +51,9 @@ g.deposit.completed!
 
 
 # 2nd goal of first user, weekdays
-g = User.first.goals.build(
-  {
-    title: 'run for 10 minutes', timezone: 'Asia/Shanghai', state: 10, duration: 184, interval_unit: 'week', weekdays: [1, 3, 5], type: 'WeekdayGoal'
-  }
-)
+g = User.first.goals.build title: 'run for 10 minutes', state: 10, duration: 184, interval_unit: 'week', weekdays: [1, 3, 5], type: 'WeekdayGoal'
 
-start_date = Time.now.in_time_zone(g.timezone) - 82.days
+start_date = Time.now.in_time_zone('Asia/Shanghai') - 82.days
 start_time = (start_date - start_date.wday.days).beginning_of_day
 schedule = IceCube::Schedule.new(start_time)
 end_time = start_time + (g.duration - 1).days
@@ -69,13 +65,9 @@ create_goal(g, schedule)
 
 
 # 3rd goal of first user, twice a week
-g = User.first.goals.build(
-  {
-    title: 'shopping', timezone: 'Asia/Shanghai', state: 10, duration: 365, interval_unit: 'week', weektimes: 2, type: 'WeektimeGoal'
-  }
-)
+g = User.first.goals.build title: 'shopping', state: 10, duration: 365, interval_unit: 'week', weektimes: 2, type: 'WeektimeGoal'
 
-start_date = Time.now.in_time_zone(g.timezone) - 24.days
+start_date = Time.now.in_time_zone('Asia/Shanghai') - 24.days
 start_time = (start_date - start_date.wday.days).beginning_of_day
 schedule = IceCube::Schedule.new(start_time)
 end_time = start_time + (g.duration - 1).days
@@ -87,13 +79,9 @@ create_goal(g, schedule)
 
 
 # 4th goal of first user, same title of the 1st one
-g = User.first.goals.build(
-  {
-    title: 'make real progress at work', timezone: 'Asia/Shanghai', state: 10, duration: 365, interval_unit: 'day', type: 'DailyGoal'
-  }
-)
+g = User.first.goals.build title: 'make real progress at work', state: 10, duration: 365, interval_unit: 'day', type: 'DailyGoal'
 
-start_time = (Time.now.in_time_zone(g.timezone) - 56.days).beginning_of_day
+start_time = (Time.now.in_time_zone('Asia/Shanghai') - 56.days).beginning_of_day
 schedule = IceCube::Schedule.new(start_time)
 end_time = start_time + (g.duration - 1).days
 
@@ -104,9 +92,9 @@ create_goal(g, schedule)
 
 
 # 5th goal of first user, new goal
-g = User.first.goals.build({title: 'not smoke', timezone: 'Asia/Shanghai', duration: 100, interval_unit: 'day', type: 'DailyGoal'})
+g = User.first.goals.build title: 'not smoke', duration: 100, interval_unit: 'day', type: 'DailyGoal'
 
-start_time = Time.now.in_time_zone(g.timezone).beginning_of_day
+start_time = Time.now.in_time_zone('Asia/Shanghai').beginning_of_day
 schedule = IceCube::Schedule.new(start_time)
 end_time = start_time + (g.duration - 1).days
 

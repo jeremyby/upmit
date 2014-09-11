@@ -20,8 +20,8 @@ class Commit < ActiveRecord::Base
   def self.get_occurrence_of(goal)
     now = Time.now
     
-    last_time = goal.weektimes.blank? ? now - 1.day : now - now.wday.days - 1.day
-    today_time = goal.weektimes.blank? ? now.in_time_zone(goal.timezone).beginning_of_day.utc : (now - now.wday.days).in_time_zone(goal.timezone).beginning_of_day.utc
+    last_time = goal.is_a?(WeektimeGoal) ?  now - now.wday.days - 24.hours : now - 24.hours
+    today_time = goal.is_a?(WeektimeGoal) ? (now - now.wday.days).in_time_zone(goal.user.timezone).beginning_of_day.utc : now.in_time_zone(goal.user.timezone).beginning_of_day.utc
     
     # find the previous occurrence(s), therefore needs to access schedule
     last_occur = goal.schedule.previous_occurrence(last_time)
@@ -41,16 +41,17 @@ class Commit < ActiveRecord::Base
     
     # Daily commitments and weekly commitments with set weekdays
     # Weekly commitments with occurrences
-    Commit.joins(:goal).where('(goals.weektimes is NULL AND commits.state = 0 AND commits.starts_at < ?)
-                              OR (goals.weektimes is NOT NULL AND commits.state = 0 AND commits.starts_at < ?)',
-                              now - 48.hours, now - now.wday.days - 8.days)
+    Commit.active.joins(:goal).where("(goals.type <> 'WeektimeGoal' AND commits.starts_at < ?)
+                                    OR (goals.type = 'WeektimeGoal' AND commits.starts_at < ?)",
+                                    now - 24.hours, now - now.wday.days - 7.days)
   end
+  
   
   #####################################################################################
   # 
   # Logic
   #
-  # ###################################################################################
+  # ################################################################################### 
   def late?
     now = Time.now.utc
     g = self.goal

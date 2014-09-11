@@ -1,0 +1,7 @@
+
+$('#goal-<%= @commit.goal_id %> .<%= @type %>-occur').replaceWith("<div class='occur <%= @type %>-occur'><%= j send(@method_name, @commit.goal, @occur) %></div>")
+$('#goal-<%= @commit.goal_id %> span.past').html('<%= @commit.goal.commits.past.size %>')
+
+<% if @commit.succeed? %>
+  $('#main-stats #earn-back').html('$<%= current_user.commits.succeed.size %>')
+<% end %>

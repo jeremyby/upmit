@@ -5,9 +5,6 @@ $(document).ready ->
   
   upmit.timeoutid = 0
   
-  timezone = jstz.determine()
-  $('#goal_timezone').val(timezone.name())
-  
   rotate_goal_samples() unless $('#goal_title').length && $('#goal_title').val().length
   
   update_frequency_title()
@@ -118,7 +115,7 @@ $(document).ready ->
   
   $('.actions :submit').on('click', (e) ->
     if $('#goal_title').val().length == 0
-      $('#goal_title').attr('placeholder', "need to describe the goal here...").addClass('error')
+      $('#goal_title').attr('placeholder', "need to describe the goal first...").addClass('error')
       clearTimeout(upmit.timeoutid)
       
       e.preventDefault()

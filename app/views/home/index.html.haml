@@ -1,9 +1,9 @@
-:sass
-  body
-    background: #000
-    color: #fff
-    font-size: 17px
-
+:css
+  body {
+    background: #000;
+    color: #fff;
+    font-size: 17px;
+  }
 
 .background-image-overlay
 
@@ -31,7 +31,7 @@
         %a(href="#grid") Grid
       %li#menu-item-featured.menu-item.scroll
         %a(href="#featured") Featured
-      %li#menu-item-contact.menu-item.scroll
+      %li#menu-item-signup.menu-item.scroll
         %a(href="#signup") start now!
 
   %section#main-content.clearfix
@@ -46,7 +46,7 @@
               %a.link-scroll(href='#better')
                 %strong the better you
             %p
-              %a.link-scroll.btn.btn-outline-inverse.btn-lg(href="#signup") sign up
+              %a.link-scroll.btn.btn-outline-inverse.btn-lg(href="/signup") sign up
               %a.btn.btn-outline-inverse.btn-lg(href="/login") log in
 
     %article#better.section-wrapper.clearfix(data-custom-background-img="#{ asset_path('bg1.jpg') }")

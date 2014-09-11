@@ -1,3 +1,0 @@
-<% last, today, next_occur = Commit.get_occurrence_of(@commit.goal) %>
-
-$('#goal-<%= @commit.goal_id %> .today-occur').replaceWith("<div class='occur last-occur'><%= j send(@commit.goal.describe_today_occur, @commit.goal, today) %></div>")

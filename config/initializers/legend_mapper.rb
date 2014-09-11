@@ -6,8 +6,8 @@ LEGEND_MAP = {
   'dumbbell'  => ['work out', 'lift', 'gym'],
   'happy'     => ['positive', 'happy', 'sad'],
   'open'      => ['experience', 'new', 'try', 'open'],
-  'check'     => ['procrastinat', 'work'],
+  'check'     => ['procrastinat', 'work', 'progress'],
   'plane'     => ['travel', 'up'],
   'diet'      => ['diet', 'weight', 'pound', 'eat'],
-  'golf'      => ['golf']
+  'golf'      => ['golf', 'golfing']
 }

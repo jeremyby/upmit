@@ -16,3 +16,16 @@ task :fail_expired_commits => :environment do
     puts "and... done."
   end
 end
+
+task :remind_active_commits => :environment do
+  puts "Sending reminders for users..."
+
+  User.remindables.find_each do |u|
+    u.reminders.each do |r|
+      r.remind(u)
+      
+      puts "Sending #{r.type} for User #{u.id}."
+    end
+  end
+end
+

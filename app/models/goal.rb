@@ -17,7 +17,7 @@ class Goal < ActiveRecord::Base
   has_one :deposit
   has_many :commits, dependent: :destroy
   
-  validates_presence_of :title, :timezone, :user_id
+  validates_presence_of :title, :user_id
   
   before_create :select_legend
   
@@ -31,6 +31,7 @@ class Goal < ActiveRecord::Base
     10  => 'active',
     0   => 'inactive',
     -1  => 'completed',
+    -5  => 'onhold',
     -10 => 'cancelled'
   }
   
@@ -77,16 +78,16 @@ class Goal < ActiveRecord::Base
   end
   
   
-  def self.active_now
-    now = Time.now.utc
+  def self.remindable_for(user)
+    now = Time.now
     
-    Goal.joins(:commits).where(
-                              '(goals.weektimes is NULL AND commits.state = 0 AND commits.starts_at < ? AND commits.starts_at >= ?)
-                              OR (goals.weektimes is NOT NULL AND commits.state = 0 AND commits.starts_at < ? AND commits.starts_at >= ?)',
-                              now, now - 48.hours, 
-                              now, now - now.wday.days - 7.days
-                            ).group('goals.id').order('goals.id desc')
+    user.goals.joins(:commits)
+              .where("commits.state = 0 AND commits.reminded_at is NULL")
+              .where("(goals.type <> 'WeektimeGoal' AND commits.starts_at = ?) OR (goals.type = 'WeektimeGoal' AND commits.starts_at = ?)",
+                now.in_time_zone(user.timezone).beginning_of_day.utc, (now - now.wday.days).in_time_zone(user.timezone).beginning_of_day.utc)
+    
   end
+
   
   #####################################################################################
   # 
@@ -95,37 +96,6 @@ class Goal < ActiveRecord::Base
   # ###################################################################################
   def schedule
     IceCube::Schedule.from_yaml(self.schedule_yaml)
-  end
-  
-
-  
-  
-  
-  #####################################################################################
-  # 
-  # Accessing
-  #
-  # ###################################################################################
-  def last_commits
-    now = Time.now.utc
-    
-    self.commits.joins(:goal).where(
-                              '(goals.weektimes is NULL AND commits.starts_at < ? AND commits.starts_at >= ?)
-                              OR (goals.weektimes is NOT NULL AND commits.starts_at < ? AND commits.starts_at >= ?)',
-                              now - 24.hours, now - 48.hours, 
-                              now - 24.hours, now - now.wday.days - 7.days
-                            )
-  end
-  
-  def active_commits
-    now = Time.now.utc
-    
-    self.commits.joins(:goal).where(
-                              '(goals.weektimes is NULL AND commits.starts_at < ? AND commits.starts_at >= ?)
-                              OR (goals.weektimes is NOT NULL AND commits.starts_at < ? AND commits.starts_at >= ?)',
-                              now, now - 24.hours, 
-                              now, now - now.wday.days - 6.days
-                            )
   end
   
   
@@ -186,7 +156,7 @@ class Goal < ActiveRecord::Base
   def create_first_commit
     # Create the first commitment in real time
     # while leave the rest to delayed job
-    self.commits.create(user_id: self.user_id, starts_at: self.schedule.first)
+    self.commits.create! user: self.user, starts_at: self.schedule.first 
     
     self.delay.batch_create_all_commits
   end
@@ -195,7 +165,7 @@ class Goal < ActiveRecord::Base
     all = self.schedule.all_occurrences[1..(self.occurrence - 1)]
     
     all.each do |o|
-      self.commits.create(user_id: self.user_id, starts_at: o)
+      self.commits.create! user: self.user, starts_at: o
     end
   end
 end

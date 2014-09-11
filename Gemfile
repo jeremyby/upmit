@@ -29,6 +29,8 @@ gem 'jquery-rails'
 gem 'turbolinks'
 gem 'jquery-turbolinks'
 
+gem 'nprogress-rails'
+
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jbuilder'
 
@@ -52,8 +54,11 @@ gem 'puma'
 
 gem 'devise'
 gem 'omniauth'
+gem 'omniauth-twitter'
 
 gem 'paypal-sdk-merchant', git: 'https://github.com/paypal/merchant-sdk-ruby.git'
+
+gem 'twitter'
 
 gem 'friendly_id'
 gem 'stringex'
@@ -61,6 +66,7 @@ gem 'stringex'
 gem 'ice_cube'
 
 gem 'delayed_job_active_record'
+gem 'daemons'
 
 
 group :development, :test do

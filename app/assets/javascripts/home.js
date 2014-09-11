@@ -378,13 +378,12 @@ function set_section_to_active(target_section_id, clicked_menu_item_id, called_o
             if (section_custom_background !== undefined && section_custom_background != "")
             {
                 var transition_speed = (called_on_scroll != true) ? 1500 : 550; // crossfading speed should be faster when function called on scroll
-
+                
                 $("#outer-background-container").backstretch(section_custom_background, {fade:transition_speed});
             }
             // end: if target section wrapper has custom background set
         }
         // end: change custom background
-
     }
     // end: only works if the target_section is provided
 }
@@ -416,7 +415,7 @@ function update_active_sections_on_scroll(section_wrappers, amount_of_pixels_as_
 {
     // first check if already loaded (to make function faster), otherwise search for all the section wrappers
     var all_section_wrappers = (section_wrappers !== undefined && section_wrappers != "") ? section_wrappers : $("#main-content").find(".section-wrapper");
-
+    
     // see comment above
     var amount_of_pixels_as_buffer_between_sections = (amount_of_pixels_as_buffer_between_sections !== amount_of_pixels_as_buffer_between_sections && amount_of_pixels_as_buffer_between_sections != "") ? amount_of_pixels_as_buffer_between_sections : 0.25 * ($(window).height());
 
@@ -437,6 +436,8 @@ function update_active_sections_on_scroll(section_wrappers, amount_of_pixels_as_
     {
         var active_section_id = "#"+current_scroll_section.attr("id");
 
+        
+        
         // DON'T do update if visible section is already active
         if (!current_scroll_section.hasClass("active"))
         {
@@ -486,6 +487,8 @@ function preload_section_backgrounds()
             {
                 var img = new Image();
                 img.src = section_custom_background;
+                
+                // alert(img.src)
             }
         });
     }
@@ -1092,6 +1095,7 @@ function initialise_document_ready_functions()
 
    // Initialise General Links Click Events
    initialise_general_links_click_events();
+   
    // Initialise Main Menu Links Click Events
    initialise_main_menu_click_events();
 
@@ -1145,7 +1149,12 @@ function initialise_document_ready_functions()
    }
    });
    // ------ END: Owl Carousel ------    
-
+   
+   
+ 
+  $(window).unbind('resize').unbind('scroll');
+    
+    
    /* 
     * ----------------------------------------------------------
     * ON WINDOW RESIZE
@@ -1174,9 +1183,12 @@ function initialise_document_ready_functions()
     * ON WINDOW SCROLL
     * ----------------------------------------------------------
     */
+    
+  
+  
    $(window).scroll(function()
    { 
-
+      // alert('scroll fire');
        // Update Active Sections on Scroll (do not use function when menu link was clicked - as this already has a link to the scroll function) -- (do not fire function on mobile viewports)
        if (!$("#main-content").hasClass("same_page_link_in_action") && !jQuery.browser.mobile )
        {
@@ -1194,7 +1206,10 @@ function initialise_document_ready_functions()
 
 $(document).ready(function()
 {
+  if ($('.homer').length) {
    initialise_document_ready_functions();
+   initialise_window_load_functions();
+  }
 });
 
 /* 
@@ -1222,11 +1237,10 @@ function initialise_window_load_functions()
 
    // Load images after other elements are loaded
    load_images("lazy", true, true);
-
 }
 // end: initialise_window_load_functions()
 
 $(window).load(function()
-{
-   initialise_window_load_functions();
+{ 
+  
 });

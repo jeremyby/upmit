@@ -1,10 +1,16 @@
 
+- @body_class = 'login-bg'
+  
+.background-image-overlay
+
 .login-wrapper
-  = link_to image_tag(asset_path('logo-home.png'), class: 'logo'), root_path
+  = link_to (image_tag(asset_path('logo-home.png'), class: 'logo')), root_path
   
   .box
     .content-wrap
       %h6 Log in
+      
+      .twitter= link_to 'Sign in with Twitter', user_omniauth_authorize_path(:twitter)
       
       = form_for(resource, as: resource_name, url: session_path(resource_name)) do |f|
         = f.email_field :email, class: "form-control", placeholder: "Email address", autofocus: true
@@ -22,10 +28,3 @@
     %p Don't have an account?
     = link_to 'Sign up', signup_path
 
-:css
-  body {
-    background: none;
-  }
-
-:javascript
-  $('html').addClass('login-bg');

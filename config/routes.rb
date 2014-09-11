@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
-  devise_for :users, skip: [:sessions]
+  devise_for :users, skip: [:sessions], controllers: { omniauth_callbacks: 'omniauth_callbacks' }
+
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
   # 
@@ -32,6 +33,8 @@ Rails.application.routes.draw do
   resources :users, path: '', only: [:show] do
     resources :goals, only: [:show]
   end
+  
+  match '/users/:id/finish_signup' => 'users#finish_signup', via: [:get, :patch], :as => :finish_signup
   
   
   # You can have the root of your site routed with "root"

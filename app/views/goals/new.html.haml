@@ -1,6 +1,7 @@
-:sass
-  #sidebar-nav
-    display: none
+:css
+  #sidebar-nav {
+    display: none;
+  }
 
 / main container .wide-content is used for this layout without sidebar :)
 .content.wide-content
@@ -16,13 +17,13 @@
       .col-md-9.new-goal
         .alert.alert-info
           %i.fa.fa-lightbulb-o.fa-lg
-          This page shows an example of an alternative layout with the main navbar on the top using
-          %strong .content.wide-content
-          for this main container
+          The change you have always want to make? Or something you always want to do? Set up the goal and we will help to keep you on track.
+          And it is totally 
+          %strong free
+          to use.
+
         .form
           = form_for @goal, url: goals_path, html: { class: "form-horizontal", role: "form" } do |f|
-            = f.hidden_field :timezone
-            
             .form-group.title
               %label.col-md-2 I will
               .col-md-10
@@ -87,6 +88,6 @@
                   %span tomorrow
             
             .actions.col-md-10.col-md-offset-2
-              = button_tag class: 'btn btn-primary', type: 'submit', name: 'commit', data: {disable_with: 'Please wait...'} do
+              = button_tag class: 'btn btn-primary', type: 'submit', name: 'commit', data: { disable_with: 'Please wait...' } do
                 Create & Proceed to Deposit
                 %i.fa.fa-arrow-right

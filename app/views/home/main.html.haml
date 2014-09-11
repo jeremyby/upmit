@@ -1,91 +1,97 @@
 / main container
 .content
-  / upper main stats
-  #main-stats
-    .row.stats-row
-      .col-md-3.col-sm-3.stat
-        .data
-          - active_goals = current_user.goals.active.size
-          
-          %span.number= active_goals
-          = 'goal'.pluralize(active_goals)
-        
-        .date
-          active
+  - if  current_user.goals.size == 0
+    #pad-wrapper
+      = render 'home/jumbotron'
+  
+  - elsif @active.blank?
+    
+  - else      
+    #pad-wrapper
+      / upper main stats
+      #main-stats
+        .row.stats-row
+          .col-md-3.col-sm-3.stat
+            .data
+              - active_goals = current_user.goals.active.size
 
-      .col-md-3.col-sm-3.stat
-        .data
-          - active_commits = current_user.commits.active.size
+              %span.number= active_goals
+              = 'goal'.pluralize(active_goals)
 
-          %span.number= active_commits
-          = 'day'.pluralize(active_commits)
+            .date
+              active
 
-        .date
-          committed
+          .col-md-3.col-sm-3.stat
+            .data
+              - active_commits = current_user.commits.active.size
 
-      .col-md-3.col-sm-3.stat
-        .data
-          - completed_goals = current_user.goals.completed.size
+              %span.number= active_commits
+              = 'day'.pluralize(active_commits)
 
-          %span.number= completed_goals
-          = 'goal'.pluralize(completed_goals)
+            .date
+              committed
 
-        .date
-          completed
+          .col-md-3.col-sm-3.stat
+            .data
+              - completed_goals = current_user.goals.completed.size
 
-      .col-md-3.col-sm-3.stat
-        .data
-          %span.number $#{ current_user.commits.succeed.size }
-          Earned back
-        .date
-          so far
+              %span.number= completed_goals
+              = 'goal'.pluralize(completed_goals)
 
-              
-  #pad-wrapper
-    - unless @active.blank?
-      .row.current
-        .col-md-12
-          %a.pull-right(href='#{ new_goal_path }')
-            %button.btn.btn-info
-              %i.fa.fa-plus
-              New Goal
-        
-          %h4 Recent activities
+            .date
+              completed
+
+          .col-md-3.col-sm-3.stat
+            .data
+              %span#earn-back.number $#{ current_user.commits.succeed.size }
+              Earned back
+            .date
+              so far
+    
+      - unless @active.blank?
+        .row.top
+          .col-md-12
+            %a(href='#{ new_goal_path }')
+              %button.btn.btn-info
+                %i.fa.fa-plus
+                New Goal
+
+            %h4 Recent activities
       
-    - @active.each do |goal|
-      .row(id='goal-#{ goal.id }')
-        .active-goal.col-md-12
-          %a(href='#{ user_goal_path(current_user, goal) }')
-            .info.col-md-2
-              .legend= get_goal_legend(goal)
-              .title= goal.title
-              .freq= goal.to_frequency
+      - @active.each do |goal|
+        .row(id='goal-#{ goal.id }')
+          .active-goal.col-md-12
+            .info.col-md-2.col-sm-3.col-xs-3
+              %a(href='#{ user_goal_path(current_user, goal) }')
+                .legend= get_goal_legend(goal)
+                .title= goal.title
+                .freq= goal.to_frequency
 
-          .occurs.col-md-8
-            - last, today, next_occur = Commit.get_occurrence_of(goal)
+            .occurs.col-md-6
+              - last, today, next_occur = Commit.get_occurrence_of(goal)
 
-            - if last.to_ary.count {|c| c.active?} > 0
-              .occur.last-occur
-                = send(goal.describe_last_occur, goal, last)
-
-
-            .occur.today-occur
-              - if today.blank?
-                = content_tag(:span, 'Today', class: 'label label-info')
-                Not scheduled.
-              - else
-                = send(goal.describe_today_occur, goal, today)
-
-            - if false  
-              .occur.report
-                = send(goal.occur_report, goal, last, next_occur)
+              - unless last.blank?
+                .occur.last-occur
+                  = send(goal.describe_last_occur, goal, last)
 
 
+              .occur.today-occur
+                - if today.blank?
+                  = label_maker('Today')
+                  Not scheduled.
+                - else
+                  = send(goal.describe_today_occur, goal, today)
 
-          .prog.col-md-2
-            %span.past= goal.commits.past.size
-            \/
-            %span.total>= goal.occurrence
+              - if false  
+                .occur.report
+                  = send(goal.occur_report, goal, last, next_occur)
+
+
+
+            .prog.col-md-3
+              %span.past= goal.commits.past.size
+              \/
+              %span.total>= goal.occurrence
         
 
               

@@ -50,10 +50,16 @@
 /* UI elements section
 #pad-wrapper
   .row
-    &.current
-      margin: 70px -15px 0 -15px
-    
-      padding: 0 5px 0 0
+    &.top
+      margin: 50px -15px 0 -15px
+      
+      position: relative
+      
+      a
+        position: absolute
+        
+        top: -5px
+        // right: 15px
   
     .active-goal
       display: table
@@ -62,9 +68,11 @@
       
       +border-radius(6px)
       border: 1px solid #fff
-
+      
       +transition-property(all)
       +transition-duration(0.4s)
+      
+      +opacity(0.9)
       
       a:hover
         text-decoration: none
@@ -80,16 +88,18 @@
         vertical-align: middle
       
       .info
-        padding-left: 25px
+        padding-left: 15px
       
         text-align: center
       
         .legend
-          +opacity(0.8)
-        
           margin-bottom: 10px
+          
+          +opacity(0.9)
         
         .title
+          font-size: 15px
+          font-weight: 600
           margin-bottom: 2px
         
         .freq
@@ -99,34 +109,27 @@
           font-size: 12px
       
       .occurs
-        padding: 0 20px
-      
+        padding: 0 30px
+        
+        
+        .label
+          padding: 0.1em 0.5em 0.2em
+          margin-right: .5em
+          
+          font-size: 12px
+          
+          &.label-default
+            background: #999
+        
         .occur
           padding: 0
           
           line-height: 2em
           
-          +opacity(0.99)
-          
           
           &.report
             color: #999
             font-size: 12px
-          
-            
-          span.label
-            padding: 0.1em 0.5em 0.2em
-            margin-right: .5em
-            
-            font-size: 12px
-            
-            +opacity(0.8)
-            
-            &.label-info
-              padding: 0 0.4em 0.1em
-              color: #333
-              background: #fff
-              border: 1px solid #999
         
           .check_in
             display: none
@@ -149,17 +152,16 @@
             &.fa-times
               color: red
               
-      
       .prog
         text-align: center
         
-        font-size: 18px
+        font-size: 16px
         
         color: #999
         
         .past
           font-size: 22px
-          
+          font-weight: 600
           color: #32a0ee
           
         .total
@@ -169,23 +171,22 @@
       &:hover
         border-color: #e0e0e0
         background: #f9f9f9
-      
+        
+        +opacity(1)
+        
         .legend
+          margin: -1px 0 11px 0
+          
           +opacity(1)
         
         .occur
-          +opacity(1)
-        
           span.label
-            +opacity(0.95)
             
           .check_in
             display: inline-block
   
     h4
       margin: 0 0 25px 0
-      
-      
     
       
     .goal
@@ -205,24 +206,20 @@
   #main-stats
     margin-left: -15px
     margin-right: -15px
+    
   #pad-wrapper
-    .ui-elements
-      .knobs
-        text-align: center
-        .knob-wrapper
-          float: inherit
-      .showcase
-        text-align: center
-    .table-products .table
-      .img
-        display: none
-      input[type="checkbox"]
-        margin-right: 10px
-      .label
-        display: none
+    .row.top
+      a
+        right: 15px
 
-@media (min-width: 768px) and (max-width: 979px)
-
+@media (min-width: 768px)
+  #main-stats
+    margin: -55px -50px 0 -50px
+    
+  .row.top
+    a
+      right: 50px
+  
 @media (max-width: 979px)
   #main-stats .stat .data
     padding-right: 17px

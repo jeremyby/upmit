@@ -1,7 +1,6 @@
 $(document).ready ->
   upmit.timer = 0
-  
-  # show_chart donut for donut in $('.donut')
+  timezone = jstz.determine()
   
   $('.donut').circliful()
   
@@ -44,17 +43,17 @@ $(document).ready ->
     $item = $(this).parent()
     $item.toggleClass "active"
     if $item.hasClass("active")
+      $item.find("i.fa-chevron-down").addClass('fa-rotate-180')
       $item.find(".submenu").slideDown "fast"
     else
       $item.find(".submenu").slideUp "fast"
+      $item.find("i.fa-chevron-down").removeClass('fa-rotate-180')
 
   
   $menu = $("#sidebar-nav")
+  
   $("body").click ->
     $(this).removeClass "menu"  if $(this).hasClass("menu")
-
-  $menu.click (e) ->
-    e.stopPropagation()
 
   $("#menu-toggler").click (e) ->
     e.stopPropagation()

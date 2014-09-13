@@ -22,6 +22,7 @@ gem 'uglifier'
 gem 'coffee-rails'
 # See https://github.com/sstephenson/execjs#readme for more supported runtimes
 gem 'therubyracer',  platforms: :ruby
+gem 'libv8'
 
 gem 'jquery-rails'
 
@@ -78,8 +79,4 @@ group :development, :test do
   gem 'rb-fsevent',       :require => false
   
   gem 'quiet_assets'
-end
-
-group :production do
-  gem 'rails_12factor'
 end

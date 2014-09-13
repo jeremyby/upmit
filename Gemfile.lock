@@ -297,7 +297,6 @@ DEPENDENCIES
   jbuilder
   jquery-rails
   jquery-turbolinks
-  libv8
   mysql2
   nprogress-rails
   omniauth

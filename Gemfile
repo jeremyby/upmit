@@ -46,9 +46,11 @@ gem 'puma'
 # gem 'bcrypt', '~> 3.1.7'
 
 # Use Capistrano for deployment
-gem 'capistrano-rails', group: :development
-gem 'capistrano3-puma' , group: :development
-gem 'capistrano-rbenv'
+group :development, :test do
+  gem 'capistrano-rails'
+  gem 'capistrano3-puma'
+  gem 'capistrano-rbenv'
+end
 
 # Use debugger
 # gem 'debugger', group: [:development, :test]

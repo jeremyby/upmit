@@ -16,3 +16,7 @@
 /tmp
 
 /.sass-cache
+
+Gemfile.lock
+
+

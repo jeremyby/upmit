@@ -40,7 +40,7 @@ class Commit < ActiveRecord::Base
     now = Time.now.utc
     
     # Daily commitments and weekly commitments with set weekdays
-    # Weekly commitments with occurrences
+    # Weekly commitments with occurrences (week starts on Sunday for now)
     Commit.active.joins(:goal).where("(goals.type <> 'WeektimeGoal' AND commits.starts_at < ?)
                                     OR (goals.type = 'WeektimeGoal' AND commits.starts_at < ?)",
                                     now - 24.hours, now - now.wday.days - 7.days)

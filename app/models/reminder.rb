@@ -6,15 +6,4 @@ class Reminder < ActiveRecord::Base
     0   => 'inactive'
   }
   
-  def remind(user)
-    goals = Goal.remindable_for(user)
-    
-    items = []
-    
-    goals.each do |g|
-      items << [g.title, g.hash_word]
-    end
-    
-    self.deliver(items.uniq)
-  end
 end

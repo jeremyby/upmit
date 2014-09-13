@@ -1,0 +1,18 @@
+!!! 5
+%html(lang="en")
+  %head
+    %title= @title.blank? ? 'Upmit.com' : @title
+  
+    = render 'layouts/common_head'
+    
+  %body(class='#{ @body_class }')
+    / %p.notice= notice
+    / %p.alert= alert
+  
+    - if user_signed_in?
+      = render 'layouts/navbar'
+      = render 'layouts/sidebar'
+      
+    = yield
+  
+

@@ -15,7 +15,8 @@ class User < ActiveRecord::Base
   has_many :commits
   has_many :reminders, dependent: :destroy
   
-  after_commit :create_email_reminder, on: [:create, :update], if: Proc.new { |u| u.previous_changes['email'][0] =~ TEMP_EMAIL_REGEX && u.email_valid? }
+  after_create :create_email_reminder, if: Proc.new { |u| u.email_valid? }
+  after_update :create_email_reminder, if: Proc.new { |u| u.previous_changes['email'].present? && u.previous_changes['email'][0] =~ TEMP_EMAIL_REGEX && u.email_valid? }
   
   attr_accessor :follow_upmit
 
@@ -23,8 +24,8 @@ class User < ActiveRecord::Base
   def normalize_friendly_id(string)
     s = string.to_ascii.parameterize
 
-    if User.where("slug ~ ?", "^#{ s }$").count > 0
-      offset = User.where("slug ~ ?", "^#{ s }-[\d]*").count + 1
+    if User.where("slug REGEXP ?", "^#{ s }$").count > 0
+      offset = User.where("slug REGEXP ?", "^#{ s }-[\d]*").count + 1
       s << "-#{ offset }"
     end
 
@@ -98,24 +99,31 @@ class User < ActiveRecord::Base
     
     user
   end
-
+  
   def email_valid?
     self.email.present? && self.email !~ TEMP_EMAIL_REGEX
   end
   
-  
-  
+  #####################################################################################
+  # 
+  # Class methods
+  #
+  # ###################################################################################
   
   def self.remindables
     now = Time.now.utc
     
+    # Non-weektime goals: active & not reminded
+    # Weektime goals: active & not reminded 7 times, since we can't decide the weekday because of user timezone now
     User.joins(:goals, :commits).where(
-                                  "(goals.type <> 'WeektimeGoal' AND commits.state = 0 AND commits.starts_at < ? AND commits.starts_at >= ?)
-                                  OR (goals.type = 'WeektimeGoal' AND commits.state = 0 AND commits.starts_at < ? AND commits.starts_at >= ?)",
+                                  "(goals.type <> 'WeektimeGoal' AND commits.starts_at < ? AND commits.starts_at >= ? AND commits.reminded < 0)
+                                  OR (goals.type = 'WeektimeGoal' AND commits.starts_at < ? AND commits.starts_at >= ? AND commits.reminded <= 6)",
                                   now, now - 24.hours, 
                                   now, now - now.wday.days - 7.days
-                                ).where('commits.reminded_at is NULL').group('users.id')
+                                )
+                                .where('commits.state = 0').group('users.id')
   end
+
 
 
   #####################################################################################

@@ -22,5 +22,4 @@ class WeekdayGoal < Goal
   def describe_today_occur
     'describe_daily_today_occur'
   end
-  
 end

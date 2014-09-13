@@ -5,8 +5,8 @@ class Goal < ActiveRecord::Base
   def normalize_friendly_id(string)
     s = string.to_ascii.parameterize
     
-    if Goal.where("user_id = ? and slug ~ ?", self.user_id, "^#{ s }$").count > 0
-      offset = Goal.where("user_id = ? and slug ~ ?", self.user_id,  "^#{ s }-[\d]*").count + 1
+    if Goal.where("user_id = ? and slug REGEXP ?", self.user_id, "^#{ s }$").count > 0
+      offset = Goal.where("user_id = ? and slug REGEXP ?", self.user_id,  "^#{ s }-[\d]*").count + 1
       s << "-#{offset}"
     end
     
@@ -18,6 +18,8 @@ class Goal < ActiveRecord::Base
   has_many :commits, dependent: :destroy
   
   validates_presence_of :title, :user_id
+  validates :hash_tag, uniqueness: { scope: :user_id }
+  
   
   before_create :select_legend
   
@@ -75,17 +77,6 @@ class Goal < ActiveRecord::Base
     @goal.schedule_yaml = schedule.to_yaml
     
     return @goal
-  end
-  
-  
-  def self.remindable_for(user)
-    now = Time.now
-    
-    user.goals.joins(:commits)
-              .where("commits.state = 0 AND commits.reminded_at is NULL")
-              .where("(goals.type <> 'WeektimeGoal' AND commits.starts_at = ?) OR (goals.type = 'WeektimeGoal' AND commits.starts_at = ?)",
-                now.in_time_zone(user.timezone).beginning_of_day.utc, (now - now.wday.days).in_time_zone(user.timezone).beginning_of_day.utc)
-    
   end
 
   

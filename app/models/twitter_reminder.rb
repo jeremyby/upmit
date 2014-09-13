@@ -1,7 +1,7 @@
 class TwitterReminder < Reminder
   def deliver(items)
-    string = "Today's reminder: #{ items.collect{|i| i[1]}.join(', ')} #upmit"
+    text = "@upmit today's reminder: #{ items.collect{|i| '#' + i[1]}.join(' ')}"
     
-    UpmitTwitter.delay.dm(self.recipient_id.to_i, string)
+    UpmitTwitter.delay.dm(self.recipient_id.to_i, text)
   end
 end

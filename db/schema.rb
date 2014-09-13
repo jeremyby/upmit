@@ -11,10 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140909100601) do
-
-  # These are extensions that must be enabled in order to support this database
-  enable_extension "plpgsql"
+ActiveRecord::Schema.define(version: 20140912133829) do
 
   create_table "authorizations", force: true do |t|
     t.integer  "user_id"
@@ -33,11 +30,11 @@ ActiveRecord::Schema.define(version: 20140909100601) do
     t.text     "note"
     t.integer  "goal_id",                 null: false
     t.integer  "user_id",                 null: false
-    t.integer  "state",       default: 0, null: false
+    t.integer  "state",      default: 0,  null: false
     t.datetime "starts_at",               null: false
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.datetime "reminded_at"
+    t.integer  "reminded",   default: -1
   end
 
   add_index "commits", ["goal_id"], name: "index_commits_on_goal_id", using: :btree
@@ -102,7 +99,7 @@ ActiveRecord::Schema.define(version: 20140909100601) do
     t.integer  "occurrence",                  null: false
     t.string   "legend"
     t.string   "type"
-    t.string   "hash_word"
+    t.string   "hash_tag"
   end
 
   add_index "goals", ["user_id"], name: "index_goals_on_user_id", using: :btree

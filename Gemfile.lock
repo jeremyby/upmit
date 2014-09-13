@@ -145,7 +145,7 @@ GEM
       railties (>= 3.1.0)
       turbolinks
     json (1.8.1)
-    libv8 (3.16.14.5)
+    libv8 (3.11.8.17)
     listen (2.7.9)
       celluloid (>= 0.15.2)
       rb-fsevent (>= 0.9.3)
@@ -246,8 +246,8 @@ GEM
       net-scp (>= 1.1.2)
       net-ssh (>= 2.8.0)
     stringex (2.5.2)
-    therubyracer (0.12.1)
-      libv8 (~> 3.16.14.0)
+    therubyracer (0.11.3)
+      libv8 (~> 3.11.8.12)
       ref
     thor (0.19.1)
     thread_safe (0.3.4)
@@ -310,7 +310,7 @@ DEPENDENCIES
   sass-rails
   sprockets (= 2.11.0)
   stringex
-  therubyracer
+  therubyracer (= 0.11.3)
   turbolinks
   twitter
   uglifier

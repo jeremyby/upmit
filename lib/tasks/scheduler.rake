@@ -22,7 +22,6 @@ namespace :commits do
   task :remind => :environment do
     puts "Sending reminders for users..."
 
-
     User.remindables.find_each do |u|
 
       now = Time.now.in_time_zone(u.timezone)
@@ -57,6 +56,64 @@ namespace :commits do
             commits = g.commits.active.where(starts_at: day_start).where("reminded < 0")
           
             commits.update_all(reminded: 0)
+          end
+        end
+      end
+    end
+  end
+end
+
+
+namespace :check do
+  task  :twitter => :environment do
+    puts "Retrieve @upmit tweets to check users in..."
+    
+    begin
+      tweets = UpmitTwitter.mentions(since_id: UpmitMentionSince.since_id, count: 200)
+    rescue Twitter::Error::TooManyRequests => error
+      # NOTE: Your process could go to sleep for up to 15 minutes but if you
+      # retry any sooner, it will almost certainly fail with the same exception.
+      sleep error.rate_limit.reset_in + 1
+      retry
+    end
+    
+    unless tweets.blank? # Having new mentions
+      puts "Processing #{ tweets.size } tweets"
+      
+      tweets.each do |t|
+        # puts "Tweet: #{ t.text }"
+        
+        auth = Authorization.where(uid: t.user.id).first # Find user with the Twitter uid
+        
+        unless auth.blank? # No such user
+          now = Time.now.in_time_zone(auth.user.timezone)
+          day_start = now.beginning_of_day
+          week_start = now.beginning_of_week(start_day = :sunday)
+          
+          if now - day_start <= 24.hours # check-in in the same day
+            unless t.hashtags.blank?
+              hash_array = t.hashtags.collect {|h| h.text}
+              
+              commits = auth.user.commits.active.joins(:goal).where("goals.hash_tag in (?)", hash_array)
+                                                              .where("(goals.type <> 'WeektimeGoal' AND commits.starts_at = ?)
+                                                                    OR (goals.type = 'WeektimeGoal' AND commits.starts_at = ?)",
+                                                                     day_start,
+                                                                     week_start)
+                                                              .group('commits.goal_id')
+              
+              # pp commits
+              
+              unless commits.blank?
+                Commit.transaction do
+                  commits.each do |c|
+                    c.update state: 1, note: t.text
+                    # photos: t.media.each p.media_url.to_s
+                  end
+                  
+                  UpmitMentionSince.update_attribute(:since_id, tweets.first.id)
+                end
+              end
+            end
           end
         end
       end

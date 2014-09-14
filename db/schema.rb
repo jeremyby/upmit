@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140912133829) do
+ActiveRecord::Schema.define(version: 20140913141128) do
 
   create_table "authorizations", force: true do |t|
     t.integer  "user_id"
@@ -103,6 +103,12 @@ ActiveRecord::Schema.define(version: 20140912133829) do
   end
 
   add_index "goals", ["user_id"], name: "index_goals_on_user_id", using: :btree
+
+  create_table "mention_pointers", force: true do |t|
+    t.integer  "since_id",   limit: 8, default: 1
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "reminders", force: true do |t|
     t.text     "type",                     null: false

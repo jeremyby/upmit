@@ -72,6 +72,9 @@ gem 'ice_cube'
 gem 'delayed_job_active_record'
 gem 'daemons'
 
+gem 'carrierwave'
+gem 'rmagick'
+
 
 group :development, :test do
   gem 'guard-rspec',      :require => false

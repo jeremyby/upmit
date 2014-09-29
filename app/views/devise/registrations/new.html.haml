@@ -1,0 +1,58 @@
+
+- @body_class = 'signup'
+
+- flash.now[:alert] = 'There are problems with your info. Please try again.' if resource.errors.present?
+
+
+.background-image-overlay
+
+
+.login-wrapper
+  .header
+    %h2.hidden-xs be the better you
+    = link_to (image_tag(asset_path('logo.png'), class: 'logo')), root_path
+
+
+  .twitter
+    = link_to image_tag(asset_path('twitter.png')) + 'Sign in with Twitter', user_omniauth_authorize_path(:twitter), class: 'btn-glow primary'
+  
+  
+  .box
+    .content-wrap
+    
+      %h6 Sign up
+      
+      - errors = resource.errors
+  
+      = form_for(resource, as: resource_name, url: registration_path(resource_name), role: 'form') do |f|
+        = f.hidden_field :timezone
+      
+        .form-group.email
+          = f.label :email, 'Email address', class: 'sr-only'
+          = f.email_field :email, autofocus: true, class: "form-control", placeholder: "Email address", data: { toggle: 'tooltip', placement: 'right'}, title: errors[:email].present? ? errors[:email].first : '' 
+        
+        .form-group.names
+          .col.col-sm-6.col-xs-6.first_name
+            = f.label :first_name, 'First name', class: 'sr-only'
+            = f.text_field :first_name, class: "form-control", placeholder: "First name", data: { toggle: 'tooltip', placement: 'right'}, title: errors[:first_name].present? ? errors[:first_name].first : ''
+          
+          .col.col-sm-6.col-xs-6.last_name
+            = f.label :last_name, 'Last name', class: 'sr-only'
+            = f.text_field :last_name, class: "form-control", placeholder: "Last name"
+        
+        .form-group
+          = f.label :password, 'Password', class: 'sr-only'
+          = f.password_field :password, autocomplete: "off", class: "form-control", placeholder: "Password", data: { toggle: 'tooltip', placement: 'right'}, title: errors[:password].present? ? errors[:password].first : ''
+        
+        .form-group
+          = f.label :password_confirmation, 'Confirm Password', class: 'sr-only'
+          = f.password_field :password_confirmation, autocomplete: "off", class: "form-control", placeholder: "Confirm Password", data: { toggle: 'tooltip', placement: 'right'}, title: errors[:password_confirmation].present? ? errors[:password_confirmation].first : ''
+
+        .action
+          = f.submit "Sign up", class: "btn-glow primary"
+
+
+  .already
+    %p Already have an account?
+    = link_to 'Log in', new_user_session_path
+

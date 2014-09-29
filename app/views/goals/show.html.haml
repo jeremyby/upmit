@@ -1,33 +1,163 @@
+- @title = "#{ is_owner?(@goal) ? 'I will' : @goal.user.full_name + ':'  } #{ h @goal.title } #{ @goal.to_s }".titlecase
+- is_current_user_owner_of_goal = is_owner?(@goal)
+
+- unless is_current_user_owner_of_goal
+  .owner
+    .follow= link_to "Follow #{ @goal.user.username.titlecase }", '#', class: 'btn btn-success'
+    .user
+      .avatar= link_to image_tag(asset_path(@goal.user.avatar.url), size: '80x80'), user_path(@goal.user)
+      .info
+        = link_to @goal.user.full_name, user_path(@goal.user)
+        %p.help-block= @goal.user.username
+        %p.bio= @goal.user.bio.blank? ? 'nothing yet' : @goal.user.bio
+
 / main container
-.content
-  #pad-wrapper
-    - if flash[:alert].present?
-      .row
-        .alert.alert-success.alert-dismissible(role='alert')
-          %button.close(type="button" data-dismiss="alert")
-            %span(aria-hidden="true") &times;
-            %span.sr-only Close
-          = flash[:alert]
-    
-    - if @goal.inactive?
-      .row
-        .alert.alert-info(role='alert')
-          %i.fa.fa-lightbulb-o.fa-lg
+.content(class="#{ 'panel-content' unless is_current_user_owner_of_goal }")
+  #pad-wrapper.goal-wrapper
+    - if @goal.inactive? && is_current_user_owner_of_goal
+      .row.col-md-11
+        .alert.alert-warning(role='alert')
+          %i.fa.fa-warning.fa-lg
           The goal is pending deposit. Please 
           = link_to 'make the deposit', new_goal_deposit_path(@goal), class: 'alert-link'
-          so we can start logging the your progress. 
+          so we can start tracking your progress.
+
+    .row.goal
+      .col-md-9
+        .legend#goal-legend
+          .wrapper
+            = get_goal_legend(@goal)
+            - if is_current_user_owner_of_goal
+              .edit Change
+
+        - if is_current_user_owner_of_goal
+          .legends(tabindex='-1')
+            - LEGEND_MAP.each do |l|
+              - img = image_tag asset_path("/assets/legends/#{ l[0] }.png")
+              - content = "<div class='legend'><div class='wrapper'>#{ img }</div></div>"
           
-    .row
-      .col-md-8
-        %h3
-          Goal
-          
-          %small
-            I will
-            = "#{ @goal.title } #{ @goal }"
-      .goal.col-md-4
-        - past, failed, succeed = @goal.commits.past.size, @goal.commits.failed.size, @goal.commits.succeed.size
-        - percentage = (past * 100 / @goal.occurrence)
-        - fgcolor = get_fg_color(past == 0 ? 0 : failed * 100 / past)
+              = link_to content.html_safe, user_goal_path(current_user, @goal, goal: { legend: l[0]} ), remote: true, method: :put, data: { url: asset_path("/assets/legends/#{ l[0] }.png") }
+        
+        
+        .right
+          %h3
+            .editable(data-type='text' data-name='goal[title]' data-pk='1' data-url='/#{ current_user.slug }/goals/#{ @goal.slug }')
+              = h @goal.title
+            
+          %p.area
+            = @goal.to_s.capitalize
+            %span.hash-tag(title="Tweet \"@upmit ##{ @goal.hash_tag }\" to check in today's commitment.")
+              - if is_current_user_owner_of_goal
+                %a.editable(data-type='text' data-name='goal[hash_tag]' data-pk='1' data-url='/#{ current_user.slug }/goals/#{ @goal.slug }')
+                  #{ @goal.hash_tag }
+              - else
+                \##{ @goal.hash_tag }
+            
+                
+          - if @goal.description.blank? 
+            - if is_current_user_owner_of_goal
+              .desc
+                .new.editable(data-type='textarea' data-value='' data-name='goal[description]' data-url='/#{ current_user.slug }/goals/#{ @goal.slug }')
+                  %span.btn.btn-default.btn-sm
+                    Add description...
+          - else
+            .desc
+              .exist.editable(data-type='textarea' data-value='#{ h @goal.description }'data-name='goal[description]' data-url='/#{ current_user.slug }/goals/#{ @goal.slug }')
+                = h textarea_format @goal.description
       
-        .donut(data-dimension="180" data-text="#{ percentage }%" data-info="#{ pluralize @goal.occurrence - past, 'time' } to go" data-width="24" data-fontsize="26" data-percent="#{ percentage }" data-fgcolor="#{ fgcolor }" data-bgcolor="#eee" data-fill="#ddd")
+      .col-md-2.side
+        %p= label_maker @goal.state_in_words, Goal::Labels[@goal.state]
+        
+        - if is_current_user_owner_of_goal
+          .edits
+            .edit.edit-title
+              %a.btn.btn-default.btn-sm(href='#') Edit title
+            
+            - unless @goal.description.blank? 
+              .edit.edit-desc
+                %a.btn.btn-default.btn-sm(href='#') Edit description
+    
+    
+    .row.line-break.col-md-11
+    
+    .row
+      .col-md-11.detail
+        .col-md-9.col-sm-12.col-xs-12
+          .row
+            .col-md-2.col-sm-2.col-xs-2.field Starts
+            .col-md-3.col-sm-3.col-xs-4.data
+              - if @goal.inactive?
+        
+              - else
+                = @goal.deposit.created_at.in_time_zone(@goal.user.timezone).strftime("%b %d, %Y")
+        
+            - unless @goal.inactive?
+              .col-md-2.col-sm-2.col-xs-2.col-md-offset-1.col-sm-offset-1.field.short Ends
+              .col-md-3.col-sm-3.col-xs-4.data= (@goal.deposit.created_at + (@goal.duration - 1).days).in_time_zone(@goal.user.timezone).strftime("%b %d, %Y")
+      
+          .row
+            .col-md-2.col-sm-2.col-xs-2.field 
+              Committed
+            .col-md-3.col-sm-3.col-xs-4.data
+              = @goal.occurrence
+              days
+        
+          .row
+            .col-md-2.col-sm-2.col-xs-2.field Succeeded
+            
+            - succeed = @goal.commits.succeed.size
+            .col-md-3.col-sm-3.col-xs-4.data= succeed
+
+        
+            - unless @goal.inactive?
+              .col-md-2.col-sm-2.col-xs-2.col-md-offset-1.col-sm-offset-1.field.short Failed
+            
+              - failed = @goal.commits.failed.size
+              .col-md-3.col-sm-3.col-xs-4.data= failed
+          
+          .row
+            .col-md-2.col-sm-2.col-xs-2.field
+              Total
+            
+            .col-md-3.col-sm-3.col-xs-4.data
+          
+              - past = @goal.commits.past.size
+        
+              = @goal.occurrence - past
+              days to go
+
+        
+        .col-md-3.col-sm-12.col-xs-12.donut-wrapper
+          - percentage = (past * 100 / @goal.occurrence)
+
+          .donut(data-dimension="140"
+                  data-text="#{ percentage }%"
+                  data-width="24"
+                  data-fontsize="24"
+                  data-percent="#{ percentage }"
+                  data-fgcolor="#50BB50"
+                  data-bgcolor="#eee"
+                  data-fill="#ddd")
+    
+    .row.line-break.col-md-11
+    
+    .row
+      .col-md-11.activities
+        %h5 Activities
+        
+        .col-md-9
+          .comment.clearfix
+            = form_for Comment.build_from(@goal), url: comments_path, html: { role: 'form', class: 'form-inline' }, remote: true do |f|
+              .form-group
+                = f.hidden_field :commentable_type
+                = f.hidden_field :commentable_id
+                
+                .col.avatar= image_tag(asset_path(current_user.avatar.thumb.url), size: '40x40')
+                .col.input= f.text_field :body, class: 'form-control input-sm', placeholder: 'your comment'
+                .col= f.submit 'Comment', class: 'btn-glow primary btn-sm'
+      
+        .col-md-9.activity-holder= render 'activities'
+
+    - if is_current_user_owner_of_goal
+      = render 'commits/commit_modal', id: 'edit-commit', title: 'Edit note and photo', cancel: 'Cancel'
+  

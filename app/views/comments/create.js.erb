@@ -1,0 +1,20 @@
+upmit.stop_spinner()
+
+$('.activities #comment_body').val('')
+
+$('.activities .activity-holder').prepend('<div style="display: none" class="activity <%= "right" if @comment.user == @comment.commentable.user %>" data-type="Comment" data-id="<%= @comment.id %>"><%= j render @comment %></div>')
+
+$('.activities .activity[data-id="<%= @comment.id %>"][data-type="Comment"]').fadeIn('fast')
+
+$('.activities .activity[data-id="<%= @comment.id %>"][data-type="Comment"] a.delete').on('ajax:success', function() {
+  $(this).closest('.activity').fadeOut('fast', function() {
+    $(this).remove();
+  })
+})
+
+
+<% if @error.present? %>
+  upmit.message('<%= @error %>', 'alert')
+<% else %>
+  upmit.message('Your entry was successfully updated.')
+<% end %>

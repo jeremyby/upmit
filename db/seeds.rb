@@ -14,8 +14,9 @@
 
 User.create! first_name: 'Jeremy', last_name: 'Yang', email: 'jeremyby@gmail.com', password: '19781115', password_confirmation: '19781115', timezone: 'Asia/Shanghai'
 User.create! first_name: 'Bin', last_name: 'Yang', email: 'b.yang@live.com', password: '19781115', password_confirmation: '19781115', timezone: 'America/New_York'
-User.create! first_name: 'Jeremy', last_name: 'Yang', email: 'jeremyyang@gmail.com', password: '19781115', password_confirmation: '19781115', timezone: 'Asia/Shanghai'
+User.create! first_name: 'Jeremy', last_name: 'Yang', email: 'jeremyyang@gmail.com', password: '19781115', password_confirmation: '19781115', timezone: 'Asia/Shanghai', confirmed_at: Time.now
 
+User.first.confirm!
 
 def create_goal(goal, schedule)
   goal.occurrence = schedule.all_occurrences.size * (goal.weektimes.blank? ? 1 : goal.weektimes)
@@ -25,7 +26,7 @@ def create_goal(goal, schedule)
   if goal.active?
     # since the goal was created with the active state,
     # creating deposit will not trigger goal.active! hence creating all commits
-    goal.create_deposit(user_id: 1, token: 'abcd', payer: 'abcd', amount: goal.occurrence, source: 'paypal')
+    goal.create_deposit(user_id: 1, token: 'abcd', payer: 'abcd', amount: Money.new(goal.occurrence * 100), source: 'paypal')
 
     weektimes = goal.weektimes.blank? ? 1 : goal.weektimes
     weektimes.times do

@@ -4,12 +4,11 @@ require 'stateable'
 
 # CDN/external file settings
 case Rails.env
-when 'nothing'
+when 'development'
   FONT_SITE = 'fonts.useso.com'
-  CDN = 'http://libs.useso.com/js'
+  CDN = '/assets/lib'
   PAYPAL_DG = '/assets/lib'
   PAYPAL_BUTTON = '/assets/'
-
 else
   FONT_SITE = 'fonts.googleapis.com'
   CDN = '//maxcdn.bootstrapcdn.com'

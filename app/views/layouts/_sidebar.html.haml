@@ -2,13 +2,16 @@
   %ul#dashboard-menu
     = nav_link('home', 'Home', '/', 'fa-home')
     
-    = nav_link('goals', 'Goals', goals_path, 'fa-star-o')
+    = nav_link('goals', 'Goals', user_goals_path(current_user), 'fa-star-o')
     
-    = nav_link('deposit', 'Deposit', deposit_index_path, 'fa-usd')
+    = nav_link('deposit', 'Balance', deposit_index_path, 'fa-usd')
     
+    %li
+      %a(href="#")
+        %i.fa.fa-share-alt
+        %span People
     
-    
-    - account_active = controller?('users') && (action?('finish_signup'))
+    - account_active = controller?('users')
     
     %li(class="#{ 'active' if account_active }")
       - if account_active
@@ -19,17 +22,12 @@
       %a.dropdown-toggle(href="settings.html")
         %i.fa.fa-cog
         %span
-          Account
+          Settings
           %i.fa.fa-chevron-down
           
       %ul.submenu(style="#{ 'display: block' if account_active }")
-        %li= link_to 'Your Profile', user_path(current_user)
-        %li
-          %a(href="grids.html") Recent Activities
-        %li
-          %a(href="signin.html") Settings
-    
-    %li
-      %a(href="#")
-        %i.fa.fa-share-alt
-        %span Extras
+        %li= link_to 'Account', account_users_path
+        %li= link_to 'Profile', profile_users_path
+        %li= link_to 'Preference', preference_users_path
+        
+

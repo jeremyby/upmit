@@ -1,0 +1,27 @@
+.modal.fade(id='#{ id }' tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true")
+  .modal-dialog
+    .modal-content
+      .modal-header
+        %button.close(type="button" data-dismiss="modal")
+          %span(aria-hidden="true") &times;
+          %span.sr-only Close
+        %h3.modal-title#modalLabel= title
+        
+      = form_tag '/commits', method: 'put', role: "form", remote: true, :multipart => true do
+        .modal-body
+          .form-group
+            %h5 Note
+            = text_area_tag :note, '', rows: 5, class: 'form-control', placeholder: 'Tell us more...'
+          .form-group
+            %ul.nav.nav-tabs(role='tablist')
+              %li.active
+                %a(href='#local' role='tab' data-toggle='tab') Local photo
+              %li
+                %a(href='#remote' role='tab' data-toggle='tab') Remote link
+            .tab-content
+              .tab-pane.active#local= file_field_tag :photo, class: 'form-control'
+              .tab-pane#remote= text_field_tag :remote_photo_url, '', class: 'form-control', placeholder: 'A url to a remote photo'
+          
+        .modal-footer
+          %button.btn.btn-default(type="button" data-dismiss="modal")= cancel
+          = submit_tag 'Update entry', class: 'btn-glow primary', data: { disable_with: 'Please wait...' }

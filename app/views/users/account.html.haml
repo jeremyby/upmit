@@ -1,0 +1,55 @@
+.content
+  #pad-wrapper.setting-wrapper    
+    .row.head
+      %h3
+        Account Settings
+        %small click and edit directly
+    
+
+    .row.line-break
+    
+    .row.email
+      .lbl.col-md-2.col-sm-2.col-xs-2
+        Email
+      .input.col-md-8.col-sm-10.col-xs-10
+        %a.editable(href='#' data-type='text' data-name='user[email]' data-url='/settings/update')
+          = @user.email
+        - if @user.unconfirmed_email.present?
+          %p.help-block
+            pending confirmation for: #{ @user.unconfirmed_email }
+          
+    
+    .row.password
+      .lbl.col-md-2.col-sm-2.col-xs-2
+        Password
+      .input.col-md-6.col-sm-8.col-xs-10
+        = form_for @user, url: '/settings/update', method: :put, remote: true, html: { :'data-type' => 'json' }, role: 'form' do |f|
+          - unless @user.encrypted_password.blank?
+            .form-group
+              = f.label :password, 'Current password', class: 'sr-only'
+              = f.password_field :current_password, autocomplete: "off", class: "form-control", placeholder: "Current password", data: { placement: 'right' }
+        
+          .form-group
+            = f.label :password, 'New password', class: 'sr-only'
+            = f.password_field :password, autocomplete: "off", class: "form-control", placeholder: "New password", data: { placement: 'right' }
+
+          .form-group
+            = f.label :password_confirmation, 'Confirm new password', class: 'sr-only'
+            = f.password_field :password_confirmation, autocomplete: "off", class: "form-control", placeholder: "Confirm new password", data: { placement: 'right' }
+
+          .action.text-right
+            = f.submit "Update", class: "btn-glow primary btn-sm", data: { disable_with: 'Update' }
+    
+    
+    .row.line-break
+    
+    .row
+      .lbl.col-md-2.col-sm-2.col-xs-2
+        Time Zone
+      .input.col-md-5.col-sm-6.col-xs-8
+        %a.editable_select(href='#' data-type='select' data-name='user[timezone]' data-url='/settings/update' data-value='#{ @user.timezone }')
+          = @user.timezone
+        %p.help-block
+          The time zone was set automatically based on your location when signing up. Please make sure your time zone setting is good so we can track your daily progress correctly.
+          
+          

@@ -1,57 +1,112 @@
-.login-bg
-  background: image-url('bg5.jpg') no-repeat center center fixed
-  filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src=image-url('bg5.jpg'), sizingMethod='scale')
-  -ms-filter: "progid:DXImageTransform.Microsoft.AlphaImageLoader(src=image-url('bg5.jpg'), sizingMethod='scale')"
+@import shared
+
+body.login,
+body.signup
+  .tool-tip
+    line-height: 40px
+  
+  .names
+  
+    .tooltip-inner
+      width: 100px
+
+
+body.login
+  background: image-url('bg8.jpg') no-repeat center center fixed
+  filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src=image-url('bg8.jpg'), sizingMethod='scale')
+  -ms-filter: "progid:DXImageTransform.Microsoft.AlphaImageLoader(src=image-url('bg8.jpg'), sizingMethod='scale')"
   -webkit-background-size: cover
   -moz-background-size: cover
   -o-background-size: cover
   background-size: cover
+  
 
 .login-wrapper
   position: absolute
-  top: 120px
+  top: 100px
   left: 0
   right: 0
   text-align: center
   
   .logo
-    margin-bottom: 12px
+    margin-bottom: 15px
     position: relative
-    left: -2px
+    left: -8px
+    
+  .twitter
+    margin: 40px auto 20px
+    width: 400px
+    
+    .btn-glow
+      width: 100%
+      font-size: 16px
+      padding: 12px 0
+      margin-bottom: 20px
+      
+      img
+        position: relative
+        
+        top: -3px
+        left: -12px
+      
+    &:after
+      content: '- or -'
+      color: #fff
+      font-size: 18px
+      font-weight: 300
+      font-family: georgia
+      font-style: italic
+      +opacity(0.6)
+      padding-top: 20px
     
   .box
-    margin: 0 auto
-    padding: 35px 0 30px
+    margin: 20px auto
+    padding: 25px 0 20px
     float: none
+    
     width: 400px
     box-shadow: 0 0 6px 2px rgba(0, 0, 0, 0.1)
     border-radius: 5px
-    background: rgba(255, 255, 255, 0.8)
+    background: rgba(255, 255, 255, 0.95)
+    
+    
     .content-wrap
       width: 82%
       margin: 0 auto
       
     h6
       text-transform: uppercase
-      margin: 0 0 30px 0
+      margin: 0 0 20px 0
       font-size: 18px
       font-weight: 600
       
-    input
-      &[type="email"]
-        font-size: 15px
-        height: 40px
-        margin-bottom: 18px
-        border-color: #b2bfc7
-        padding-left: 12px
+    
+    .form-group
+      margin: 0 0 8px 0
+      
+      &.email
+        margin-bottom: 15px
+    
+    
+    .form-group.names
+      margin: 18px 0
+      height: 40px
+      
+      .col
+        padding: 0
         
-      &[type="password"]
-        font-size: 15px
-        height: 40px
-        margin-bottom: 18px
-        border-color: #b2bfc7
-        padding-left: 12px
-        margin-bottom: 10px
+        &.first_name
+          padding-right: 4px
+          
+        &.last_name
+          padding-left: 4px
+      
+      
+    input
+      border-color: #b2bfc7
+      height: 40px
+      font-size: 15px
+
         
       &:-moz-placeholder
         color: #9ba8b6
@@ -79,11 +134,13 @@
       color: #3d88ba
       font-size: 13px
       margin-bottom: 6px
+      
     .remember
       display: block
       overflow: hidden
-      margin-bottom: 20px
+      margin: 15px 0
       input[type="checkbox"]
+        height: auto
         float: left
         margin-right: 8px
       label
@@ -92,22 +149,23 @@
         font-size: 13px
         font-weight: 600
         
-    .login
+    .btn-glow
       text-transform: uppercase
       font-size: 13px
       padding: 8px 30px
       
-  .no-account
+  .no-account,
+  .already
     margin: 0 auto
     float: none
     text-align: center
-    font-size: 14px
-    margin-top: 25px
+    font-size: 13px
+    margin-top: 20px
     p
       display: inline-block
-      color: #aaaaaa
+      color: #aaa
     a
-      color: #aaaaaa
+      color: #aaa
       margin-left: 7px
       border-bottom: 1px solid
       transition: all .1s linear
@@ -122,11 +180,275 @@
         color: #fff
         border-bottom-color: #fff
 
-/* responsive
-@media (max-width: 767px)
-  .login-wrapper .box
-    width: 350px
 
-@media (max-width: 480px)
-  .login-wrapper .box
-    width: 90%
+  .already
+    p
+      color: #555
+    a
+      color: #555
+
+      /* Opera
+      &:hover
+        color: #000
+        border-bottom-color: #000
+
+
+body.signup
+  background: image-url('bg7.jpg') no-repeat center center fixed
+  filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src=image-url('bg7.jpg'), sizingMethod='scale')
+  -ms-filter: "progid:DXImageTransform.Microsoft.AlphaImageLoader(src=image-url('bg7.jpg'), sizingMethod='scale')"
+  -webkit-background-size: cover
+  -moz-background-size: cover
+  -o-background-size: cover
+  background-size: cover
+  
+  
+  .login-wrapper
+    top: 0
+    
+    .header
+      background: rgba(58, 71, 83, 0.8)
+      width: 100%
+      text-align: left
+      
+      height: 48px
+      padding: 0 30px
+      
+      
+      .logo
+        margin-top: 13px
+      
+
+      h2
+        float: right
+      
+        color: #f5f5f5
+        
+        line-height: 43px
+        
+        
+        font-size: 22px
+        font-style: italic
+        +text-shadow(#ccc 1px 1px 1px)
+    
+    .twitter
+      margin-top: 60px
+    
+    .box      
+      .field_with_errors
+      
+        input
+          color: #E98385
+      
+        /* native placeholders */
+        input:-moz-placeholder
+          color: #E98385
+
+        input:-ms-input-placeholder
+          color: #E98385
+
+        input::-webkit-input-placeholder
+          color: #E98385
+      
+      .action
+        border-top: 1px solid #d3d7db
+        background-color: #f4f5f6
+        margin: 0px -36px
+        position: relative
+        top: 20px
+        border-radius: 0px 0px 7px 7px
+        padding: 15px 0px
+
+
+.finish_signup
+  h3
+    margin-bottom: 30px
+    
+  input[type='text']
+    font-size: 16px
+    
+  label.follow
+    font-weight: 600
+    margin-right: 10px
+    
+.setting-wrapper
+  .row
+    margin-bottom: 45px
+    
+    &.head
+      margin-bottom: 20px
+    
+    &.line-break
+      margin: 0 20% 45px 0
+
+    
+    h3
+      padding-left: 15px
+    
+    &.username
+    
+    
+    &.password
+    
+      .form-group,
+      .action
+        width: 50%
+        
+        margin-bottom: 5px
+
+    .lbl
+      text-align: right
+      font-weight: 600
+      
+    .lbl,
+    .input
+      line-height: 2em
+      
+    p.help-block
+      line-height: normal
+      font-size: 13px
+    
+    
+    &.names
+      a
+        margin-right: 8px
+    
+    &.avatar
+      margin: 40px -15px 50px -15px
+      
+      .lbl
+        line-height: 120px
+    
+      .input
+        padding: 0 10px
+          
+        .uploader
+          margin-left: 125px
+          
+          .nav
+            display: inline-block
+            border: none
+            
+            margin: 0 0 -9px 0
+            
+            a
+              font-size: 13px
+              padding: 5px 10px
+              
+            .active
+              a
+                background: #ccc
+          
+          input[type="text"],
+          input[type="file"]          
+            margin-bottom: 10px
+            padding: 9px 12px
+            height: 40px
+            
+            +border-top-left-radius(0)
+
+            
+    &.bio
+      margin-bottom: 65px
+    
+      .editable-area
+        white-space: normal
+        
+        color: #428bca
+        
+        padding: 6px 12px
+        line-height: 20px
+        background-color: #fff
+        border: 1px dashed #0088cc
+        +border-radius(4px)
+        
+        height: 5.2em
+      
+      
+      .editable-container,
+      .form-group,
+      .editable-input,
+      .form-control
+        width: 100%
+        
+      .editable-buttons
+        text-align: right
+
+    &.twitter
+      position: relative
+      
+      .connect
+        position: absolute
+        right: 7.5%
+        top: 5px
+      
+      .connected
+        
+  
+        .disconnect
+          .btn
+            position: absolute
+            right: 7.5%
+            top: 5px
+          
+            padding: 3px 8px
+        
+            color: #666
+        
+        .as
+          padding: 30px
+        
+          margin-right: 15%
+          text-align: center
+        
+          font-size: 18px
+          font-weight: 600
+          
+          a
+            font-weight: normal
+     
+    &.reminder
+      .email,
+      .twitter
+        margin: 30px 0
+        
+        .lbl
+          font-size: 16px
+        
+      .disabled
+        .lbl,
+        .btn,
+        p
+          color: #aaa
+          
+        .btn:hover
+          color: #aaa
+          background: white
+          border-color: #ccc
+          
+        .active.btn:hover
+          background-color: #e6e6e6
+          border-color: #adadad
+      
+     
+/* responsive
+
+@media (max-width: 767px)
+  .login-wrapper
+    h2.pull-right
+      float: right
+  
+    .twitter,
+    .box
+      width: 350px
+  
+  body.signup
+    .login-wrapper
+      .box
+        .action
+          margin: 0 -31px
+          
+@media (max-width: 991px)
+  .setting-wrapper
+    .row.line-break
+      margin-right:  0

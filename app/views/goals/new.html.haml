@@ -1,17 +1,13 @@
-:css
-  #sidebar-nav {
-    display: none;
-  }
 
 / main container .wide-content is used for this layout without sidebar :)
 .content.wide-content
-  #pad-wrapper.goal-wrapper
+  #pad-wrapper.new-goal-wrapper
     .row
       / title column
       .col-md-3.logo-box
         .logo-image.text-center
           %img(alt="New Goal" src="#{ asset_path('new_goal.png') }")
-          %h2 New Goal
+          %h3 New Goal
           
       / form column
       .col-md-9.new-goal
@@ -78,7 +74,7 @@
             
             
             .starts.col-md-10.col-md-offset-2
-              .btn-group.btn-group-small(data-toggle="buttons")
+              .btn-group.btn-group-sm(data-toggle="buttons")
                 %label.btn starting
                 %label.btn.btn-default.left(class='#{ "active" if @goal.starts != 1 }')
                   = f.radio_button :starts, 0
@@ -88,6 +84,6 @@
                   %span tomorrow
             
             .actions.col-md-10.col-md-offset-2
-              = button_tag class: 'btn btn-primary', type: 'submit', name: 'commit', data: { disable_with: 'Please wait...' } do
+              = button_tag class: 'btn-glow primary', type: 'submit', name: 'commit', data: { disable_with: 'Please wait...' } do
                 Create & Proceed to Deposit
                 %i.fa.fa-arrow-right

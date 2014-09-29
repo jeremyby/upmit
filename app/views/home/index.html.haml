@@ -1,16 +1,12 @@
-:css
-  body {
-    background: #000;
-    color: #fff;
-    font-size: 17px;
-  }
+
+- @body_class = 'homer'
 
 .background-image-overlay
 
 #outer-background-container(data-default-background-img="#{ asset_path('bg5.jpg') }" style="background-image:url(#{ asset_path('bg5.jpg') });")
 
 / Outer Container
-#outer-container.homer
+#outer-container
 
   / Left Sidebar
   %section#left-sidebar

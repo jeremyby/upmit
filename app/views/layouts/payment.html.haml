@@ -45,7 +45,7 @@
           closeme();
         }
     - elsif action?('confirm') #other action - error, do not close the lightbox
-      - if flash[:error].blank?
+      - if flash[:alert].blank?
         :javascript
           window.onload = function() {
             setTimeout(closeme, 3000)

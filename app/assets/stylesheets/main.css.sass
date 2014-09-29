@@ -1,66 +1,57 @@
 @import shared
-
-// Main stats up of screen
-#main-stats
-  background-color: #fdfdfd
-  border-bottom: 1px solid #efeef3
-
-  .stats-row
-    box-shadow: inset -1px 0px 5px 2px #f9f9f9
-    margin: 0
-    
-    .stat
-      text-align: center
-      padding: 20px 0px
-      border-right: 1px solid #e8e9ee
-      box-shadow: 1px 0px 0px 0px white
-
-      &.last
-        border-right: 0px
-      
-      .data
-        color: #29323a
-        text-transform: uppercase
-        font-weight: 600
-        font-size: 16px
-        
-        .number 
-          color: #32a0ee
-          font-size: 24px
-          margin-right: 5px 
-        
-      
-      .date
-        margin-left: 50px
-      
-        color: rgb(180, 184, 187)
-        font-weight: lighter
-        font-family:  'Lato', 'Open Sans'
-        font-style: italic
-        font-size: 13px
-
-
-.section
-  border-top: 1px solid #edeff1
-  margin-top: 45px
-  padding-top: 45px
-  box-shadow: inset 0px 3px 4px -1px #fafafa
   
 
 /* UI elements section
 #pad-wrapper
-  .row
-    &.top
-      margin: 50px -15px 0 -15px
-      
-      position: relative
-      
-      a
-        position: absolute
-        
-        top: -5px
-        // right: 15px
+  // Main stats up of screen
+  #main-stats
+    margin: -55px -50px 50px -50px
   
+    background-color: #fdfdfd
+    border-bottom: 1px solid #efeef3
+
+    .stats-row
+      box-shadow: inset -1px 0px 5px 2px #f9f9f9
+      margin: 0
+
+      .stat
+        text-align: center
+        padding: 20px 0px
+        border-right: 1px solid #e8e9ee
+        box-shadow: 1px 0px 0px 0px white
+
+        &.last
+          border-right: 0px
+
+        .data
+          color: #29323a
+          text-transform: uppercase
+          font-weight: 600
+          font-size: 16px
+
+          .number 
+            color: #32a0ee
+            font-size: 24px
+            margin-right: 5px 
+
+
+        .date
+          margin-left: 50px
+
+          color: rgb(180, 184, 187)
+          font-weight: lighter
+          font-family:  'Lato', 'Open Sans'
+          font-style: italic
+          font-size: 13px
+
+
+  .section
+    border-top: 1px solid #edeff1
+    margin-top: 45px
+    padding-top: 45px
+    box-shadow: inset 0px 3px 4px -1px #fafafa
+
+  .row
     .active-goal
       display: table
       width: 100%
@@ -70,9 +61,9 @@
       border: 1px solid #fff
       
       +transition-property(all)
-      +transition-duration(0.4s)
+      +transition-duration(0.3s)
       
-      +opacity(0.9)
+      +opacity(0.95)
       
       a:hover
         text-decoration: none
@@ -109,29 +100,30 @@
           font-size: 12px
       
       .occurs
-        padding: 0 30px
-        
+        padding: 0 40px
         
         .label
-          padding: 0.1em 0.5em 0.2em
-          margin-right: .5em
+          margin-right: 5px
+          padding: 0.2em 0.9em 0.2em 0.6em
           
           font-size: 12px
-          
-          &.label-default
-            background: #999
         
         .occur
-          padding: 0
-          
           line-height: 2em
           
+          &.last-occur,
+          &.next-occur
+            float: left
+            color: #7d848c
+            font-size: 13px
+            
+          &.today-occur
+            clear: left
           
-          &.report
-            color: #999
-            font-size: 12px
+            .label-default
+              background: #999
         
-          .check_in
+          .check-in
             display: none
           
             margin-left: 10px
@@ -142,15 +134,58 @@
               font-size: 12px
               
               +transition-property(all)
-              +transition-duration(0.5s)
+              +transition-duration(0.3s)
           
           i
-            margin-right: 3px
+            color: #aaa
+            margin-right: 0.3em
+            
+            &.fa-chevron-right
+              margin: 0 0 0 0.3em
+            
+            &.fa-chevron-left,
+            &.fa-chevron-right
+              color: #999
+              font-size: 11px
+            
+            &.fa-check-circle,
+            &.fa-times-circle
+              margin: 0 0 0 0.3em
             
             &.fa-check
+              +opacity(0.7)
               color: green
+           
             &.fa-times
+              +opacity(0.7)
               color: red
+              
+          
+          &.last-occur,
+          &.next-occur
+            i.fa-circle
+              position: relative
+              top: -1px
+              
+              color: #7d848c
+              font-size: 8px
+              margin: 0 0.9em 0 1.2em
+          
+          &.today-occur
+            i.fa-circle
+              position: relative
+              top: -1px
+            
+              font-size: 7px
+              color: white
+              margin: 0 0.3em 0 0
+
+          .check-in
+            i.fa-check
+              +opacity(1)
+              margin: 0 0.2em 0 0
+              color: green
+
               
       .prog
         text-align: center
@@ -182,63 +217,58 @@
         .occur
           span.label
             
-          .check_in
+          .check-in
             display: inline-block
   
     h4
       margin: 0 0 25px 0
+
+
+.modal-dialog
+  #note
+    color: #333
+  
+    &:-moz-placeholder
+      color: #7d848c
     
-      
-    .goal
-      margin: 15px 0
-      text-align: center
-      
-      .donut
-        width: 180px
-        margin: 0 auto
+    &:-ms-input-placeholder
+      color: #7d848c
+  
+    &::-webkit-input-placeholder
+      color: #7d848c
 
 
+  h5
+    margin: 10px 0 5px
+    
+  
+  .nav-tabs
+    border: none
+    
+    a
+      font-size: 13px
+      padding: 5px 10px
+      
+    .active
+      a,
+      a:hover
+        background: #ccc
+        
+        
+          
+
+  .tab-content      
+    input[type="text"],
+    input[type="file"]
+      padding: 9px 12px
+      height: 40px
+      
+      +border-top-left-radius(0)
+  
 /* responsive
 
-@media (max-width: 480px)
-
-@media (max-width: 768px)
+@media (max-width: 767px)
   #main-stats
-    margin-left: -15px
-    margin-right: -15px
+    margin: 0 -15px
     
-  #pad-wrapper
-    .row.top
-      a
-        right: 15px
 
-@media (min-width: 768px)
-  #main-stats
-    margin: -55px -50px 0 -50px
-    
-  .row.top
-    a
-      right: 50px
-  
-@media (max-width: 979px)
-  #main-stats .stat .data
-    padding-right: 17px
-    .number
-      font-size: 18px
-  #pad-wrapper .knob-wrapper .info
-    display: none
-  .pointer
-    top: 5%
-  .table-products .head
-    margin-bottom: 20px
-
-@media (min-width: 980px)
-  #pad-wrapper .ui-elements .knob-wrapper + .knob-wrapper
-    margin-left: 5px
-
-@media (min-width: 1200px)
-  #pad-wrapper .ui-elements
-    .showcase
-      width: 53%
-    .knob-wrapper + .knob-wrapper
-      margin-left: 35px

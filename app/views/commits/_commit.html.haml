@@ -1,0 +1,25 @@
+.line-break
+
+- if commit.checked_by == 'host'
+  .activeable(class='fail expired')
+    .info
+      %strong expired at
+      %span #{ distance_of_time_in_words_to_now(commit.created_at) } ago
+      
+- else
+  .avatar= link_to image_tag(asset_path(commit.user.avatar.thumb.url), size: '40x40'), user_path(commit.user)
+  .activeable(class='#{ commit.succeed? ? 'success' : 'fail' }')
+    .info
+      %strong checked in
+      %span #{ distance_of_time_in_words_to_now(commit.checked_at) } ago via #{ commit.checked_by == 'twitter' ? 'Twitter' : 'Upmit.com'}
+    - unless commit.note.blank?
+      .body= commit.note
+    - unless commit.photo.blank?
+      .photo= image_tag(asset_path(commit.photo.url))
+    - if is_owner?(commit)
+      .edit
+        %a.small(href='#')
+          %i.fa.fa-edit
+          Edit note and photo
+  
+.clearfix

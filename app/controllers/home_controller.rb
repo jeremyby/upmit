@@ -1,4 +1,6 @@
 class HomeController < ApplicationController
+  
+  
   def index
     
     if user_signed_in?
@@ -6,5 +8,9 @@ class HomeController < ApplicationController
       
       render 'main' and return 
     end
+  end
+  
+  
+  def confirmation_sent
   end
 end

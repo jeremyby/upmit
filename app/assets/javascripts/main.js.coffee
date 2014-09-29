@@ -1,9 +1,56 @@
 $(document).ready ->
   upmit.timer = 0
-  timezone = jstz.determine()
+  upmit.spinner = $('.navbar .settings i.fa-cog')
+  
+  
+  $.fn.editableform.buttons = 
+    '<button type="submit" class="btn btn-primary btn-sm editable-submit">'+
+      '<i class="fa fa-check"></i>'+
+    '</button>'+
+    '<button type="button" class="btn btn-default btn-sm editable-cancel">'+
+      '<i class="fa fa-times"></i>'+
+    '</button>';         
+  
+  
+  $.fn.poof = (speed) ->
+    poofer = $(this)
+    i = switch speed
+      when 'slow' then 10000
+      when 'fast' then 4000
+      else 7000
+
+    setTimeout(->
+      poofer.hide('slide')
+     , i)
+  
+  upmit.message = (message, type = 'alert') ->
+    icon = if type == 'alert' then "<i class='fa fa-times-circle'></i> " else "<i class='fa fa-exclamation-circle'></i> "
+
+    $('#messages').html("<div class='text'>" + icon + message + '</div>').show('slide').poof('slow')
+  
+  
+  if $('#messages').html().length >0
+    $('#messages.on').show('slide').poof('slow')
+    
+    
+  
+  upmit.start_spinner = ->
+    upmit.spinner.addClass('fa-spin')
+  
+  upmit.stop_spinner = ->
+    setTimeout(->
+      upmit.spinner.removeClass('fa-spin')
+    , 500)
+    
+  
   
   $('.donut').circliful()
   
+  $('.field_with_errors input').tooltip('show')
+  
+  $('.field_with_errors input').keydown ->
+    $(this).tooltip('destroy')
+    $(this).closest('.field_with_errors').removeClass('field_with_errors')
   
   $(".notification-dropdown").each (index, el) ->
     $el = $(el)
@@ -61,8 +108,51 @@ $(document).ready ->
 
   $(window).resize ->
     $(this).width() > 769 and $("body.menu").removeClass("menu")
+
+  # fix for the left-shifting of bootstrap modal when hidding
+  $.fn.modal.Constructor.prototype.setScrollbar = ->
+    $('body').css('padding-right', '')
   
   
+  $('.check-in a').on('click', (e) ->
+    upmit.start_spinner()
+    
+    $(this).closest('.occurs').fadeOut()
+  )
+  
+  
+  
+  if $('.panel-content').length
+    $('#sidebar-nav').hover(->
+      $('.panel-content, .owner').css('margin-left', '177px').css('z-index', '999')
+    , ->
+      $('.panel-content, .owner').css('z-index', '').css('margin-left', '')
+    )
+  
+  
+  $(".nav-tabs a[href='#remote']").click ->
+    setTimeout(->
+      $('.tab-content input[type="text"]').focus()
+    , 100)
+  
+  
+  
+  $('#commit-detail').on('shown.bs.modal', ->
+    $('#commit-detail form #note').focus()
+  )
+  
+  $('#commit-detail').on('hidden.bs.modal', ->
+    $('#commit-detail form #note').val('')
+    $('#commit-detail form #photo').val('')
+    $('#commit-detail form #remote_photo_url').val('')
+    
+    $('.modal-footer button').show()
+  )
+  
+  $('#commit-detail form').on('submit', ->
+    upmit.start_spinner()
+    $('.modal-footer button').hide()
+  )
   
 show_chart = (d) ->
   setTimeout( ->

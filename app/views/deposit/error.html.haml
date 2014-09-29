@@ -1,10 +1,10 @@
 .row
   %h2 Payment not successful.
 
-- if flash[:error].present?
+- if flash[:alert].present?
   .row
     .alert.alert-danger(role='alert')
-      = flash[:error]
+      = flash[:alert]
 .row
   %p There have been problems processing the payment. Your payment account was not charged.
   %p Please try again...

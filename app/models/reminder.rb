@@ -6,4 +6,5 @@ class Reminder < ActiveRecord::Base
     0   => 'inactive'
   }
   
+  acts_as_stateable states: STATES
 end

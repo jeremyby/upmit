@@ -5,11 +5,138 @@ $(document).ready ->
   
   upmit.timeoutid = 0
   
+  $.fn.editable.defaults.mode = 'inline'
+  $.fn.editable.defaults.ajaxOptions = {type: "PUT"}
+  
   rotate_goal_samples() unless $('#goal_title').length && $('#goal_title').val().length
   
   update_frequency_title()
+
+
+  # 
+  # Show Goal
+  #
+  
+  $('.legend .edit').click (e) ->
+    $(document).bind('keyup', esc_close_legends)
+    
+    $('.legends').show('fold').focus()
+    e.stopPropagation()
+  
+  $('.legends').blur (e) ->
+    $('.legends').hide('fold')
+    e.stopPropagation()
+    
+  $(".legends a").click ->
+    upmit.start_spinner()
+    
+    $(".legends a").removeClass('clicked')
+    $(this).addClass('clicked')
+    
+  $(".legends a").bind("ajax:success", (e) ->
+    $('.goal #goal-legend img').attr('src', $(".legends a.clicked").data('url'))
+    
+    upmit.stop_spinner()
+    $('.legends').hide('fold')
+    
+    upmit.message('The legend was updated successfully.', 'notice')
+  )
   
   
+  $('.area .hash-tag a.editable').editable({
+    container: 'body'
+    mode: 'popup'
+    placement: 'bottom'
+    display: (value) ->
+      $(this).text('#' + value)
+  })
+  
+  
+  $('.goal h3 .editable').editable({
+    toggle: 'manual',
+    onblur: 'ignore',
+    inputclass: 'edit-title',
+    validate: (value) ->
+      return "Goal's title cannot be empty" if($.trim(value) == '')
+  })
+  
+  $('.goal .desc .new.editable').editable({
+    onblur: 'ignore',
+    inputclass: 'edit-desc'
+  })
+  
+  $('.goal .desc .new.editable').on('shown', (e, editable) ->
+    $('.goal .desc .edit-desc').autosize()
+  )
+  
+  $('.goal .desc .exist.editable').editable({
+    toggle: 'manual',
+    onblur: 'ignore',
+    inputclass: 'edit-desc',
+    emptytext: 'The description is removed.',
+    escape: false,
+    rows: 5
+  })
+  
+  $('.side .edit-title a').click (e) ->
+    e.stopPropagation()
+    
+    $('.goal h3 .editable').editable('toggle')
+    
+  $('.side .edit-desc a').click (e) ->
+    e.stopPropagation()
+
+    $('.goal .desc .exist.editable').editable('toggle')
+    $('.goal .desc .edit-desc').autosize()
+  
+  esc_close_legends = (e) ->
+    if (e.keyCode == 27)
+      $('.legends').hide('fold')
+      $(document).unbind('keyup', esc_close_legends)
+    
+    return false
+  
+      
+  update_activities = (e, data, status, xhr) ->
+    if data.status == 200
+      upmit.debug = data.responseText
+      div = $("<div style='display: none'></div>")
+      div.html(data.responseText)
+      
+      $('.activities .more').replaceWith(div)
+      div.slideDown(2000, ->
+        upmit.stop_spinner()
+      )
+      
+  
+  $(document).on("ajax:complete", '.activities .more a', update_activities)
+  
+  $(document).on('ajax:beforeSend', '.activities .more a', ->
+    upmit.start_spinner()
+  )
+  
+  upmit.click_commit_edit = (e) ->
+    e.preventDefault()
+    
+    $('#edit-commit form').attr('action', '/commits/' + $(this).closest('.activity').data('id'))
+    $('#edit-commit .modal-body #note').val($(this).closest('.activeable').find('.body').html())
+    
+    $('#edit-commit form input[type="file"], #edit-commit form input[type="text"]').attr('placeholder', 'Not changed')
+    
+    $('#edit-commit').modal()
+
+  $('.activities .activity .edit a').on('click', upmit.click_commit_edit)
+  
+
+  $('.activities .activeable a.delete').on('ajax:success', ->
+    $(this).closest('.activity').fadeOut('fast', ->
+      $(this).remove()
+    )
+  )
+  
+  # 
+  # New Goal
+  # 
   $('#goal_title').on('focus', ->
     $(this).removeClass('error')
     clearTimeout(upmit.timeoutid)

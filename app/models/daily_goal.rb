@@ -21,4 +21,8 @@ class DailyGoal < Goal
   def describe_today_occur
     'describe_daily_today_occur'
   end
+  
+  def describe_next_occur
+    'describe_daily_next_occur'
+  end
 end

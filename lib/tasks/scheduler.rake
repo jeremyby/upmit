@@ -10,11 +10,14 @@ namespace :commits do
       failed = Commit.expired_commitments
       size = failed.size
 
-      failed.each {|f| f.update_attribute(:state, rand(100) > 80 ? -1 : 1) }
+      failed.each {|f| f.update state: rand(100) > 80 ? -10 : 1, checked_by: 'host', checked_at: Time.now }
 
-      puts "#{ size } commits were failed."
+      puts "#{ size } commits were expired."
     else
-      Commit.expired_commitments.update_all("state = -1")
+      Commit.expired_commitments.find_each do |c|
+        c.update state: -10, checked_by: 'host', checked_at: Time.now
+      end
+      
       puts "and... done."
     end
   end
@@ -23,39 +26,35 @@ namespace :commits do
     puts "Sending reminders for users..."
 
     User.remindables.find_each do |u|
-
-      now = Time.now.in_time_zone(u.timezone)
-      day_start = now.beginning_of_day
-      week_start = now.beginning_of_week(start_day = :sunday)
+      now = Time.now
 
       goals = u.goals.joins(:commits)
-      .where("commits.state = 0")
-      .where("(goals.type <> 'WeektimeGoal' AND commits.starts_at = ? AND commits.reminded < 0)
-            OR (goals.type = 'WeektimeGoal' AND commits.starts_at = ? AND commits.reminded < ?)",
-             day_start,
-             week_start,
-             now.wday)
-      .select('DISTINCT goals.*')
-      
+                      .where("commits.state = 0")
+                      .where("commits.starts_at < ?", now)
+                      .where("(goals.type <> 'WeektimeGoal' AND commits.reminded < 0)
+                              OR (goals.type = 'WeektimeGoal' AND commits.reminded < ?)",
+                             now.in_time_zone(u.timezone).wday)
+                      .select('DISTINCT goals.*')
+
       # goals can be blank for User.remindables picks all users with weektime goals
       unless goals.blank?
         items = goals.collect {|g| [g.title, g.hash_tag]}
-      
+
         u.reminders.each do |r|
-          r.deliver(items)
-      
-          puts "Sending #{r.type} for User #{u.id}. Message: #{ items.to_s }"
+          if r.active?
+            puts "Sending #{ r.type } for User #{ u.id }. Message: #{ items.to_s }" if r.deliver(items)
+          end
         end
-      
+
         goals.each do |g|
-          if g.is_a?(WeektimeGoal)      
-            commits = g.commits.active.where(starts_at: week_start).where("reminded < ?", now.wday)
-      
-            commits.update_all(reminded: now.wday)
+          if g.is_a?(WeektimeGoal)
+            g.commits.active.where("commits.starts_at < ?", now)
+                            .where("reminded < ?", now.in_time_zone(u.timezone).wday)
+                            .update_all(reminded: now.in_time_zone(u.timezone).wday)
           else
-            commits = g.commits.active.where(starts_at: day_start).where("reminded < 0")
-          
-            commits.update_all(reminded: 0)
+            g.commits.active.where("commits.starts_at < ?", now)
+                            .where("reminded < 0")
+                            .update_all(reminded: 0)
           end
         end
       end
@@ -67,7 +66,7 @@ end
 namespace :check do
   task  :twitter => :environment do
     puts "Retrieve @upmit tweets to check users in..."
-    
+
     begin
       tweets = UpmitTwitter.mentions(since_id: UpmitMentionSince.since_id, count: 200)
     rescue Twitter::Error::TooManyRequests => error
@@ -76,46 +75,39 @@ namespace :check do
       sleep error.rate_limit.reset_in + 1
       retry
     end
-    
+
+    puts "Processing #{ tweets.size } tweets"
+
     unless tweets.blank? # Having new mentions
-      puts "Processing #{ tweets.size } tweets"
-      
       tweets.each do |t|
-        # puts "Tweet: #{ t.text }"
-        
+        puts "Tweet: #{ t.text }"
+
         auth = Authorization.where(uid: t.user.id).first # Find user with the Twitter uid
-        
+
         unless auth.blank? # No such user
-          now = Time.now.in_time_zone(auth.user.timezone)
-          day_start = now.beginning_of_day
-          week_start = now.beginning_of_week(start_day = :sunday)
-          
-          if now - day_start <= 24.hours # check-in in the same day
-            unless t.hashtags.blank?
-              hash_array = t.hashtags.collect {|h| h.text}
-              
-              commits = auth.user.commits.active.joins(:goal).where("goals.hash_tag in (?)", hash_array)
-                                                              .where("(goals.type <> 'WeektimeGoal' AND commits.starts_at = ?)
-                                                                    OR (goals.type = 'WeektimeGoal' AND commits.starts_at = ?)",
-                                                                     day_start,
-                                                                     week_start)
-                                                              .group('commits.goal_id')
-              
-              # pp commits
-              
-              unless commits.blank?
-                Commit.transaction do
-                  commits.each do |c|
-                    c.update state: 1, note: t.text
-                    # photos: t.media.each p.media_url.to_s
-                  end
-                  
-                  UpmitMentionSince.update_attribute(:since_id, tweets.first.id)
+          now = Time.now
+
+          unless t.hashtags.blank?
+            hash_array = t.hashtags.collect {|h| h.text}
+
+            commits = auth.user.commits.active.joins(:goal)
+                                        .where("goals.hash_tag in (?)", hash_array)
+                                        .where("commits.starts_at < ?", now)
+                                        .group('commits.goal_id')
+
+            # pp commits
+
+            unless commits.blank?
+              Commit.transaction do
+                commits.each do |c|
+                  c.update state: 1, note: t.text, checked_by: 'twitter', remote_photo_url: t.media.first.media_url.to_s
                 end
               end
             end
           end
         end
+
+        UpmitMentionSince.update_attribute(:since_id, tweets.first.id)
       end
     end
   end

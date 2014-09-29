@@ -6,7 +6,7 @@
   
   - elsif @active.blank?
     
-  - else      
+  - else
     #pad-wrapper
       / upper main stats
       #main-stats
@@ -47,17 +47,18 @@
               Earned back
             .date
               so far
-    
-      - unless @active.blank?
-        .row.top
-          .col-md-12
-            %a(href='#{ new_goal_path }')
-              %button.btn.btn-info
-                %i.fa.fa-plus
-                New Goal
+              
+      .row
+        .col-md-12
+          %a.new-goal.btn-glow.primary(href='#{ new_goal_path }')
+            %i.fa.fa-plus
+            New Goal
 
-            %h4 Recent activities
+          %h4 Active goals
       
+      = render 'commits/commit_modal', id: 'commit-detail', title: 'Add note and a photo', cancel: 'Not now'
+      
+        
       - @active.each do |goal|
         .row(id='goal-#{ goal.id }')
           .active-goal.col-md-12
@@ -70,23 +71,26 @@
             .occurs.col-md-6
               - last, today, next_occur = Commit.get_occurrence_of(goal)
 
-              - unless last.blank?
-                .occur.last-occur
+              .occur.last-occur
+                - unless last.blank?
                   = send(goal.describe_last_occur, goal, last)
-
-
+                - else
+                  New goal
+              
+              .occur.next-occur
+                = fa_icon('fa-circle')
+                
+                - if next_occur.blank?
+                  Congrads! The last commitment of the goal!
+                - else
+                  = send(goal.describe_next_occur, goal, next_occur)
+                      
               .occur.today-occur
                 - if today.blank?
-                  = label_maker('Today')
+                  = label_maker(fa_icon('fa-circle') + 'Today')
                   Not scheduled.
                 - else
                   = send(goal.describe_today_occur, goal, today)
-
-              - if false  
-                .occur.report
-                  = send(goal.occur_report, goal, last, next_occur)
-
-
 
             .prog.col-md-3
               %span.past= goal.commits.past.size

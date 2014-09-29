@@ -25,20 +25,22 @@ body
   // -webkit-font-smoothing: antialiased
 
 
+body.homer
+  background: #000
+  color: #fff
+  font-size: 16px
+
+
 a,
 .btn
   +transition-property(all)
-  +transition-duration(0.4s)
+  +transition-duration(0.3s)
 
   text-decoration: none
   outline: none !important
 
 p
   margin: 1em 0
-
-  @media (min-width: 768px)
-  @media (min-width: 992px)
-  @media (min-width: 1200px)
 
 .pull-right
   float: none !important
@@ -62,6 +64,7 @@ h1,h2,h3,h4,h5,h6
 
 body.menu
   overflow-x: hidden
+  
   .content
     margin-left: 165px
     position: fixed
@@ -69,47 +72,123 @@ body.menu
   #sidebar-nav
     position: absolute
     left: 0
+    top: 50px
     /*height: 100%;
     border-right: 0px
     box-shadow: none
 
 
-/* Custom navbar stuff
-.header
-  margin-bottom: 60px
-  h1, h2, h3, h4, h5
-    float: left
-    margin-top: 5px
+.label
+  +border-radius(100px)
   
+.line-break
+  padding: 0
+  
+  border-top: 1px solid #dde2e9
+  +box-shadow(#f6f6f6 0 -1px 1px)
+
+
+.avatar
+  img
+    +border-radius(50%)
+    border: 3px solid #c3cddb
+
+
+
+a.new-goal
+  position: absolute
+  
+  top: -5px
+  right: 50px
+  
+  padding: 6px 12px
+    
+  i
+    margin-right: 4px
+
 
 /* search input
 .navbar-inverse
-  // .navbar-header
-  //   .navbar-brand
-  //     +opacity(0.92)
-  //     
-  //     &:hover
-  //       +opacity(1)
+  position: fixed
+  top: 0
   
-
+  z-index: 1050
+  
+  width: 100%
+  
+  .navbar-header
+    .navbar-brand
+      padding: 12px 20px 8px 33px
+  
+  
   /* navbar settings and logout icons
-  .settings i
-    color: #9ba3ad
-    font-size: 21px
+  .settings
+    .dropdown-toggle
+      padding-right: 25px
+      
+      i
+        color: #c0cbd8
+        font-size: 21px
+    
+        position: absolute
+        right: 10px
+        top: 12px
+
+    .dropdown-menu
+      left: auto
+      right: -1px
+      
+      min-width: 140px
+    
+      +border-bottom-right-radius(0)
+      
+      .break
+        margin-top: 9px
+        padding-top: 7px
+        
+        border-top: 1px solid #ddd
+        // +box-shadow(#ddd 0 1px 1px -1px inset)
+  
+  li.home
+    i
+      font-size: 23px
+  
+  li.current_user
+    a
+      padding: 0 10px
+    
+    .avatar
+      line-height: 46px
+      float: left
+      
+      img
+        border-width: 2px
+
+      
+    .username
+      margin-left: 43px
+      
+      line-height: 46px
+
+    
   /* notification menu with custom dropdowns
   .notification-dropdown
     position: relative
     > a:hover,
     > a.active
       background: #254261 !important
-      box-shadow: inset 1px 0px 1px 0px rgb(62, 90, 121)
+      
     i
+      position: relative
+      top: 3px
+      
       font-size: 17px
-      color: #9ba3ad
+      color: #c0cbd8
+      
     .count
       position: absolute
-      top: 1px
-      left: 58%
+      top: 5px
+      left: 56%
       background: rgb(53, 186, 196)
       padding: 0px 5px
       border-radius: 30px
@@ -118,6 +197,7 @@ body.menu
       z-index: 9999
       text-align: center
       font-size: 11px
+  
   
   // navbar popup dialog
   .pop-dialog
@@ -191,67 +271,73 @@ body.menu
             font-size: 13px
             color: #cfcfcf
             margin-right: 1px
-    /* navbar popup dialog for messages
-    .messages
-      width: 325px
-      margin: 10px -10px 0px -10px
-      .item
-        display: block
-        padding: 10px 20px 15px 20px
-        height: 80px
-        border-bottom: 1px solid #e7e8ea
-        color: rgb(54, 54, 54)
-        text-decoration: none
-        position: relative
-        transition: all .25s linear
-        -moz-transition: all .25s linear
-        -webkit-transition: all .25s linear
-        -o-transition: all .25s linear
-        &.last
-          border-bottom: 0px
-        &:hover
-          background: rgb(240, 246, 255)
-        .display
-          float: left
-          border-radius: 50px
-          margin-right: 15px
-        .name
-          font-size: 12px
-          color: #404951
-          font-weight: bold
-        .msg
-          font-size: 11px
-          color: rgb(99, 99, 99)
-          line-height: 13px
-          position: relative
-          top: 2px
-        .time
-          position: absolute
-          right: 0px
-          bottom: 6px
-          color: #82a3c1
-          font-style: italic
-          font-weight: 600
-          font-size: 11px
-          min-width: 60px
-          margin-right: 5px
-          i
-            font-size: 13px
-            color: #cfcfcf
-            margin-right: 1px
-      .footer
-        margin-top: 6px
+
+
+
+#np-holder
+  position: fixed
+  top: 48px
+  
+  z-index: 1200
+  
+  width: 100%
+  height: 2px
+
+
+body.homer,
+body.login,
+body.signup
+  #np-holder
+    top: 0
+
+
+#messages
+  position: fixed
+  top: 48px
+  left: 50%
+
+  margin-left: -300px
+  
+  display: none
+
+  z-index: 9999
+  
+  width: 600px
+
+  text-align: center
+  
+  
+  .text
+    display: inline-block
+  
+    padding: 6px 25px 7px
+    
+    background: rgba(238, 238, 238, 0.6)
+    color: #111
+    
+    +border-bottom-radius(4px)
+    +box-shadow(#ccc 0 1px 1px inset)
+
+
+
+body.login
+  #messages
+    top: 0
 
 /* Sidebar
 #sidebar-nav
-  position: absolute
+  position: fixed
   width: 180px
   float: left
   margin: 0em
-  padding-top: 5.8em
+  
+  padding: 9em 0
+  
+  z-index: 1000
   
   #dashboard-menu
     list-style: none
+    
     padding-right: 15px
     padding-left: 15px
     margin-bottom: 0
@@ -291,6 +377,7 @@ body.menu
           
     .pointer
       position: absolute
+      
       right: 9px
       top: 20px
       .arrow,
@@ -339,6 +426,9 @@ body.menu
         -o-transition: opacity .1s ease
         
         &.fa-chevron-down
+          +transition-property(all)
+          +transition-duration(0.3s)
+        
           position: relative
           float: right
           top: 5px
@@ -380,7 +470,8 @@ body.menu
           text-shadow: none
 
 #pad-wrapper
-  padding: 55px 50px 0 50px
+  padding: 55px 50px 0
+  position: relative
   
   h4
     color: #696d73
@@ -389,38 +480,99 @@ body.menu
 .content
   min-width: 400px
   min-height: 620px
+  
+  margin: 0 0 100px 177px
   margin-bottom: 100px
+  padding-top: 48px
   padding-bottom: 50px
   overflow: hidden
   position: relative
   background: #fff
-  margin-left: 177px
+
   border-left: 1px solid #dae3e9
   border-bottom: 1px solid #dae3e9
   box-shadow: -3px 3px 3px -2px #f1f1f3
   border-radius: 0px 0px 0px 5px
-  -webkit-transition: margin-left .3s ease
-  -moz-transition: margin-left .3s ease
-  -o-transition: margin-left .3s ease
-  -ms-transition: margin-left .3s ease
-  transition: margin-left .3s ease
+  
+  +transition-property(all)
+  +transition-duration(0.3s)
+  
+  
   &.wide-content
     margin-left: 0
     border-radius: 0
+    
+    z-index: 1000
+    
+  &.panel-content
+    margin-left: 20px
+    padding-top: 0
+    
+    z-index: 1000
 
+    
+.owner
+  position: relative
 
+  margin: 48px 0 0 20px
+  
+  border-bottom: 1px solid #dae3e9
+  box-shadow: 0px 3px 3px -2px #f1f1f3 inset
+  background-color: #f7f7f7
+  
+  height: 120px
+  
+  z-index: 1001
+  
+  +transition-property(all)
+  +transition-duration(0.3s)
+  
+  .follow
+    position: absolute
+    top: 50%
+    right: 40px
+    
+    margin-top: -17px
+    
+  .user
+    padding: 20px 20px 20px 30px
+  
+    .avatar
+      float: left
+      
+    .info
+      margin: 5px 0 0 100px
+      
+      a
+      
+      .help-block
+        margin: 5px 0 0 0
+        padding: 0
+      
+        font-size: 12px
+        font-style: italic
+        color: #999
+        
+      .bio
+        margin: 10px 0
+        padding: 0
+  
 .jumbotron
   padding-top: 28px
 
   background: #fff
 
 
-
 /* responsive
-@media (max-width: 1020px)
-@media (max-width: 768px)
+@media (max-width: 767px)
+  .navbar-inverse
+    .navbar-header
+      .navbar-brand
+        padding-left: 0
+  
   #pad-wrapper
-    padding: 0px 15px
+    padding: 55px 15px 0
+    
   .content
     min-width: 0px
     margin: 0
@@ -430,6 +582,9 @@ body.menu
   #sidebar-nav
     left: -200px
     position: fixed
+    
+    top: 50px
+    
     z-index: 9999
     background-color: #f7f7f7
     padding-top: 0px
@@ -453,9 +608,6 @@ body.menu
         border-bottom: 0px
         box-shadow: none
 
-@media (max-width: 822px)
-  .navbar-inverse input.search
-    display: none
 
 @media (max-width: 767px)
   #main-stats .stat

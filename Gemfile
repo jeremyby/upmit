@@ -25,11 +25,16 @@ gem 'therubyracer', '0.11.3', platforms: :ruby
 
 gem 'jquery-rails'
 
+gem 'detect_timezone_rails'
+
+
 # Turbolinks makes following links in your web application faster. Read more: https://github.com/rails/turbolinks
 gem 'turbolinks'
 gem 'jquery-turbolinks'
 
 gem 'nprogress-rails'
+
+gem 'bootstrap-editable-rails'
 
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jbuilder'
@@ -69,11 +74,20 @@ gem 'stringex'
 
 gem 'ice_cube'
 
+gem 'money-rails'
+
 gem 'delayed_job_active_record'
 gem 'daemons'
 
 gem 'carrierwave'
-gem 'rmagick'
+gem 'rmagick', require: false
+gem 'remotipart'
+
+gem 'fog', require: "fog/aws/storage"
+
+gem 'acts_as_commentable_with_threading'
+
+gem 'will_paginate'
 
 
 group :development, :test do

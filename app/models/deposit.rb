@@ -4,10 +4,13 @@ class Deposit < ActiveRecord::Base
   
   STATES = {
     10  => 'completed', #Deposit refunded
-    1   => 'paid' #Deposit paid
+    1   => 'paid', #Deposit paid
+    0   => 'initial'
   }
   
   acts_as_stateable states: STATES
+  
+  monetize :amount_cents
   
   after_commit :activate_goal, on: :create, :if => Proc.new { |d| d.goal.inactive? }
   

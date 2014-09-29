@@ -1,0 +1,36 @@
+
+- @body_class = 'login'
+
+- errors = resource.errors
+
+- flash.now[:alert] =  errors.full_messages.first if resource.errors.present?
+
+
+.background-image-overlay
+
+.login-wrapper
+  = link_to (image_tag(asset_path('logo-lg.png'), class: 'logo')), root_path
+  
+  .box
+    .content-wrap.text-left
+      %h4 Reset your password
+      
+      %p
+        = form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :put }, role: 'form') do |f|
+        
+          = f.hidden_field :reset_password_token
+        
+          .form-group
+            = f.label :password, 'New password', class: 'sr-only'
+            = f.password_field :password, autocomplete: "off", class: "form-control", placeholder: "New password"
+
+          .form-group
+            = f.label :password_confirmation, 'Confirm new password', class: 'sr-only'
+            = f.password_field :password_confirmation, autocomplete: "off", class: "form-control", placeholder: "Confirm new password"
+        
+          .form-group.text-center
+            = f.submit "Reset password", class: "btn-glow primary"
+            
+  .no-account
+    %p Wanna give another try?
+    = link_to 'Log in', new_user_session_path

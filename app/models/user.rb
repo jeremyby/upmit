@@ -1,25 +1,28 @@
 class User < ActiveRecord::Base
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
-  devise :database_authenticatable, :registerable,
+  devise :database_authenticatable, :registerable, :confirmable,
     :recoverable, :rememberable, :trackable, :validatable, :omniauthable
 
   extend FriendlyId
-  friendly_id :username_for_url, use: :slugged
+  friendly_id :get_username, use: :slugged
+
+  mount_uploader :avatar, AvatarUploader
 
   validates_presence_of :first_name
+  validates :username, presence: true
 
   has_many :authorizations, dependent: :destroy
 
   has_many :goals
   has_many :commits
+  has_many :comments
   has_many :reminders, dependent: :destroy
   
-  after_create :create_email_reminder, if: Proc.new { |u| u.email_valid? }
-  after_update :create_email_reminder, if: Proc.new { |u| u.previous_changes['email'].present? && u.previous_changes['email'][0] =~ TEMP_EMAIL_REGEX && u.email_valid? }
+  # after_create :create_email_reminder, if: Proc.new { |u| u.email_valid? }
+  after_commit :create_email_reminder, on: :update, if: Proc.new { |u| u.previous_changes['confirmed_at'].present? && u.confirmed? }
   
-  attr_accessor :follow_upmit
-
+  attr_accessor :follow_upmit, :current_password
 
   def normalize_friendly_id(string)
     s = string.to_ascii.parameterize
@@ -31,11 +34,6 @@ class User < ActiveRecord::Base
 
     return s
   end
-
-  def username_for_url
-    self.username.blank? ? "#{first_name} #{last_name}" : self.username
-  end
-  
   
 
   #####################################################################################
@@ -44,8 +42,8 @@ class User < ActiveRecord::Base
   #
   # ###################################################################################
   
-  TEMP_EMAIL_PREFIX = 'need_to_change_me@'
-  TEMP_EMAIL_REGEX = /\Aneed_to_change_me@/
+  TEMP_EMAIL_PREFIX = 'please_change_now@'
+  TEMP_EMAIL_REGEX = /\Aplease_change_now@/
   
   def self.find_for_oauth(auth, existing_user = nil)
 
@@ -83,11 +81,11 @@ class User < ActiveRecord::Base
           first_name: first_name,
           last_name: last_name, 
           username: auth.info.name,
-          email: email.present? ? email : "#{ TEMP_EMAIL_PREFIX }#{ authorization.provider }-#{ authorization.uid }.com",
-          password: Devise.friendly_token[8,8]
+          email: email.present? ? email : "#{ TEMP_EMAIL_PREFIX }#{ authorization.provider }-#{ authorization.uid }.com"
         )
-
-        user.save!
+        
+        user.skip_confirmation!
+        user.save!(validate: false)
       end
     end
 
@@ -115,12 +113,9 @@ class User < ActiveRecord::Base
     
     # Non-weektime goals: active & not reminded
     # Weektime goals: active & not reminded 7 times, since we can't decide the weekday because of user timezone now
-    User.joins(:goals, :commits).where(
-                                  "(goals.type <> 'WeektimeGoal' AND commits.starts_at < ? AND commits.starts_at >= ? AND commits.reminded < 0)
-                                  OR (goals.type = 'WeektimeGoal' AND commits.starts_at < ? AND commits.starts_at >= ? AND commits.reminded <= 6)",
-                                  now, now - 24.hours, 
-                                  now, now - now.wday.days - 7.days
-                                )
+    User.joins(:goals, :commits).where("(goals.type <> 'WeektimeGoal' AND commits.reminded < 0)
+                                      OR (goals.type = 'WeektimeGoal' AND commits.reminded <= 6)")
+                                .where("commits.starts_at < ?", now)
                                 .where('commits.state = 0').group('users.id')
   end
 
@@ -128,25 +123,35 @@ class User < ActiveRecord::Base
 
   #####################################################################################
   # 
+  # Format & Outputs
+  #
+  # ###################################################################################
+  def full_name
+    str = self.first_name
+    str += " #{ self.last_name }" if self.last_name.present?
+    
+    return str.titlecase
+  end
+
+  alias_method :to_s, :full_name
+
+
+  #####################################################################################
+  # 
   # Callbacks
   #
   # ###################################################################################
+  private
+  def get_username
+    self.username = self.full_name if self.username.blank?
+    
+    return self.username
+  end
+  
   def create_email_reminder
     reminder = self.reminders.find_or_initialize_by(type: 'EmailReminder')
     reminder.attributes = { recipient: self.first_name, recipient_id: self.email }
     
     reminder.save!
   end
-
-
-  #####################################################################################
-  # 
-  # Format & Outputs
-  #
-  # ###################################################################################
-  def name
-    (self.first_name + ' ' + self.last_name).titlecase
-  end
-
-  alias_method :to_s, :name
 end

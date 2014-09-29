@@ -1,0 +1,14 @@
+
+- @activities.each do |a|
+  .activity(class=" #{ 'right' if a.activeable.user == @goal.user }" data-type='#{ a.activeable.class }' data-id='#{ a.activeable.id }')
+    = render a.activeable
+
+- if  @activities.include?(@goal.activities.first)
+  .deposit
+    %strong Deposit made on
+    %lable.label.label-info= @goal.deposit.created_at.in_time_zone(@goal.user.timezone).strftime("%b %d, %Y")
+  .created
+    %strong Created on
+    %lable.label.label-primary= @goal.created_at.in_time_zone(@goal.user.timezone).strftime("%b %d, %Y")
+- else
+  .more.text-center= link_to 'Load more...', user_goal_path(@goal.user, @goal, since: @activities.last.id, limit: @limit), remote: true, class: 'btn btn-default'

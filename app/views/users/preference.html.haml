@@ -1,0 +1,88 @@
+.content
+  #pad-wrapper.setting-wrapper    
+    .row.head
+      %h3 Preferences
+
+    .row.line-break
+
+    .row.twitter
+      .col-md-10
+        %h3 Twitter
+        
+        - t = current_user.authorizations.where(provider: 'twitter').first
+        
+        .auth
+          - if t.blank?
+            = link_to 'Connect Twitter Account', user_omniauth_authorize_path(:twitter), class: 'connect btn-glow primary'
+          - else
+            .connected
+              .disconnect
+                = form_for current_user, url: '/settings/preference', method: :post do |f|
+                  = f.hidden_field :disconnect, value: 'twitter'
+                  = f.submit 'Disconnect', class: 'btn btn-default btn-sm', data: { confirm: "Are your sure? You won't be able to check in with tweets or receive reminders on Twitter if disconnected."}
+            
+              .as
+                Connected as:
+                %a(href="http://twitter.com/#{ t.username }")
+                  @#{ t.username }
+              %p.help-block
+                %ul
+                  %li 
+                    tweet us to check in your commitment, e.g. 
+                    %em
+                      "
+                      %strong> @upmit
+                      &nbsp; just had a good run today &nbsp;
+                      %strong> #running
+                      "
+                  %li receive reminders in Twitter Direct Messages (need to follow @upmit)
+    
+    .row.line-break
+    
+    .row.reminder
+      .col-md-10
+        %h3 Reminder
+        
+        - email = current_user.reminders.where(type: "EmailReminder").first
+        
+        = form_tag '/settings/preference', method: :post, remote: true, role: 'form' do
+          = hidden_field_tag 'user[reminder][change]', ''
+          
+          .email(class="#{ 'disabled' if email.blank? }")
+            .lbl.col-md-2.col-sm-2.col-xs-2 Email
+          
+            .btn-group.btn-group-sm(data-toggle="buttons")
+              - if email.blank?
+                %button.btn.btn-default(disabled='disabled') ON
+                %button.btn.btn-default(disabled='disabled') OFF
+              - else
+                %label.btn.btn-default(class= "#{ 'active' if email.active? }")
+                  = radio_button_tag 'user[reminder][email]', 1, email.active? ? true : false
+                  ON
+                %label.btn.btn-default(class= "#{ 'active' unless email.active? }")
+                  = radio_button_tag 'user[reminder][email]', 0, email.active? ? false : true
+                  OFF
+
+            %p.help-block.col-md-offset-2.col-sm-offset-2.col-xs-offset-2
+              Receive a digestive email for all commitments scheduled for the day.
+            
+          .twitter(class="#{ 'disabled' if t.blank? }")
+            - twitter = current_user.reminders.where(type: "TwitterReminder").first if t.present?
+        
+            .lbl.col-md-2.col-sm-2.col-xs-2 Twitter
+            .btn-group.btn-group-sm(data-toggle="buttons")
+              - if t.blank?
+                %button.btn.btn-default(disabled='disabled') ON
+                %button.btn.btn-default(disabled='disabled') OFF
+              - else
+                %label.btn.btn-default(class= "#{ 'active' if twitter.active? }")
+                  = radio_button_tag 'user[reminder][twitter]', 1, twitter.active? ? true : false
+                  ON
+                %label.btn.btn-default(class= "#{ 'active' unless twitter.active? }")
+                  = radio_button_tag 'user[reminder][twitter]', 0, twitter.active? ? false : true
+                  OFF
+            
+            %p.help-block.col-md-offset-2.col-sm-offset-2.col-xs-offset-2
+              Receive a digestive Twitter Direct Message for all commitments scheduled for the day.
+          
+          .hidden= submit_tag 'Submit'

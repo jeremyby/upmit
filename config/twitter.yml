@@ -7,4 +7,7 @@ test:
   <<: *default
   
 production:
-  <<: *default
+  api_key: n6ZsUUg7EXXq2ikFuRam484do
+  api_secret: sKoKm30IfHbfCy9ljDIOhv0JLGFFB15q4em00Rfsla6liW0ldS
+  access_token: 2650231424-AieylEIqubIsY2hghrFXbO7F6LHAZ2TFaK94wMe
+  access_secret: zWbGSEzkRAlLnHOzLLwZHKDfm5Z6yAc29dOCq2UQCHRNc

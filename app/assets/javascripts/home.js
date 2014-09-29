@@ -1206,7 +1206,7 @@ function initialise_document_ready_functions()
 
 $(document).ready(function()
 {
-  if ($('.homer').length) {
+  if ($('body.homer').length) {
    initialise_document_ready_functions();
    initialise_window_load_functions();
   }

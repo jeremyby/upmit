@@ -1,0 +1,21 @@
+
+- @body_class = 'login'
+- @message_switch = 'off'
+
+.background-image-overlay
+
+
+.login-wrapper
+  = link_to (image_tag(asset_path('logo-lg.png'), class: 'logo')), root_path
+
+  .box
+    .content-wrap.text-left
+      %h3 Confirmation Sent
+
+      %p Thank you for signing up Upmit.com. 
+      
+      %p A message with a confirmation link has been sent to your email address. Please open the link to activate your account.
+      
+      %p
+        Return to
+        = link_to 'Home', root_path

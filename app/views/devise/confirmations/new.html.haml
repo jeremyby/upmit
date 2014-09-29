@@ -1,0 +1,27 @@
+- @body_class = 'login'
+
+- flash.now[:alert] = 'Confirmation token is invalid'
+
+.background-image-overlay
+
+
+.login-wrapper
+  = link_to (image_tag(asset_path('logo-lg.png'), class: 'logo')), root_path
+  
+  .box
+    .content-wrap.text-left
+      %h4 Resend confirmation link
+      
+      %p
+        = form_for(resource, as: resource_name, url: confirmation_path(resource_name), html: { method: :post }) do |f|
+        
+          .form-group.email
+            = f.label :email, 'Email address', class: 'sr-only'
+            = f.email_field :email, class: "form-control", placeholder: "Your email address", autofocus: true
+        
+          .form-group.text-center
+            = f.submit "Resend", class: "btn-glow primary"
+
+  .no-account
+    %p Already have an account?
+    = link_to 'Log in', new_user_session_path

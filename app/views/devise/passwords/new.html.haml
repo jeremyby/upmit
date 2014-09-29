@@ -1,0 +1,29 @@
+
+- @body_class = 'login'
+
+- flash.now[:alert] = 'Email ' + resource.errors[:email].first if resource.errors[:email].present?
+
+.background-image-overlay
+
+
+.login-wrapper
+  = link_to (image_tag(asset_path('logo-lg.png'), class: 'logo')), root_path
+  
+  .box
+    .content-wrap.text-left
+      %h4 Forgot your password?
+      
+      %p
+        = form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :post }, role: 'form') do |f|
+        
+          .form-group.email
+            = f.label :email, 'Email address', class: 'sr-only'
+            = f.email_field :email, class: "form-control", placeholder: "Your email address", autofocus: true
+        
+          .form-group.text-center
+            = f.submit "Reset password", class: "btn-glow primary"
+        
+  .no-account
+    %p Don't have an account?
+    = link_to 'Sign up', signup_path
+

@@ -6,10 +6,21 @@
     = render 'layouts/common_head'
     
   %body(class='#{ @body_class }')
-    / %p.notice= notice
-    / %p.alert= alert
-  
-    - if user_signed_in?
+    #np-holder
+    
+    #messages(class='#{ @message_switch.blank? ? "on" : "off" }')
+      - case
+      - when flash[:alert].present?
+        .text
+          %i.fa.fa-times-circle
+          = flash[:alert]
+          
+      - when flash[:notice].present?
+        .text
+          %i.fa.fa-exclamation-circle
+          = flash[:notice]
+        
+    - if user_signed_in? && !controller?('devise/confirmations')
       = render 'layouts/navbar'
       = render 'layouts/sidebar'
       

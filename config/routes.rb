@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
-  devise_for :users, skip: [:sessions], controllers: { omniauth_callbacks: 'omniauth_callbacks' }
-
+  devise_for :users, skip: [:sessions], controllers: { omniauth_callbacks: 'omniauth_callbacks', :registrations => 'registrations' }
+  
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
   # 
@@ -15,7 +15,7 @@ Rails.application.routes.draw do
   
   resources :deposit, only: [:index]
   
-  resources :goals, except: [:show] do
+  resources :goals, except: [:show, :edit, :update, :destroy] do
     resources :deposit, except: [:index]  do
       collection do
         get 'confirm'
@@ -25,16 +25,33 @@ Rails.application.routes.draw do
     end
   end
   
-  resources :commits, only: [] do
+  resources :commits, only: [:update] do
     post 'check'
     post 'fail'
   end
   
-  resources :users, path: '', only: [:show] do
-    resources :goals, only: [:show]
+  resources :users, path: 'settings', only: [] do
+    collection do
+      put 'update'
+      get 'account'
+      get 'profile'
+      get 'preference'
+      post 'preference'
+    end
   end
   
-  match '/users/:id/finish_signup' => 'users#finish_signup', via: [:get, :patch], :as => :finish_signup
+  
+  resources :comments, only: [:create, :destroy]
+  
+  
+  match '/finish_signup' => 'users#finish_signup', via: [:get, :patch], :as => :finish_signup
+  
+  match '/confirmation_sent' => 'home#confirmation_sent', via: [:get], :as => :confirmation_sent
+
+  
+  resources :users, path: '', only: [:show] do
+    resources :goals, only: [:index, :show, :update]
+  end
   
   
   # You can have the root of your site routed with "root"

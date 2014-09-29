@@ -1,18 +1,17 @@
 / main container
 .content
-  #pad-wrapper
+  #pad-wrapper.goals-wrapper
     - if  current_user.goals.size == 0
       = render 'home/jumbotron'
 
     - elsif @active.blank?
     
     - else
-      .row.top
+      .row
         .col-md-12
-          %a(href='#{ new_goal_path }')
-            %button.btn.btn-info
-              %i.fa.fa-plus
-              New Goal
+          %a.new-goal.btn-glow.primary(href='#{ new_goal_path }')
+            %i.fa.fa-plus
+            New Goal
         
           %h4 Active
       

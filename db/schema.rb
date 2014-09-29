@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140913141128) do
+ActiveRecord::Schema.define(version: 20140928152210) do
 
   create_table "authorizations", force: true do |t|
     t.integer  "user_id"
@@ -22,9 +22,27 @@ ActiveRecord::Schema.define(version: 20140913141128) do
     t.text     "link"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "username"
   end
 
   add_index "authorizations", ["user_id"], name: "index_authorizations_on_user_id", using: :btree
+
+  create_table "comments", force: true do |t|
+    t.integer  "commentable_id",   default: 0
+    t.string   "commentable_type"
+    t.string   "title"
+    t.text     "body"
+    t.string   "subject"
+    t.integer  "user_id",          default: 0, null: false
+    t.integer  "parent_id"
+    t.integer  "lft"
+    t.integer  "rgt"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "comments", ["commentable_id", "commentable_type"], name: "index_comments_on_commentable_id_and_commentable_type", using: :btree
+  add_index "comments", ["user_id"], name: "index_comments_on_user_id", using: :btree
 
   create_table "commits", force: true do |t|
     t.text     "note"
@@ -35,6 +53,9 @@ ActiveRecord::Schema.define(version: 20140913141128) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "reminded",   default: -1
+    t.string   "photo"
+    t.string   "checked_by"
+    t.datetime "checked_at"
   end
 
   add_index "commits", ["goal_id"], name: "index_commits_on_goal_id", using: :btree
@@ -57,13 +78,13 @@ ActiveRecord::Schema.define(version: 20140913141128) do
   add_index "delayed_jobs", ["priority", "run_at"], name: "delayed_jobs_priority", using: :btree
 
   create_table "deposits", force: true do |t|
-    t.string   "source",                 null: false
-    t.string   "payer",                  null: false
-    t.string   "token",                  null: false
-    t.integer  "goal_id",                null: false
-    t.integer  "user_id",                null: false
-    t.integer  "amount",                 null: false
-    t.integer  "state",      default: 1, null: false
+    t.string   "source",                   null: false
+    t.string   "payer",                    null: false
+    t.string   "token",                    null: false
+    t.integer  "goal_id",                  null: false
+    t.integer  "user_id",                  null: false
+    t.integer  "amount_cents",             null: false
+    t.integer  "state",        default: 0, null: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -80,6 +101,14 @@ ActiveRecord::Schema.define(version: 20140913141128) do
   add_index "friendly_id_slugs", ["slug", "sluggable_type"], name: "index_friendly_id_slugs_on_slug_and_sluggable_type", using: :btree
   add_index "friendly_id_slugs", ["sluggable_id"], name: "index_friendly_id_slugs_on_sluggable_id", using: :btree
   add_index "friendly_id_slugs", ["sluggable_type"], name: "index_friendly_id_slugs_on_sluggable_type", using: :btree
+
+  create_table "goal_activities", force: true do |t|
+    t.string   "activeable_type"
+    t.integer  "activeable_id"
+    t.integer  "goal_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "goals", force: true do |t|
     t.string   "title",                       null: false
@@ -140,9 +169,15 @@ ActiveRecord::Schema.define(version: 20140913141128) do
     t.datetime "last_sign_in_at"
     t.string   "current_sign_in_ip"
     t.string   "last_sign_in_ip"
+    t.string   "confirmation_token"
+    t.datetime "confirmed_at"
+    t.datetime "confirmation_sent_at"
+    t.string   "unconfirmed_email"
     t.string   "timezone"
+    t.string   "bio"
   end
 
+  add_index "users", ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true, using: :btree
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
 

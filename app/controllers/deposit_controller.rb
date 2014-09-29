@@ -16,7 +16,7 @@ class DepositController < ApplicationController
     if @goal.deposit.blank?
       @deposit = @goal.build_deposit(user: current_user)
     else
-      flash[:alert] = 'Deposit was already made.'
+      flash[:notice] = 'Deposit was already made.'
       redirect_to user_goal_path(current_user, @goal)
     end
   end
@@ -44,7 +44,7 @@ class DepositController < ApplicationController
       
       raise 'Deposit was already made.' unless @goal.deposit.blank?
       
-      @deposit = @goal.build_deposit(user: current_user, token: params[:token], payer: params[:PayerID], amount: @goal.occurrence, source: 'paypal')
+      @deposit = @goal.build_deposit(user: current_user, token: params[:token], payer: params[:PayerID], amount: @goal.occurrence * 100, source: 'paypal')
 
       checkout_object = api.build_do_express_checkout_payment({
                                                                 :DoExpressCheckoutPaymentRequestDetails => {
@@ -54,7 +54,7 @@ class DepositController < ApplicationController
                                                                   :PaymentDetails => [{
                                                                                         :OrderTotal => {
                                                                                           :currencyID => "USD",
-                                                                                          :value => @goal.occurrence 
+                                                                                          :value => @deposit.amount.to_param 
                                                                                         }
                                                                                       }]
                                                                 }
@@ -70,10 +70,10 @@ class DepositController < ApplicationController
       
       @deposit.save!
 
-      flash[:alert] = 'You have made the deposit. The goal is active now!'
+      flash[:notice] = 'You have made the deposit. The goal is active now!'
       @redirecter = user_goal_url(current_user, @goal)
     rescue => error
-      flash[:error] = error
+      flash[:alert] = error
       render 'error' 
     end
   end

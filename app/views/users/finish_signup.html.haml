@@ -1,25 +1,29 @@
 .content
-  #pad-wrapper
-    #add-email
-      .row
+  #pad-wrapper.finish_signup
+    .row
+      .col-md-8
         %h3 Finishing up
+  
+        
+    = form_for(current_user, :as => 'user', :url => finish_signup_path(current_user), :html => { role: 'form' }) do |f|
+      = f.hidden_field :timezone
       
       .row
-        .col-m-10.col-m-offset-1
-          = form_for(current_user, :as => 'user', :url => finish_signup_path(current_user), :html => { role: 'form' }) do |f|
-            - if @show_errors && current_user.errors.any?
-              #error_explanation
-                - current_user.errors.full_messages.each do |msg|
-                  = msg
-                  %br
-            .form-group
-              .controls
-                = f.text_field :email, :autofocus => true, :value => '', class: 'form-control input-lg', placeholder: 'Email address'
-                %p.help-block Please provide your email address. No spam.
-              .controls
-                = f.label :follow_upmit, 'Follow @upmit so we can send you reminders via Twitter Direct Message'
-                = f.check_box :follow_upmit, checked: true
-                %p.help-block One time use only. We will never make change to your Twitter account in the future.
-                 
-            .actions
-              = f.submit 'Continue', :class => 'btn btn-primary'
+        .form-group.col-md-6
+          = f.text_field :email, :autofocus => true, :value => '', class: 'form-control input-lg', placeholder: 'Email address'
+          - if current_user.errors.any?
+            #error_explanation
+              - current_user.errors.full_messages.each do |msg|
+                = msg
+                %br
+          %p.help-block Please provide your email address. No spam.
+        
+      .row
+        .form-group.col-md-6
+          = f.label :follow_upmit, 'Follow @upmit on Twitter', class: 'follow'
+          = f.check_box :follow_upmit, checked: true
+          %p.help-block Required to receive reminders via Twitter Direct Messages. We will not make change to your Twitter account after this.
+      
+      .row
+        .actions.col-md-6.text-right
+          = f.submit 'Continue', :class => 'btn-glow primary'

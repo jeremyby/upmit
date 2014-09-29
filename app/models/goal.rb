@@ -16,15 +16,15 @@ class Goal < ActiveRecord::Base
   belongs_to :user
   has_one :deposit
   has_many :commits, dependent: :destroy
+  has_many :activities, class_name: 'GoalActivities', dependent: :destroy
   
   validates_presence_of :title, :user_id
-  validates :hash_tag, uniqueness: { scope: :user_id }
-  
+  # validates :hash_tag, uniqueness: { scope: :user_id }
   
   before_create :select_legend
   
   # Create the first commit when the state of the goal is updated
-  # from 'inactive' to 'active'
+  # from 'inactive' to 'active', that is - deposit paid
   after_commit :create_first_commit, on: :update, :if => Proc.new { |g| g.previous_changes['state'] == [0, 10] }
   
   WEEKDAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
@@ -37,7 +37,17 @@ class Goal < ActiveRecord::Base
     -10 => 'cancelled'
   }
   
+  Labels = {
+    10  => 'primary',
+    0   => 'default',
+    -1  => 'success',
+    -5  => 'warning',
+    -10 => 'danger'
+  }
+  
   acts_as_stateable states: STATES
+  
+  acts_as_commentable
   
   attr_accessor :starts
   
@@ -50,8 +60,8 @@ class Goal < ActiveRecord::Base
   # ###################################################################################
   def self.samples
     [
-      'run', 'work out', 'not smoke', 'stay positive','try something new', 'stay on diet',
-      'smile to a stranger', 'make real progress at work', 'not procrastinate'
+      'run', 'work out', 'not smoke', 'stay positive','try something new', 'have quality time with family', 'eat healthier',
+      'smile to a stranger', 'try harder at work', 'not procrastinate', 'spend 30 minutes learning a new language', 'pray more'
     ]
   end
   
@@ -145,15 +155,17 @@ class Goal < ActiveRecord::Base
   end
   
   def create_first_commit
-    # Create the first commitment in real time
+    # Create the first 2 commitments in real time
     # while leave the rest to delayed job
-    self.commits.create! user: self.user, starts_at: self.schedule.first 
+    self.schedule.first(2).each do |o|
+      self.commits.create! user: self.user, starts_at: o
+    end
     
     self.delay.batch_create_all_commits
   end
   
   def batch_create_all_commits
-    all = self.schedule.all_occurrences[1..(self.occurrence - 1)]
+    all = self.schedule.all_occurrences[2..(self.occurrence - 1)]
     
     all.each do |o|
       self.commits.create! user: self.user, starts_at: o

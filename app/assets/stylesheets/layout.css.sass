@@ -42,8 +42,8 @@ a,
 p
   margin: 1em 0
 
-.pull-right
-  float: none !important
+// .pull-right
+//   float: none !important
 
 @media (min-width: 768px)
   .pull-right
@@ -93,6 +93,29 @@ body.menu
     +border-radius(50%)
     border: 3px solid #c3cddb
 
+
+.owner
+  .follow
+    position: relative
+
+    .following
+      position: absolute
+      top: 0
+      left: 0
+      
+      text-align: center
+
+      width: 100%
+      
+    .unfollow
+      +opacity(0.5)
+    
+    &:hover
+      .following
+        display: none
+        
+      .unfollow
+        +opacity(1)
 
 
 a.new-goal
@@ -320,7 +343,8 @@ body.signup
 
 
 
-body.login
+body.login,
+body.homer
   #messages
     top: 0
 
@@ -501,7 +525,7 @@ body.login
   &.wide-content
     margin-left: 0
     border-radius: 0
-    
+  
     z-index: 1000
     
   &.panel-content

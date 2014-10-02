@@ -1,24 +1,30 @@
 .line-break
 
-- if commit.checked_by == 'host'
-  .activeable(class='fail expired')
+- checked_at = commit.checked_at.in_time_zone(commit.user.timezone)
+
+- date = checked_at.year == Time.now.year ? checked_at.strftime("%b %d") : checked_at.strftime("%b %d, %Y")
+
+
+- if commit.failed?
+  .activeable(class='fail')
     .info
-      %strong expired at
-      %span #{ distance_of_time_in_words_to_now(commit.created_at) } ago
+      %strong Failed
+      %span= date
       
 - else
   .avatar= link_to image_tag(asset_path(commit.user.avatar.thumb.url), size: '40x40'), user_path(commit.user)
-  .activeable(class='#{ commit.succeed? ? 'success' : 'fail' }')
+  .activeable(class='success')
     .info
-      %strong checked in
-      %span #{ distance_of_time_in_words_to_now(commit.checked_at) } ago via #{ commit.checked_by == 'twitter' ? 'Twitter' : 'Upmit.com'}
+      %strong Checked in
+      %span via #{ commit.checked_by.capitalize }
+      %span= date
     - unless commit.note.blank?
       .body= commit.note
     - unless commit.photo.blank?
       .photo= image_tag(asset_path(commit.photo.url))
     - if is_owner?(commit)
       .edit
-        %a.small(href='#')
+        %a(href='#')
           %i.fa.fa-edit
           Edit note and photo
   

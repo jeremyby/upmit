@@ -17,7 +17,7 @@ module Stateable
   
   module InstanceMethods
     def state_in_words
-      self.class::STATES[self.state]
+      self.class::States[self.state]
     end
   end
 end

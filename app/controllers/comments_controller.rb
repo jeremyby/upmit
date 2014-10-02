@@ -2,11 +2,7 @@ class CommentsController < ApplicationController
   before_action :authenticate_user!
   
   def create
-    @comment = current_user.comments.build(params[:comment].permit([:commentable_type, :commentable_id, :body]))
-    
-    unless @comment.save
-      @error = 'There has been some problem. Please try again later.' 
-    end
+    @comment = current_user.comments.create(params[:comment].permit([:commentable_type, :commentable_id, :body]))
   end
 
   def destroy

@@ -44,7 +44,7 @@ class DepositController < ApplicationController
       
       raise 'Deposit was already made.' unless @goal.deposit.blank?
       
-      @deposit = @goal.build_deposit(user: current_user, token: params[:token], payer: params[:PayerID], amount: @goal.occurrence * 100, source: 'paypal')
+      @deposit = @goal.build_deposit user: current_user, token: params[:token], payer: params[:PayerID], amount: @goal.occurrence * 100, source: 'paypal'
 
       checkout_object = api.build_do_express_checkout_payment({
                                                                 :DoExpressCheckoutPaymentRequestDetails => {
@@ -70,7 +70,7 @@ class DepositController < ApplicationController
       
       @deposit.save!
 
-      flash[:notice] = 'You have made the deposit. The goal is active now!'
+      flash[:notice] = 'The deposit was made successfully and now your goal is active!'
       @redirecter = user_goal_url(current_user, @goal)
     rescue => error
       flash[:alert] = error
@@ -79,7 +79,6 @@ class DepositController < ApplicationController
   end
 
   private
-
   def get_my_goal
     @goal = current_user.goals.find_by_slug(params[:goal_id])
   end
@@ -103,7 +102,7 @@ class DepositController < ApplicationController
                                                     Quantity: "#{ occurrence }",
                                                     Amount: {
                                                       currencyID: "USD",
-                                                    value: "1" },
+                                                      value: "1" },
                              ItemCategory: "Digital" }],
         PaymentAction: "Sale" }] }
     })

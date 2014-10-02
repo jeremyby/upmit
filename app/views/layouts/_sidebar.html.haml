@@ -1,17 +1,15 @@
 #sidebar-nav
   %ul#dashboard-menu
-    = nav_link('home', 'Home', '/', 'fa-home')
+    = nav_link(controller?('home'), 'Home', '/', 'fa-home')
     
-    = nav_link('goals', 'Goals', user_goals_path(current_user), 'fa-star-o')
+    = nav_link(controller?('goals') && (@user.present? && @user == current_user), 'Goals', user_goals_path(current_user), 'fa-star-o')
     
-    = nav_link('deposit', 'Balance', deposit_index_path, 'fa-usd')
+    = nav_link(controller?('deposit'), 'Balance', deposit_index_path, 'fa-usd')
     
-    %li
-      %a(href="#")
-        %i.fa.fa-share-alt
-        %span People
+    = nav_link((@user.present? && @user != current_user) || (controller?('users') && action?('index')), 'People', people_path, 'fa-share-alt')
     
-    - account_active = controller?('users')
+    
+    - account_active = controller?('users') && (@user.present? && @user == current_user) && !(controller?('users') && action?('index'))
     
     %li(class="#{ 'active' if account_active }")
       - if account_active

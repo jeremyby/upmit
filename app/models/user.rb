@@ -19,6 +19,10 @@ class User < ActiveRecord::Base
   has_many :comments
   has_many :reminders, dependent: :destroy
   
+  
+  acts_as_followable
+  acts_as_follower
+  
   # after_create :create_email_reminder, if: Proc.new { |u| u.email_valid? }
   after_commit :create_email_reminder, on: :update, if: Proc.new { |u| u.previous_changes['confirmed_at'].present? && u.confirmed? }
   

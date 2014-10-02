@@ -1,7 +1,7 @@
 class WeektimeGoal < Goal
   def builder(offset, now, hash)
 
-    self.attributes = hash.permit(:title, :duration, :interval, :interval_unit, :weektimes)
+    self.attributes = hash.permit(:title, :duration, :interval, :interval_unit, :weektimes, :privacy)
 
     today = now.in_time_zone(self.user.timezone)
     start_time = (today - today.wday.days + (offset * 7).days).beginning_of_day

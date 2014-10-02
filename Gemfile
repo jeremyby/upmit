@@ -87,7 +87,7 @@ gem 'fog', require: "fog/aws/storage"
 
 gem 'acts_as_commentable_with_threading'
 
-gem 'will_paginate'
+gem "acts_as_follower"
 
 
 group :development, :test do

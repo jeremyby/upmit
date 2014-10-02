@@ -1,0 +1,17 @@
+/ main container
+.content
+  #pad-wrapper.people-wrapper
+  
+    %h3 Friends
+    
+    %h4 Following
+    - followings = current_user.following_by_type('User')
+    - followings.each do |f|
+      .user
+        = link_to (image_tag asset_path(f.avatar.thumb.url)), user_path(f)
+    
+    %h4 Followers
+    - followers = current_user.followers
+    - followers.each do |f|
+      .user
+        = link_to (image_tag asset_path(f.avatar.thumb.url)), user_path(f)

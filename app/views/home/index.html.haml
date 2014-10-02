@@ -3,7 +3,7 @@
 
 .background-image-overlay
 
-#outer-background-container(data-default-background-img="#{ asset_path('bg5.jpg') }" style="background-image:url(#{ asset_path('bg5.jpg') });")
+#outer-background-container(data-default-background-img="#{ asset_path('bg1.jpg') }" style="background-image:url(#{ asset_path('bg1.jpg') });")
 
 / Outer Container
 #outer-container
@@ -31,53 +31,53 @@
         %a(href="#signup") start now!
 
   %section#main-content.clearfix
-    %article#intro.section-wrapper.clearfix(data-custom-background-img="#{ asset_path('bg5.jpg') }")
+    %article#intro.section-wrapper.clearfix(data-custom-background-img="#{ asset_path('bg1.jpg') }")
       .content-wrapper.clearfix
         .col-sm-8.col-md-7.pull-right
           %section.feature-text
             %h1 Up + Commit
             %p 
-              Upmit helps to make real changes about yourself, 
-              so you can be
+              Upmit helps to make real changes about yourself,
+              %br
+              so you can
               %a.link-scroll(href='#better')
-                %strong the better you
+                %strong be the better you
             %p
-              %a.link-scroll.btn.btn-outline-inverse.btn-lg(href="/signup") sign up
-              %a.btn.btn-outline-inverse.btn-lg(href="/login") log in
+              %a.link-scroll.btn.btn-outline-inverse.btn-lg(href='#better') Find out more
+              %span or,
+              %a.signin(href="/login") sign in
 
-    %article#better.section-wrapper.clearfix(data-custom-background-img="#{ asset_path('bg1.jpg') }")
+    %article#better.section-wrapper.clearfix(data-custom-background-img="#{ asset_path('bg3.jpg') }")
       .content-wrapper.clearfix
         .col-sm-10.col-md-9.pull-right
           %h1.section-title Be the Better You
           %p.feature-paragraph
             %img.lazy.pull-right(alt="Lorem Ipsum" data-img-src="#{ asset_path('transp-image5b.png') }")
-            Etiam at ligula sit amet arcu laoreet consequat. Duis dictum lorem metus, vitae dapibus risus imperdiet nec.
-            %a(href="#carousel") Suspendisse molestie lorem odio
-            , sit amet. Laoreet consequat. Duis dictum lorem metus, vitae dapibus.
-          %h4 Duis dictum lorem metus
-          %p Suspendisse molestie lorem odio, sit amet. Duis dictum lorem metus, vitae dapibus risus imperdiet nec. Suspendisse molestie lorem odio. Etiam scelerisque lacus tempor, rhoncus diam vel, gravida felis. Fusce tristique sem et leo. Pellentesque sed malesuada turpis. Quisque eget lacus sit amet dui.
-          %p
-            %a.btn.btn-outline-inverse.btn-sm(href="#") how it works
+            Changing ourselves for the better is always hard. It starts easy with a resolution, but sticking to it is the painful part.
+            
+          %h4 Upmit is here to help
+          %p Set up a goal of doing something for a given time span and make a deposit of one dollar for every day you committed. You are then required to check in with us on Twitter and failed to do so you will lose the one dollar you deposited.
+
           
 
 
-    %article#carousel.section-wrapper.clearfix(data-custom-background-img="#{ asset_path('bg6.jpg') }")
+    %article#carousel.section-wrapper.clearfix(data-custom-background-img="#{ asset_path('bg2.jpg') }")
       .content-wrapper.clearfix
         #features-carousel.carousel.slide.with-title-indicators.max-height(data-height-percent="60" data-ride="carousel")
           / Indicators - slide navigation
           %ol.carousel-indicators.title-indicators
-            %li.active(data-slide-to="0" data-target="#features-carousel") Create a goal
-            %li(data-slide-to="1" data-target="#features-carousel") Make the deposit
-            %li(data-slide-to="2" data-target="#features-carousel") Stick to your goal
-            %li(data-slide-to="3" data-target="#features-carousel") Earn your money back
+            %li.active(data-slide-to="0" data-target="#features-carousel") Commit yourself
+            %li(data-slide-to="1" data-target="#features-carousel") It takes repeation
+            %li(data-slide-to="2" data-target="#features-carousel") Stick to the goal
+            %li(data-slide-to="3" data-target="#features-carousel") Support from people
           / Wrapper for slides
           .carousel-inner
             / CAROUSEL SLIDE 1
             .item.active
               .carousel-text-content
                 = image_tag asset_path('goal.png'), alt: 'Goal', class: 'icon'
-                %h2.title Create a goal
-                %p Suspendisse molestie lorem odio, sit amet. Duis dictum lorem metus, vitae dapibus risus imperdiet nec. Suspendisse molestie lorem odio.
+                %h2.title Commit yourself
+                %p 
 
                 
             / CAROUSEL SLIDE 2
@@ -224,14 +224,15 @@
     #go-to-top(onclick="scroll_to_top();")
       %i.icon.fa.fa-chevron-up.fa-lg
     %ul.social-icons
-      %li
-        %a(href="#" target="_blank" title="Facebook")
-          = image_tag asset_path('facebook.png'), alt: 'Facebook'
+      - if false
+        %li
+          %a(href="#" target="_blank" title="Facebook")
+            = image_tag asset_path('facebook.png'), alt: 'Facebook'
       %li
         %a(href="https://twitter.com/upmit" target="_blank" title="Twitter")
           = image_tag asset_path('twitter.png'), alt: 'Twitter'
     / copyright text
-    .footer-text-line © 2014 Upmit
+    .footer-text-line © 2014 Upmit LLC
     
     / Modal
     / DO NOT MOVE, EDIT OR REMOVE - this is needed in order for popup content to be populated in it

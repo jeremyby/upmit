@@ -1,6 +1,6 @@
 class DailyGoal < Goal
   def builder(offset, now, hash)
-    self.attributes = hash.permit(:title, :duration, :interval, :interval_unit)
+    self.attributes = hash.permit(:title, :duration, :interval, :interval_unit, :privacy)
   
     start_time = (now.in_time_zone(self.user.timezone) + offset.day).beginning_of_day
     schedule = IceCube::Schedule.new(start_time)

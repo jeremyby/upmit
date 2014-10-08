@@ -14,9 +14,12 @@
         %i.fa.fa-home
   
     %li.notification-dropdown.hidden-xs
+      - notices = current_user.notifications.unread
+    
       %a.trigger(href="#")
         %i.fa.fa-exclamation-triangle
-        %span.count 8
+        - unless notices.blank?
+          %span.count= notices.size
       .pop-dialog
         .pointer.right
           .arrow
@@ -25,39 +28,19 @@
           %a.close-icon(href="#")
             %i.fa.fa-times-circle
           .notifications
-            %h3 You have 6 new notifications
-            %a.item(href="#")
-              %i.icon-signin
-              New user registration
-              %span.time
-                %i.icon-time
-                13 min.
-            %a.item(href="#")
-              %i.icon-signin
-              New user registration
-              %span.time
-                %i.icon-time
-                18 min.
-            %a.item(href="#")
-              %i.icon-envelope-alt
-              New message from Alejandra
-              %span.time
-                %i.icon-time
-                28 min.
-            %a.item(href="#")
-              %i.icon-signin
-              New user registration
-              %span.time
-                %i.icon-time
-                49 min.
-            %a.item(href="#")
-              %i.icon-download-alt
-              New order placed
-              %span.time
-                %i.icon-time
-                1 day.
-            .footer
-              %a.logout(href="#") View all notifications
+            %h3 You have #{ notices.size } new #{ 'notification'.pluralize(notices.size) }
+            - notices.each do |n|
+              - if n.event == 'start-refund'              
+                %a.item(href="/deposit")
+                  %i.fa.fa-usd
+                  You have one refundable deposit.
+                  %span.time
+                    %i.fa.fa-clock-o
+                    = distance_of_time_in_words_to_now(n.created_at)
+
+            - if false
+              .footer
+                %a.logout(href="#") View all notifications
     %li.current_user
       %a(href='/settings/profile')
         .avatar= image_tag asset_path(current_user.avatar.thumb.url), size: '32x32'

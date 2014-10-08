@@ -25,8 +25,9 @@ $(document).ready ->
   
   upmit.message = (message, type = 'alert') ->
     icon = if type == 'alert' then "<i class='fa fa-times-circle'></i> " else "<i class='fa fa-exclamation-circle'></i> "
-
-    $('#messages').html("<div class='text'>" + icon + message + '</div>').slideDown().poof('slow')
+    classes = if type == 'alert' then "text alert alert-danger" else "text alert alert-info"
+    
+    $('#messages').html("<div class='#{ classes }'>" + icon + message + '</div>').slideDown().poof()
   
   
   if $('#messages').html().length > 0

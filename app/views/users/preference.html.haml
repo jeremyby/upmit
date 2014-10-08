@@ -4,27 +4,80 @@
       %h3 Preferences
 
     .row.line-break
+    
+    
+    
+    
+    .row.facebook
+      .col-md-10
+        %h3 Facebook
+        
+        - fb = current_user.authorizations.find_by(provider: 'facebook')
+        
+        .auth
+          - if fb.blank?
+            = link_to 'Connect Facebook Account', user_omniauth_authorize_path(:facebook), class: 'connect btn-glow primary'
+          - else
+            .connected
+              - if current_user.checkin_with == 'facebook'
+                .label.label-primary
+                  Check In
+              - else
+                .disconnect
+                  = form_for current_user, url: '/settings/preference', method: :post do |f|
+                    = f.hidden_field :disconnect, value: 'facebook'
+                    = f.submit 'Disconnect', class: 'btn btn-default btn-sm', data: { confirm: "Are your sure? You won't be able to if disconnected."}
+
+                .make-default
+                  = form_for current_user, url: '/settings/preference', method: :post do |f|
+                    = f.hidden_field :switch_to, value: 'facebook'
+                    = f.submit 'check-in via Facebook', data: { confirm: "Are your sure you want all your new goals to listen to check-ins from Facebook?"}
+
+              .as
+                Connected as:
+                = link_to fb.username, fb.link
+              %p.help-block
+                %ul
+                  %li 
+                    tweet us to check in your commitment, e.g. 
+                    %em
+                      "
+                      %strong> @upmit
+                      &nbsp; just had a good run today &nbsp;
+                      %strong> #running
+                      "
+                  %li receive reminders in Twitter Direct Messages (need to follow @upmit)
+    
+    .row.line-break
 
     .row.twitter
       .col-md-10
         %h3 Twitter
         
-        - t = current_user.authorizations.where(provider: 'twitter').first
+        - t = current_user.authorizations.find_by(provider: 'twitter')
         
         .auth
           - if t.blank?
             = link_to 'Connect Twitter Account', user_omniauth_authorize_path(:twitter), class: 'connect btn-glow primary'
           - else
             .connected
-              .disconnect
-                = form_for current_user, url: '/settings/preference', method: :post do |f|
-                  = f.hidden_field :disconnect, value: 'twitter'
-                  = f.submit 'Disconnect', class: 'btn btn-default btn-sm', data: { confirm: "Are your sure? You won't be able to check in with tweets or receive reminders on Twitter if disconnected."}
+              - if current_user.checkin_with == 'twitter'
+                .label.label-primary
+                  Check In
+              - else
+                .disconnect
+                  = form_for current_user, url: '/settings/preference', method: :post do |f|
+                    = f.hidden_field :disconnect, value: 'twitter'
+                    = f.submit 'Disconnect', class: 'btn btn-default btn-sm', data: { confirm: "Are your sure? You won't be able to check in with tweets or receive reminders on Twitter if disconnected."}
+                
+                .make-default
+                  = form_for current_user, url: '/settings/preference', method: :post do |f|
+                    = f.hidden_field :switch_to, value: 'twitter'
+                    = f.submit 'check-in via Twitter', data: { confirm: "Are your sure you want all your new goals to listen to check-ins from Twitter?"}
             
               .as
                 Connected as:
-                %a(href="http://twitter.com/#{ t.username }")
-                  @#{ t.username }
+                = link_to t.username, t.link
               %p.help-block
                 %ul
                   %li 
@@ -39,11 +92,12 @@
     
     .row.line-break
     
+    
     .row.reminder
       .col-md-10
         %h3 Reminder
         
-        - email = current_user.reminders.where(type: "EmailReminder").first
+        - email = current_user.reminders.find_by(type: "EmailReminder")
         
         = form_tag '/settings/preference', method: :post, remote: true, role: 'form' do
           = hidden_field_tag 'user[reminder][change]', ''
@@ -67,7 +121,7 @@
               Receive a digestive email for all commitments scheduled for the day.
             
           .twitter(class="#{ 'disabled' if t.blank? }")
-            - twitter = current_user.reminders.where(type: "TwitterReminder").first if t.present?
+            - twitter = current_user.reminders.find_by(type: "TwitterReminder") if t.present?
         
             .lbl.col-md-2.col-sm-2.col-xs-2 Twitter
             .btn-group.btn-group-sm(data-toggle="buttons")

@@ -36,7 +36,7 @@ class Commit < ActiveRecord::Base
     last = goal.commits.where(starts_at: last_occur.utc) unless last_occur.blank? # the first occurrence
     
     # occurrence(s) on today/this week in case of weektimes
-    tz = last_occur.time_zone
+    tz = goal.timezone
     today_time = goal.is_a?(WeektimeGoal) ? now.in_time_zone(tz).beginning_of_week(start_day = :sunday).utc : now.in_time_zone(tz).beginning_of_day.utc
     today = goal.commits.where(starts_at: today_time)
     

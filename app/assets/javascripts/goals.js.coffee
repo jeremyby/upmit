@@ -270,13 +270,6 @@ $(document).ready ->
   )
   
   
-  $('.new-goal-wrapper .settings .result a').on('click', (e) ->
-    e.preventDefault()
-    
-    $('.new-goal-wrapper .settings .result').hide()
-    $('.new-goal-wrapper .settings .fields').show()
-  )
-  
   $('.new-goal-wrapper .actions :submit').on('click', (e) ->
     if $('.new-goal-wrapper #goal_title').val().length == 0
       $('.new-goal-wrapper #goal_title').attr('placeholder', "need to describe the goal first...").addClass('error')

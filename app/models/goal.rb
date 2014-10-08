@@ -1,3 +1,11 @@
+class TitleValidator < ActiveModel::EachValidator
+  def validate_each(record, attribute, value)
+    unless Goal.where("id <> ? AND user_id = ? AND title = ?", record.id, record.user_id, value).where('state >= -1').blank?
+      record.errors[attribute] << 'You have another goal with the same title and not completed.'
+    end
+  end
+end
+
 class Goal < ActiveRecord::Base
   extend FriendlyId
   friendly_id :title, use: :slugged
@@ -18,21 +26,18 @@ class Goal < ActiveRecord::Base
   has_many :commits, dependent: :destroy
   has_many :activities, class_name: 'GoalActivities', dependent: :destroy
   
-  validates_presence_of :title, :user_id
-  validates :hash_tag, uniqueness: { scope: :user_id }
+  validates :user_id, presence: true
+  validates :title, presence: true, title: true
   
   before_create :select_legend
   
-  after_commit :set_hash_tag, on: :update, :if => Proc.new { |g| g.previous_changes['state'] == [0, 10] }
-  
   # Create the first commit when the state of the goal is updated
   # from 'inactive' to 'active', that is - deposit paid
-  after_commit :create_first_commit, on: :update, :if => Proc.new { |g| g.previous_changes['state'] == [0, 10] }
+  after_commit :made_deposit, on: :update, :if => Proc.new { |g| g.previous_changes['state'] == [0, 10] }
   
   
-  # Completed
-  # State from 'active' to 'completed'
-  after_commit :process_deposit, on: :update, :if => Proc.new { |g| g.previous_changes['state'] == [10, -1] }
+  # Completed, state from 'active' to 'completed'
+  after_commit :process_deposit, on: :update, :if => Proc.new { |g| g.previous_changes['state'] == [10, -5] }
   
   
   WEEKDAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
@@ -40,8 +45,8 @@ class Goal < ActiveRecord::Base
   States = {
     10  => 'active',
     0   => 'inactive',
-    -1  => 'completed',
-    -5  => 'onhold',
+    -1  => 'onhold',
+    -5  => 'completed',
     -10 => 'cancelled'
   }
   
@@ -69,8 +74,6 @@ class Goal < ActiveRecord::Base
   
   acts_as_commentable
   
-  attr_accessor :starts
-  
   serialize :weekdays
   
   #####################################################################################
@@ -95,15 +98,20 @@ class Goal < ActiveRecord::Base
       DailyGoal.new
     end
     
+    @goal.attributes = hash.permit(:title, :duration, :interval, :interval_unit, :weektimes, :privacy, :timezone)
+    @goal.weekdays = hash[:weekdays] if hash[:weekdays].present?
+    
     @goal.user = user
+    @goal.checkin_with = user.checkin_with
+    @goal.starts = hash[:starts].to_i
     
-    offset = hash[:starts] == '1' ? 1 : 0
-    now = Time.now
+    start_time, schedule, occurrence = @goal.get_schedule(Time.now)
+    @goal.occurrence = occurrence
     
-    start_time, schedule = @goal.builder(offset, now, hash)
+    # start_time, schedule = @goal.builder(offset, now, hash)
     
-    @goal.start_time = start_time #giving value to goal will convert to UTC, therefore needing the temp start_time
-    @goal.schedule_yaml = schedule.to_yaml
+    # @goal.start_time = start_time #giving value to goal will convert to UTC, therefore needing the temp start_time
+    # @goal.schedule_yaml = schedule.to_yaml
     
     return @goal
   end
@@ -118,6 +126,39 @@ class Goal < ActiveRecord::Base
     IceCube::Schedule.from_yaml(self.schedule_yaml)
   end
   
+  def settle(now)
+    time, schedule, occurrence = self.get_schedule(now)
+    
+    self.attributes = { start_time: time, schedule_yaml: schedule.to_yaml, occurrence: occurrence }
+  end
+  
+  def get_hash_tag
+    s = self.title.split(' ').first
+    
+    if Goal.where("user_id = ? AND hash_tag = ? AND state >= -1", self.user_id, s).count > 0
+      offset = Goal.where("user_id = ? AND state >= -1 AND hash_tag REGEXP ?", self.user_id, "^#{ s }-[\d]*").count + 1
+      
+      s << "-#{offset}"
+    end
+    
+    return s
+  end
+  
+  def create_first_commit
+    self.schedule.first(2).each do |o|
+      self.commits.create! user: self.user, starts_at: o
+    end
+    
+    self.delay.batch_create_all_commits
+  end
+  
+  def batch_create_all_commits
+    all = self.schedule.all_occurrences[2..(self.occurrence - 1)]
+    
+    all.each do |o|
+      self.commits.create! user: self.user, starts_at: o
+    end
+  end
   
   #####################################################################################
   # 
@@ -141,6 +182,10 @@ class Goal < ActiveRecord::Base
       end
     end
      return str
+  end
+  
+  def starts_in_words
+    self.starts > 0 ? 'Next Week' : 'This Week'
   end
   
   def start_time_string
@@ -172,37 +217,16 @@ class Goal < ActiveRecord::Base
     self.legend = legend.blank? ? 'default' : legend
   end
   
-  def set_hash_tag
-    s = self.title.split(' ').first
+  def made_deposit
+    self.settle(Time.now)
+    self.hash_tag = self.get_hash_tag
     
-    if Goal.active.where("user_id = ? and hash_tag = ?", self.user_id, s).count > 0
-      offset = Goal.active.where("user_id = ? and hash_tag REGEXP ?", self.user_id, "^#{ s }-[\d]*").count + 1
-      
-      s << "-#{offset}"
-    end
+    self.save
     
-    self.update hash_tag: s
-  end
-  
-  def create_first_commit
-    # Create the first 2 commitments in real time
-    # while leave the rest to delayed job
-    self.schedule.first(2).each do |o|
-      self.commits.create! user: self.user, starts_at: o
-    end
-    
-    self.delay.batch_create_all_commits
-  end
-  
-  def batch_create_all_commits
-    all = self.schedule.all_occurrences[2..(self.occurrence - 1)]
-    
-    all.each do |o|
-      self.commits.create! user: self.user, starts_at: o
-    end
+    self.create_first_commit
   end
   
   def process_deposit
-    #TODO
+    self.deposit.refund!
   end
 end

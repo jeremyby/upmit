@@ -1,5 +1,7 @@
 - @body_class = 'login'
 
+- @no_nav = true
+
 - flash.now[:alert] = 'Confirmation token is invalid'
 
 .background-image-overlay
@@ -24,4 +26,4 @@
 
   .no-account
     %p Already have an account?
-    = link_to 'Log in', new_user_session_path
+    = link_to 'Sign in', signin_path

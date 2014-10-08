@@ -1,15 +1,14 @@
 @import shared
 
 .goals-wrapper
-  .head
-    a.new-goal
-      top: -1px
-      right: 15px
-      
-    h3
+  a.new-goal
+    top: 50px
+    right: 50px
     
-    h4
-      padding: 5px 0
+    z-index: 1
+  
+  h4
+    margin-bottom: 30px
   
   .line-break
     margin:  50px 0
@@ -49,7 +48,10 @@
       +opacity(0.9)
     
   .detail
-    padding-top: 3px
+    padding-top: 0
+    
+    margin-bottom: 10px
+    
     font-style: italic
     font-size: 13px
     color: #999
@@ -314,15 +316,19 @@
       a
         font-size: 13px
       
+      .hash-tag
+        margin-right: 15px
+        
+        .icon
+          margin-right: -2px
+      
       .visibility
-        margin-left: 15px
+        margin-right: 15px
 
         .icon
           font-size: 15px
       
       .desc
-        margin-left: 15px
-        
         a
           span
             border-bottom: 1px dashed #0088cc
@@ -566,8 +572,11 @@
       
     .alert
       margin-left: 50px
-      margin-bottom: 40px
+      margin-bottom: 10px
       font-size: 13px
+    
+    .form
+      margin-top: 60px
     
     h3
       font-size: 18px
@@ -729,33 +738,23 @@
 
     .settings
       clear: left
-      padding-left: 8%
+      padding-top: 25px
+      padding-left: 9%
       
       color: #999
       
       label
         float: none
         font-weight: 400
-        font-size: 14px
-        
-        color: #696d73
+        font-size: 13px
+
         cursor: default
       
-      .title,
-      .result
-        line-height: 26px
       
-      .result
-        a
-          color: #999
-          margin-left: 5px
-          padding:  1px 3px
-      
-      .fields
-        display: none
       
       .starts
-        margin-left: 15px
+        margin-left: 10px
+        
         label
           padding: 0
         

@@ -17,9 +17,8 @@
     .user
       .avatar= link_to image_tag(asset_path(@user.avatar.url), size: '80x80'), user_path(@user)
       .info
-        = link_to @user.full_name, user_path(@user)
+        = link_to @user, user_path(@user)
         %p.help-block= @user.username
-        %p.bio= @user.bio.blank? ? 'nothing yet' : @user.bio
 
 
 / main container
@@ -29,20 +28,21 @@
       = render 'home/jumbotron'
     
     - else
+      %a.new-goal.btn-glow.primary(href='#{ new_goal_path }')
+        %i.fa.fa-plus
+        New Goal
+        
       - unless @active.blank?
         .row.head
           .col-md-12
-            %a.new-goal.btn-glow.primary(href='#{ new_goal_path }')
-              %i.fa.fa-plus
-              New Goal
-        
-            %h3 Active
+            %h3 Active goals
       
         .row.active
           - today = Time.now.in_time_zone(@user.timezone).to_date
         
           - @active.each do |goal|
             - passed = (today - goal.start_time.in_time_zone(@user.timezone).to_date).to_i
+            - passed = 0 if passed < 0
             - percentage = passed * 100 / goal.duration
             
             .goal
@@ -55,10 +55,9 @@
                     days
                   .progress-bar.progress-bar-success(role="progressbar" aria-valuenow="#{ passed }" aria-valuemin="0" aria-valuemax="#{ goal.duration }" style='width: #{ percentage }%')= passed   
 
-                
-      - unless @inactive.blank?
         .line-break
-      
+        
+      - unless @inactive.blank?
         .row.head
           .col-md-12
             %h4 Pending
@@ -72,10 +71,8 @@
                   .total
                     = goal.duration
                     days
-            
-      - unless @completed.blank?
         .line-break
-      
+      - unless @completed.blank?
         .row.head
           .col-md-12
             %h4 Completed
@@ -86,18 +83,18 @@
               .col-md-3.col-sm-4.col-xs-4.title= link_to (h goal.title).titlecase, user_goal_path(@user, goal)
               .col-md-3.col-sm-4.col-xs-4= goal.to_s
               .col-md-3.col-sm-4.col-xs-4
-                - s = goal.start_time.in_time_zone(@user.timezone)
+                - s = goal.start_time.in_time_zone(goal.timezone)
                 - e = (s + goal.duration.days)
           
                 = s.year == e.year ? s.strftime("%b %d") : s.strftime("%b %d, %Y")
                 \-
                 = e.strftime("%b %d, %Y")
             .detail.col-md-12.col-xs-12
-              #{ goal.occurrence } commitments,
+              #{ goal.occurrence } days committed,
               - success = goal.commits.succeed.size
               - if success == goal.occurrence
                 all of which 
               - else
-                in which #{ success }
+                of which #{ success }
               were successful
                 

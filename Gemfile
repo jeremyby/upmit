@@ -64,6 +64,7 @@ end
 gem 'devise'
 gem 'omniauth'
 gem 'omniauth-twitter'
+gem 'omniauth-facebook'
 
 gem 'paypal-sdk-merchant', git: 'https://github.com/paypal/merchant-sdk-ruby.git'
 
@@ -88,6 +89,8 @@ gem 'fog', require: "fog/aws/storage"
 gem 'acts_as_commentable_with_threading'
 
 gem "acts_as_follower"
+
+gem "koala"
 
 
 group :development, :test do

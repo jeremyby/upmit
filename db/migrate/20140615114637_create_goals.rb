@@ -3,17 +3,16 @@ class CreateGoals < ActiveRecord::Migration
     create_table :goals do |t|
       t.string      :title,           null: false
       t.text        :description
-      
-      t.text        :schedule_yaml,   null: false
-      t.references  :user,            null: false,        index: true
       t.string      :timezone,        null: false
+      t.text        :schedule_yaml
+      t.references  :user,            null: false,        index: true
       t.integer     :state,           null: false,        default: 0
       
       t.string      :weekdays
       t.string      :interval,        null: false,        default: 1
       t.string      :interval_unit,   null: false
-      t.datetime    :start_time,      null: false
-      t.string      :slug,            unique: true,       index: true
+      t.datetime    :start_time
+      t.string      :slug,            index: true
 
       t.timestamps
     end

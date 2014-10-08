@@ -26,7 +26,7 @@ class DepositController < ApplicationController
 
     # Build request object
     request_object = checkout_builder(@goal.occurrence)
-
+    
     # Make API call & get response
     response = api.set_express_checkout(request_object)
 
@@ -44,8 +44,8 @@ class DepositController < ApplicationController
       
       raise 'Deposit was already made.' unless @goal.deposit.blank?
       
-      @deposit = @goal.build_deposit user: current_user, token: params[:token], payer: params[:PayerID], amount: @goal.occurrence * 100, source: 'paypal'
-
+      @deposit = @goal.build_deposit user: current_user, token: params[:token], payer: params[:PayerID], amount: @goal.occurrence, source: 'paypal'
+      
       checkout_object = api.build_do_express_checkout_payment({
                                                                 :DoExpressCheckoutPaymentRequestDetails => {
                                                                   :PaymentAction => "Sale",
@@ -70,7 +70,7 @@ class DepositController < ApplicationController
       
       @deposit.save!
 
-      flash[:notice] = 'The deposit was made successfully and now your goal is active!'
+      flash[:notice] = 'The deposit was made successfully. Now your goal is active!'
       @redirecter = user_goal_url(current_user, @goal)
     rescue => error
       flash[:alert] = error
@@ -95,14 +95,14 @@ class DepositController < ApplicationController
           PaymentDetails: [{
                              OrderTotal: {
                                currencyID: "USD",
-                               value: "#{ occurrence }"
+                               value: "#{ occurrence }.00"
                              },
                              PaymentDetailsItem: [{
-                                                    Name: "One Dollar Deposit",
+                                                    Name: "One dollar deposit per day",
                                                     Quantity: "#{ occurrence }",
                                                     Amount: {
                                                       currencyID: "USD",
-                                                      value: "1" },
+                                                      value: "1.00" },
                              ItemCategory: "Digital" }],
         PaymentAction: "Sale" }] }
     })

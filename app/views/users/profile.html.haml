@@ -7,27 +7,12 @@
 
     .row.line-break
 
-    .row.username
-      .lbl.col-md-2.col-sm-2.col-xs-2
-        Username
-      .input.col-md-6.col-sm-6.col-xs-6
-        %a.editable(href='#' data-type='text' data-name='user[username]' data-url='/settings/update')
-          = @user.username
-        %p.help-block https://upmit.com/#{ @user.slug }
-      
-
-
     .row.names
       .lbl.col-md-2.col-sm-2.col-xs-2
-        Full Name
+        Display Name
       .input.col-md-6.col-sm-6.col-xs-6
-        %a.editable(href='#' data-type='text' data-name='user[first_name]' data-url='/settings/update')
-          = @user.first_name
-        %a.editable(href='#' data-type='text' data-name='user[last_name]' data-url='/settings/update')
-          = @user.last_name
-              
-    
-    .row.line-break
+        %a.editable(href='#' data-type='text' data-name='user[display_name]' data-url='/settings/update')
+          = @user
     
     .row.avatar
       .lbl.col-md-2.col-sm-2.col-xs-2
@@ -46,12 +31,3 @@
               .tab-pane.active#local= f.file_field :avatar, class: 'form-control'
               .tab-pane#remote= f.text_field :remote_avatar_url, class: 'form-control', placeholder: 'A url to a remote photo'
               .action.text-right= f.submit 'Update', class: 'btn-glow primary btn-sm', data: { disable_with: 'Please wait...' }
-    
-
-
-    .row.bio
-      .lbl.col-md-2.col-sm-2.col-xs-2
-        Short Bio
-      .input.col-md-5.col-sm-6.col-xs-7
-        .editable-area(href='#' data-type='textarea' data-name='user[bio]' data-url='/settings/update' data-placeholder='Nothing yet')
-          = @user.bio

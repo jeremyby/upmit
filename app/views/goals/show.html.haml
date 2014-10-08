@@ -1,4 +1,4 @@
-- @title = "#{ is_owner?(@goal) ? 'I will' : @goal.user.full_name + ':'  } #{ h @goal.title } #{ @goal.to_s }".titlecase
+- @title = "#{ is_owner?(@goal) ? 'I will' : @goal.user.to_s + ':'  } #{ h @goal.title } #{ @goal.to_s }".titlecase
 - is_current_user_owner_of_goal = is_owner?(@goal)
 
 - unless is_current_user_owner_of_goal
@@ -7,9 +7,8 @@
     .user
       .avatar= link_to image_tag(asset_path(@user.avatar.url), size: '80x80'), user_path(@user)
       .info
-        = link_to @user.full_name, user_path(@user)
+        = link_to @user, user_path(@user)
         %p.help-block= @user.username
-        %p.bio= @user.bio.blank? ? 'nothing yet' : @user.bio
 
 / main container
 .content(class="#{ 'panel-content' unless is_current_user_owner_of_goal }")
@@ -65,9 +64,10 @@
                     %a.btn.btn-default.btn-sm(href='#') Edit
           
           .attrs
-            .hash-tag(class='#{ "active" if is_current_user_owner_of_goal }' title="Tweet \"@upmit ##{ @goal.hash_tag }\" to check in today's commitment.")
-              %span.icon #
-              %span.editable(class='#{ "active" if is_current_user_owner_of_goal }' data-type='text' data-name='goal[hash_tag]' data-pk='1' data-url='/#{ current_user.slug }/goals/#{ @goal.slug }')= @goal.hash_tag
+            - unless @goal.inactive?
+              .hash-tag(class='#{ "active" if is_current_user_owner_of_goal }' title="Hash tag: post or tweet \"@upmit ##{ @goal.hash_tag }\" to check in today's commitment.")
+                %span.icon #
+                %span.editable(class='#{ "active" if is_current_user_owner_of_goal }' data-type='text' data-name='goal[hash_tag]' data-pk='1' data-url='/#{ current_user.slug }/goals/#{ @goal.slug }')= @goal.hash_tag
               
             .visibility(class='#{ "active" if is_current_user_owner_of_goal }' title="The goal's privacy setting - who can see the details of the goal.")
               %i.icon.fa.fa-eye
@@ -83,6 +83,7 @@
 
       .col-md-2.side
         .status= label_maker @goal.state_in_words, Goal::Labels[@goal.state]
+        .status= label_maker image_tag(asset_path("#{ @goal.checkin_with }.png")), 'primary'
         
 
     
@@ -95,20 +96,21 @@
             .col-md-2.col-sm-2.col-xs-2.field Starts:
             .col-md-3.col-sm-3.col-xs-4.data
               - if @goal.inactive?
-                - #TODO: goals starts on today/tomorrow, and decide the date when the deposit is made
+                = @goal.starts_in_words
               - else
-                = @goal.deposit.created_at.in_time_zone(@goal.user.timezone).strftime("%b %d, %Y")
+                = @goal.start_time.in_time_zone(@goal.timezone).strftime("%b %d, %Y")
         
             - unless @goal.inactive?
               .col-md-2.col-sm-2.col-xs-2.col-md-offset-1.col-sm-offset-1.field.short Ends:
-              .col-md-3.col-sm-3.col-xs-4.data= (@goal.deposit.created_at + (@goal.duration - 1).days).in_time_zone(@goal.user.timezone).strftime("%b %d, %Y")
-      
-          .row
-            .col-md-2.col-sm-2.col-xs-2.field 
-              Committed:
-            .col-md-3.col-sm-3.col-xs-4.data
-              = @goal.occurrence
-              days
+              .col-md-3.col-sm-3.col-xs-4.data= (@goal.start_time + (@goal.duration - 1).days).in_time_zone(@goal.timezone).strftime("%b %d, %Y")
+          
+          - unless @goal.inactive?
+            .row
+              .col-md-2.col-sm-2.col-xs-2.field 
+                Committed:
+              .col-md-3.col-sm-3.col-xs-4.data
+                = @goal.occurrence
+                days
           
           - past = @goal.commits.past.size
           - unless @goal.inactive?          
@@ -135,7 +137,7 @@
 
         
         .col-md-3.col-sm-12.col-xs-12.donut-wrapper
-          - percentage = past * 100 / @goal.occurrence
+          - percentage = past == 0 ? 0 : past * 100 / @goal.occurrence
 
           .donut(data-dimension="140"
                   data-text="#{ percentage }%"

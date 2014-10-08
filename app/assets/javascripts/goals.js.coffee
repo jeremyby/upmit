@@ -43,12 +43,16 @@ $(document).ready ->
   )
   
   
-  $('.area .hash-tag a.editable').editable({
+  $('.goal-wrapper .attrs .hash-tag.active .editable').editable({
     container: 'body'
     mode: 'popup'
-    placement: 'bottom'
-    display: (value) ->
-      $(this).text('#' + value)
+    placement: 'right'
+  })
+  
+  $('.goal-wrapper .attrs .visibility.active .editable').editable({
+    container: 'body'
+    mode: 'popup'
+    placement: 'right'
   })
   
   
@@ -60,14 +64,18 @@ $(document).ready ->
       return "Goal's title cannot be empty" if($.trim(value) == '')
   })
   
+  $('.goal h3 .editable').on('hidden', ->
+    $('.goal-wrapper .goal h3 .edit').show()
+  )
+  
   $('.goal .desc .new.editable').editable({
-    onblur: 'ignore',
+    toggle: 'manual'
+    onblur: 'ignore'
     inputclass: 'edit-desc'
+    emptytext: ''
   })
   
-  $('.goal .desc .new.editable').on('shown', (e, editable) ->
-    $('.goal .desc .edit-desc').autosize()
-  )
+
   
   $('.goal .desc .exist.editable').editable({
     toggle: 'manual',
@@ -78,17 +86,26 @@ $(document).ready ->
     rows: 5
   })
   
-  $('.side .edit-title a').click (e) ->
+  $('.goal-wrapper .goal h3 .edit-title a').click (e) ->
     e.stopPropagation()
     
-    $('.goal h3 .editable').editable('toggle')
+    $('.goal-wrapper .goal h3 .editable').editable('toggle')
+    $('.goal-wrapper .goal h3 .edit').hide()
     
-  $('.side .edit-desc a').click (e) ->
+  $('.goal-wrapper .goal .attrs .desc a').click (e) ->
+    e.stopPropagation()
+
+    $('.goal .desc .new.editable').editable('toggle')
+    $('.goal .desc .edit-desc').autosize()
+    
+
+  $('.goal-wrapper .goal .desc .edit-desc a').click (e) ->
     e.stopPropagation()
 
     $('.goal .desc .exist.editable').editable('toggle')
     $('.goal .desc .edit-desc').autosize()
   
+
   esc_close_legends = (e) ->
     if (e.keyCode == 27)
       $('.legends').hide('fold')
@@ -137,7 +154,7 @@ $(document).ready ->
   # 
   # New Goal
   # 
-  $('#goal_title').on('focus', ->
+  $('.new-goal-wrapper #goal_title').on('focus', ->
     $(this).removeClass('error')
     clearTimeout(upmit.timeoutid)
   ).on('focusout', ->
@@ -145,10 +162,10 @@ $(document).ready ->
       rotate_goal_samples()
   )
   
-  $('.frequency h3').on('click', (e) ->
-    $('.frequency').toggleClass('active')
-    $('.frequency .details').toggle('blind')
-    $('.frequency h3 i').toggleClass('fa-rotate-180')
+  $('.new-goal-wrapper .frequency h3').on('click', (e) ->
+    $('.new-goal-wrapper .frequency').toggleClass('active')
+    $('.new-goal-wrapper .frequency .details').toggle('blind')
+    $('.new-goal-wrapper .frequency h3 i').toggleClass('fa-rotate-180')
     
     update_frequency_day_inverval()
     update_frequency_week_times()
@@ -156,30 +173,30 @@ $(document).ready ->
     e.preventDefault()
   )
   
-  $('.duration h3').on('click', (e) ->
-    $('.duration').toggleClass('active')
-    $('.duration .details').toggle('blind')
-    $('.duration h3 i').toggleClass('fa-rotate-180')
+  $('.new-goal-wrapper .duration h3').on('click', (e) ->
+    $('.new-goal-wrapper .duration').toggleClass('active')
+    $('.new-goal-wrapper .duration .details').toggle('blind')
+    $('.new-goal-wrapper .duration h3 i').toggleClass('fa-rotate-180')
     
-    if $('.duration').hasClass('active')
-      $('#goal_duration').slider()
+    if $('.new-goal-wrapper .duration').hasClass('active')
+      $('.new-goal-wrapper #goal_duration').slider()
       
-      update_slider($('#goal_duration').data('slider-value'))
+      update_slider($('.new-goal-wrapper #goal_duration').data('slider-value'))
       
-      $('#goal_duration').on('slide', (slideEvt) ->
+      $('.new-goal-wrapper #goal_duration').on('slide', (slideEvt) ->
         update_slider_value(slideEvt.value)
       ).on('slideStop', (slideEvt) ->
         update_slider(slideEvt.value)
       )
     else
       setTimeout(->
-        $('#goal_duration').slider('destroy')
+        $('.new-goal-wrapper #goal_duration').slider('destroy')
       , 400)
   ).on('mousedown', (e) ->
     e.preventDefault()
   )
   
-  $('.duration button').click (e) ->
+  $('.new-goal-wrapper .duration button').click (e) ->
     text = "for #{ $(this).data('value') } days"
     
     text = switch $(this).prop('id')
@@ -191,58 +208,78 @@ $(document).ready ->
       when '6m' then "for 6 months"
       when '1y' then "for 1 year"
     
-    set_slider_button($(".duration button[data-value='#{ $(this).data('value') }']"))
+    set_slider_button($(".new-goal-wrapper .duration button[data-value='#{ $(this).data('value') }']"))
     
-    $('#goal_duration').slider('setValue', $(this).data('value'), true)
+    $('.new-goal-wrapper #goal_duration').slider('setValue', $(this).data('value'), true)
     
-    $(".duration h3 span").text(text)
+    $(".new-goal-wrapper .duration h3 span").text(text)
     
     e.preventDefault()
   
   # changing interval unit, day <-> week
-  $('input[name="goal[interval_unit]"]').on('change', ->    
+  $('.new-goal-wrapper input[name="goal[interval_unit]"]').on('change', ->    
     update_frequency_title()
-    show_end_date($('#goal_duration').data('sliderValue'))
+    show_end_date($('.new-goal-wrapper #goal_duration').data('sliderValue'))
   )
   
   # simply changing the day/days
-  $('.frequency .day select').on('change', ->
-    $('#goal_interval_unit_day').prop('checked', true)
+  $('.new-goal-wrapper .frequency .day select').on('change', ->
+    $('.new-goal-wrapper #goal_interval_unit_day').prop('checked', true)
     
     update_frequency_day_inverval()
     update_frequency_title()
   )
   
   # simply changing the weekly time/times
-  $('.frequency .week select').on('change', ->
-    $('#goal_interval_unit_week').prop('checked', true)
+  $('.new-goal-wrapper .frequency .week select').on('change', ->
+    $('.new-goal-wrapper #goal_interval_unit_week').prop('checked', true)
     
     update_frequency_week_times()
     
-    w = $('.frequency label.checkbox-inline input:checked').length
-    $('.frequency label.checkbox-inline input').prop('checked', false) unless w == $('.frequency .week select').val()
+    w = $('.new-goal-wrapper .frequency label.checkbox-inline input:checked').length
+    $('.new-goal-wrapper .frequency label.checkbox-inline input').prop('checked', false) if w != $('.new-goal-wrapper .frequency .week select').val()
     
     update_frequency_title()
   )
   
   # clicking on weekday checkboxes
-  $('.frequency label.checkbox-inline input:checkbox').on('change', ->
-    $('#goal_interval_unit_week').prop('checked', true)
+  $('.new-goal-wrapper .frequency label.checkbox-inline input:checkbox').on('change', (e) ->
+    $('.new-goal-wrapper #goal_interval_unit_week').prop('checked', true)
     
-    w = $('.frequency label.checkbox-inline input:checked').length
-    $('.frequency .week select').val(w)
+    w = $('.new-goal-wrapper .frequency label.checkbox-inline input:checked').length
     
-    update_frequency_title()
+    if w <= 0
+      e.preventDefault() # can't deselect all
+    else if w >= 7
+      e.preventDefault() # should not select all
+      $(this).prop('checked', false)
+      $('.new-goal-wrapper .frequency .day select').val(1)
+      $('.new-goal-wrapper #goal_interval_unit_day').prop('checked', true)
+      
+      update_frequency_day_inverval()
+      update_frequency_title()
+    else
+      $('.new-goal-wrapper .frequency .week select').val(w)
+    
+      update_frequency_title()
   )
   
   # changing starting offset, day <-> week
-  $('input[name="goal[starts]"]').on('change', ->
-    show_end_date($('#goal_duration').data('sliderValue'))
+  $('.new-goal-wrapper input[name="goal[starts]"]').on('change', ->
+    show_end_date($('.new-goal-wrapper #goal_duration').data('sliderValue'))
   )
   
-  $('.actions :submit').on('click', (e) ->
-    if $('#goal_title').val().length == 0
-      $('#goal_title').attr('placeholder', "need to describe the goal first...").addClass('error')
+  
+  $('.new-goal-wrapper .settings .result a').on('click', (e) ->
+    e.preventDefault()
+    
+    $('.new-goal-wrapper .settings .result').hide()
+    $('.new-goal-wrapper .settings .fields').show()
+  )
+  
+  $('.new-goal-wrapper .actions :submit').on('click', (e) ->
+    if $('.new-goal-wrapper #goal_title').val().length == 0
+      $('.new-goal-wrapper #goal_title').attr('placeholder', "need to describe the goal first...").addClass('error')
       clearTimeout(upmit.timeoutid)
       
       e.preventDefault()
@@ -252,82 +289,82 @@ rotate_goal_samples = ->
   if upmit.timeoutid
     clearTimeout(upmit.timeoutid)
     
-  upmit.timeoutid = setTimeout(rotater, 2500)
+  upmit.timeoutid = setTimeout(rotater, 3000)
 
 rotater = ->
-  $('#goal_title').attr('placeholder', upmit.samples[upmit.currentSample++ % upmit.samples.length])
+  $('.new-goal-wrapper #goal_title').attr('placeholder', upmit.samples[upmit.currentSample++ % upmit.samples.length])
   rotate_goal_samples()
 
 update_frequency_day_inverval = ->
-  $('.frequency .day span').html(if $('.frequency .day select').val() > 1 then 'days' else 'day')
+  $('.new-goal-wrapper .frequency .day span').html(if $('.new-goal-wrapper .frequency .day select').val() > 1 then 'days' else 'day')
   
 update_frequency_week_times = ->
-  $('.frequency .week span').html(if $('.frequency .week select').val() > 1 then 'times' else 'time')
+  $('.new-goal-wrapper .frequency .week span').html(if $('.new-goal-wrapper .frequency .week select').val() > 1 then 'times' else 'time')
   
 
 update_frequency_title = ->
-  if $('input[name="goal[interval_unit]"]:checked').val() == 'day'
-    d = $('.frequency .day select').val()
+  if $('.new-goal-wrapper input[name="goal[interval_unit]"]:checked').val() == 'day'
+    d = $('.new-goal-wrapper .frequency .day select').val()
     
     if d > 1
       str = "every #{ d } days"
     else
       str = 'everyday'
       
-    $('.starts label.left span').text('today').attr('title', '')
-    $('.starts label.right span').text('tomorrow')
+    $('.new-goal-wrapper .starts label.left span').text('today').attr('title', '')
+    $('.new-goal-wrapper .starts label.right span').text('tomorrow')
   else
-    w = $('.frequency .week select').val()
+    w = $('.new-goal-wrapper .frequency .week select').val()
     t = if w > 1 then 'times' else 'time'
     str = "#{ w } #{ t } a week"
     
     output = 'this week'
     output = '<i class="fa fa-exclamation"></i> ' + output if upmit.now.getDay() > 1
     
-    $('.starts label.left span').html(output)
+    $('.new-goal-wrapper .starts label.left span').html(output)
     
     if upmit.now.getDay() > 1
-      $('.starts label.left')
+      $('.new-goal-wrapper .starts label.left')
       .attr('title', 'Days has passed in this week, are you sure you want to start your goal this week?')
       .data('toggle', "tooltip")
-      .data('placement', "bottom")
+      .data('placement', "top")
       
-      $('.starts label.left').tooltip()
+      $('.new-goal-wrapper .starts label.left').tooltip()
     else
-      $('.starts label.left').attr('title', '')
+      $('.new-goal-wrapper .starts label.left').attr('title', '')
     
-    $('.starts label.right span').text('next week')
+    $('.new-goal-wrapper .starts label.right span').text('next week')
     
-  $('.frequency h3 span').html(str)
+  $('.new-goal-wrapper .frequency h3 span').html(str)
 
 set_slider_button = (el) ->
-  $('.duration button').removeClass('active')
+  $('.new-goal-wrapper .duration button').removeClass('active')
   el.addClass('active')
 
 update_slider = (value) ->
   update_slider_value(value)
   
-  button = $(".duration button[data-value='#{ value }']")
+  button = $(".new-goal-wrapper .duration button[data-value='#{ value }']")
   
   if button.length > 0
     set_slider_button(button)
   else
-    $('.duration button').removeClass('active')
+    $('.new-goal-wrapper .duration button').removeClass('active')
 
 update_slider_value = (value) ->
-  $(".duration h3 span").text("for #{ value } days")
-  $('#goal_duration').data('sliderValue', value)
+  $(".new-goal-wrapper .duration h3 span").text("for #{ value } days")
+  $('.new-goal-wrapper #goal_duration').data('sliderValue', value)
   show_end_date(value)
 
 show_end_date = (value) ->
-  if $('input[name="goal[interval_unit]"]:checked').val() == 'week'
-    if $('input[name="goal[starts]"]:checked').val() == '1'
+  if $('.new-goal-wrapper input[name="goal[interval_unit]"]:checked').val() == 'week'
+    if $('.new-goal-wrapper input[name="goal[starts]"]:checked').val() == '1'
       value = value - upmit.now.getDay() + 7
     else
       value = value - upmit.now.getDay()
   else
-    if $('input[name="goal[starts]"]:checked').val() == '1'
+    if $('.new-goal-wrapper input[name="goal[starts]"]:checked').val() == '1'
       value += 1      
     
-  $('.duration .date').html('finishes on ' + upmit.now.addDays(value - 1).toLocaleDateString())
+  $('.new-goal-wrapper .duration .date').html('finishes on ' + upmit.now.addDays(value - 1).toLocaleDateString())
   

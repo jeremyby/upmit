@@ -68,7 +68,7 @@ module GoalsHelper
     
     case
     when commit.active?
-       label_maker(str, 'info') + "Did you #{ h goal.title }?" + checkin_btn_group(commit, 'today')
+       label_maker(str, 'info') + "Did you #{ h goal.title }?  " + checkin_btn_group(commit, 'today')
     when commit.succeed?
       label_maker(str) + check_icon
     when commit.failed?
@@ -122,7 +122,7 @@ module GoalsHelper
     actions = ''
     
     if active.size > 0 
-      actions << "Did you #{ h goal.title }?"
+      actions << "Did you #{ h goal.title }?  "
       actions << checkin_btn_group(active.first, 'today')
     end
 

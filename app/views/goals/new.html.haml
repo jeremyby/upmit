@@ -1,3 +1,4 @@
+- @title = 'New Goal - Upmit.com'
 
 / main container .wide-content is used for this layout without sidebar :)
 .content.wide-content
@@ -13,10 +14,13 @@
       .col-md-9.new-goal
         .alert.alert-info
           %i.fa.fa-lightbulb-o.fa-lg
-          The change you have always want to make? Or something you always want to do? Set up the goal and we will help to keep you on track.
-          And it is totally 
-          %strong free
-          to use.
+          Make a
+          %strong> &nbsp;commitment
+          , choose the
+          %strong frequency
+          and set the 
+          %strong> &nbsp;duration
+          \. Your new goal will start after the deposit is made. You can change your mind and cancel it in 3 days, and get all money back. So... no worries.
 
         .form
           = form_for @goal, url: goals_path, html: { class: "form-horizontal", role: "form" } do |f|
@@ -72,18 +76,26 @@
                     .btn-group.btn-group-xs
                       %button.btn.btn-default#1y(data-value='#{ get_days(1.year) }') 1 year
             
-            
-            .starts.col-md-10.col-md-offset-2
-              .btn-group.btn-group-sm(data-toggle="buttons")
-                %label.btn starting
-                %label.btn.btn-default.left(class='#{ "active" if @goal.starts != 1 }')
-                  = f.radio_button :starts, 0
-                  %span today
-                %label.btn.btn-default.right(class='#{ "active" if @goal.starts == 1 }')
-                  = f.radio_button :starts, 1
-                  %span tomorrow
-            
             .actions.col-md-10.col-md-offset-2
               = button_tag class: 'btn-glow primary', type: 'submit', name: 'commit', data: { disable_with: 'Please wait...' } do
                 Create & Proceed to Deposit
                 %i.fa.fa-arrow-right
+                
+                
+            %p.help-block.settings
+              %span.title Defaults:
+              %span.result
+                starting tomorrow and public visibility
+                %a.btn.btn-default.btn-sm(href='#') Change
+              %span.fields
+                %span.starts.btn-group-sm(data-toggle="buttons")
+                  %label Starting&nbsp;
+                  %label.btn.btn-default.left(class='#{ "active" if @goal.starts != 1 }')>
+                    = f.radio_button :starts, 0
+                    %span today
+                  %label.btn.btn-default.right(class='#{ "active" if @goal.starts == 1 }')
+                    = f.radio_button :starts, 1
+                    %span tomorrow
+                %span.privacy
+                  = f.label :privacy, 'Visibility'
+                  = f.select :privacy, Goal::Privacy.map {|p| [p[1], p[0]] }

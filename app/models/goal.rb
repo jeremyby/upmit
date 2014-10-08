@@ -19,17 +19,25 @@ class Goal < ActiveRecord::Base
   has_many :activities, class_name: 'GoalActivities', dependent: :destroy
   
   validates_presence_of :title, :user_id
-  # validates :hash_tag, uniqueness: { scope: :user_id }
+  validates :hash_tag, uniqueness: { scope: :user_id }
   
   before_create :select_legend
+  
+  after_commit :set_hash_tag, on: :update, :if => Proc.new { |g| g.previous_changes['state'] == [0, 10] }
   
   # Create the first commit when the state of the goal is updated
   # from 'inactive' to 'active', that is - deposit paid
   after_commit :create_first_commit, on: :update, :if => Proc.new { |g| g.previous_changes['state'] == [0, 10] }
   
+  
+  # Completed
+  # State from 'active' to 'completed'
+  after_commit :process_deposit, on: :update, :if => Proc.new { |g| g.previous_changes['state'] == [10, -1] }
+  
+  
   WEEKDAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
   
-  STATES = {
+  States = {
     10  => 'active',
     0   => 'inactive',
     -1  => 'completed',
@@ -45,7 +53,19 @@ class Goal < ActiveRecord::Base
     -10 => 'danger'
   }
   
-  acts_as_stateable states: STATES
+  Privacy = {
+    10  => 'public',
+    5   => 'friends',
+    1   => 'private'
+  }
+  
+  PrivacySelect = [
+    { value: 10, text: 'public'},
+    { value: 5, text: 'friends'},
+    { value: 1, text: 'private'}
+  ]
+  
+  acts_as_stateable states: States
   
   acts_as_commentable
   
@@ -60,8 +80,7 @@ class Goal < ActiveRecord::Base
   # ###################################################################################
   def self.samples
     [
-      'run', 'work out', 'not smoke', 'stay positive','try something new', 'have quality time with family', 'eat healthier',
-      'smile to a stranger', 'try harder at work', 'not procrastinate', 'spend 30 minutes learning a new language', 'pray more'
+      'run', 'work out', 'not smoke', 'eat less', 'try harder at work', 'not procrastinate', 'study a new language'
     ]
   end
   
@@ -98,7 +117,6 @@ class Goal < ActiveRecord::Base
   def schedule
     IceCube::Schedule.from_yaml(self.schedule_yaml)
   end
-  
   
   
   #####################################################################################
@@ -154,6 +172,18 @@ class Goal < ActiveRecord::Base
     self.legend = legend.blank? ? 'default' : legend
   end
   
+  def set_hash_tag
+    s = self.title.split(' ').first
+    
+    if Goal.active.where("user_id = ? and hash_tag = ?", self.user_id, s).count > 0
+      offset = Goal.active.where("user_id = ? and hash_tag REGEXP ?", self.user_id, "^#{ s }-[\d]*").count + 1
+      
+      s << "-#{offset}"
+    end
+    
+    self.update hash_tag: s
+  end
+  
   def create_first_commit
     # Create the first 2 commitments in real time
     # while leave the rest to delayed job
@@ -170,5 +200,9 @@ class Goal < ActiveRecord::Base
     all.each do |o|
       self.commits.create! user: self.user, starts_at: o
     end
+  end
+  
+  def process_deposit
+    #TODO
   end
 end

@@ -1,5 +1,4 @@
-// PAGE BACKGROUND AND OUTER CONTAINERS
-
+@import shared
 
 #outer-background-container
   display: block
@@ -472,6 +471,16 @@ body.homer
     font-size: 1em
     p
       color: #e8e8e8
+      
+      span,
+      .signin
+        +opacity(0.7)
+        font-size: 0.7em
+        font-weight: 300
+        
+      span
+        margin-left: 10px
+      
       strong
         color: #fff
         font-weight: 500

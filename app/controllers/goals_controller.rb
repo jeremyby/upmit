@@ -3,13 +3,15 @@ class GoalsController < ApplicationController
   before_action :get_user_and_goal, only: [:show, :update]
 
   def index
-    @active = current_user.goals.active
-    @inactive = current_user.goals.inactive
-    @completed = current_user.goals.completed.order('created_at asc')
+    begin
+      @user = User.find_by_slug!(params[:user_id])
+    rescue
+      go_404
+    end
   end
 
   def new
-    @goal = Goal.new(interval_unit: 'day', duration: 100, interval: 1)
+    @goal = Goal.new(interval_unit: 'day', duration: 100, interval: 1, starts: 1)
   end
 
   def create
@@ -29,8 +31,7 @@ class GoalsController < ApplicationController
     @limit = 10
     @limit = 25 if params[:limit].present?
     
-    @activities = @goal.activities.includes(:activeable).order('id DESC').limit(@limit)
-                        .where(cond)
+    @activities = @goal.activities.includes(:activeable).order('id DESC').limit(@limit).where(cond)
     
     
     respond_to do |format|
@@ -41,7 +42,7 @@ class GoalsController < ApplicationController
 
   def update
     respond_to do |format|
-      if @goal.update_attributes(params[:goal].permit([:title, :description, :legend, :hash_tag]))
+      if @goal.update_attributes(params[:goal].permit([:title, :description, :legend, :hash_tag, :privacy]))
         format.json { head :no_content } # 204 No Content
       else
         format.json { render json: @gaal.errors, status: :unprocessable_entity }

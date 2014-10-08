@@ -2,13 +2,13 @@ class Deposit < ActiveRecord::Base
   belongs_to :goal
   belongs_to :user
   
-  STATES = {
+  States = {
     10  => 'completed', #Deposit refunded
     1   => 'paid', #Deposit paid
     0   => 'initial'
   }
   
-  acts_as_stateable states: STATES
+  acts_as_stateable states: States
   
   monetize :amount_cents
   

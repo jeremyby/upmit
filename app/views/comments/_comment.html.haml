@@ -4,7 +4,7 @@
 .activeable
   .info
     = link_to comment.user.full_name, user_path(comment.user)
-    %span commented #{ distance_of_time_in_words_to_now(comment.created_at) } ago
+    %span= distance_of_time_in_words_to_now(comment.created_at)
   .body
     - if is_owner?(comment)
       %a.delete.small.right(href='/comments/#{ comment.id }' data-remote='true' data-method='delete' data-confirm='Are you sure?')

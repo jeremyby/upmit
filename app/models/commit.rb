@@ -2,14 +2,13 @@ class Commit < ActiveRecord::Base
   belongs_to :goal
   belongs_to :user
 
-  STATES = {
+  States = {
     1   => 'succeed',
     0   => 'active',
-    -1  => 'onhold',
     -10 => 'failed'
   }
 
-  acts_as_stateable states: STATES
+  acts_as_stateable states: States
 
   scope :past, -> { where("state <> 0") }
   
@@ -20,7 +19,7 @@ class Commit < ActiveRecord::Base
   
   has_one :goal_activity, class: GoalActivities, as: :activeable
   
-  after_commit :log_to_goal_activity, on: :update, :if => Proc.new { |c| c.previous_changes['state'] == [0, 1] || c.previous_changes['state'] == [0, -10] }
+  after_commit :after_update_processing, on: :update, :if => Proc.new { |c| c.previous_changes['state'] == [0, 1] || c.previous_changes['state'] == [0, -10] }
   
   #####################################################################################
   # 
@@ -72,11 +71,11 @@ class Commit < ActiveRecord::Base
   
   
   private
-  def get_check_in_time
-    self.checked_at = Time.now
-  end
-  
-  def log_to_goal_activity
+  def after_update_processing
     self.goal.activities.create activeable_type: 'Commit', activeable_id: self.id
+    
+    if self == self.goal.commits.last # last_commit?
+      self.goal.completed!
+    end
   end
 end

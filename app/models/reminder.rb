@@ -1,10 +1,10 @@
 class Reminder < ActiveRecord::Base
   belongs_to :user
   
-  STATES = {
+  States = {
     1   => 'active',
     0   => 'inactive'
   }
   
-  acts_as_stateable states: STATES
+  acts_as_stateable states: States
 end

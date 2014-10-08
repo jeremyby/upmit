@@ -8,11 +8,11 @@
   = link_to (image_tag(asset_path('logo-lg.png'), class: 'logo')), root_path
   
   .twitter
-    = link_to image_tag(asset_path('twitter.png')) + 'Sign in with Twitter', user_omniauth_authorize_path(:twitter), class: 'btn-glow primary'
+    = link_to image_tag(asset_path('twitter.png')) + 'Sign in with Twitter', user_omniauth_connect_path(:twitter), class: 'btn-glow primary'
   
   .box
     .content-wrap
-      %h6 Log in
+      %h6 Sign in
 
       = form_for(resource, as: resource_name, url: session_path(resource_name), role: 'form') do |f|
         
@@ -34,6 +34,8 @@
         = f.submit "Log in", class: "btn-glow primary"
         
   .no-account
-    %p Don't have an account?
-    = link_to 'Sign up', signup_path
+    %p
+      Integration with other social platforms, e.g. Facebook,
+      %br
+      is coming soon.
 

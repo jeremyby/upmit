@@ -1,6 +1,5 @@
 class UsersController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_user, only: [:show]
   before_action :set_current_user, only: [:update, :account, :profile, :preference, :finish_signup]
   # before_action :ensure_signup_complete, only: [:new, :create, :update]
 
@@ -9,7 +8,13 @@ class UsersController < ApplicationController
   end
 
   def show
-
+    begin
+      @user = User.find_by_slug!(params[:id])
+    rescue
+      go_404
+    end
+    
+    render 'goals/index' and return
   end
 
   # PATCH/PUT /users/:id.:format
@@ -101,11 +106,12 @@ class UsersController < ApplicationController
         auth = @user.authorizations.where(provider: type).first
         reminder = @user.reminders.where(type: "#{ type.capitalize }Reminder").first
         
-        Authorization.transaction do
-          auth.destroy
-          reminder.destroy
+        if auth.present? && reminder.present?
+          Authorization.transaction do
+            auth.destroy
+            reminder.destroy
+          end
         end
-        
       elsif params[:user][:reminder].present? # updaing reminder settings
         reminder_params = params[:user][:reminder]
         type = reminder_params[:change]
@@ -131,10 +137,6 @@ class UsersController < ApplicationController
   
 
   private
-  def set_user
-    @user = User.find_by_slug(params[:id])
-  end
-  
   def set_current_user
     @user = current_user
   end

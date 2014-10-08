@@ -1,6 +1,6 @@
 class WeekdayGoal < Goal
   def builder(offset, now, hash)
-    self.attributes = hash.permit(:title, :duration, :interval, :interval_unit)
+    self.attributes = hash.permit(:title, :duration, :interval, :interval_unit, :privacy)
     self.weekdays = hash[:weekdays] #weekdays cannot be mass-assigned. for it's an array?
 
     today = now.in_time_zone(self.user.timezone)

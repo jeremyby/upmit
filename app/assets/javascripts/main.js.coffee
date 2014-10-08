@@ -20,17 +20,17 @@ $(document).ready ->
       else 7000
 
     setTimeout(->
-      poofer.hide('slide')
+      poofer.slideUp()
      , i)
   
   upmit.message = (message, type = 'alert') ->
     icon = if type == 'alert' then "<i class='fa fa-times-circle'></i> " else "<i class='fa fa-exclamation-circle'></i> "
 
-    $('#messages').html("<div class='text'>" + icon + message + '</div>').show('slide').poof('slow')
+    $('#messages').html("<div class='text'>" + icon + message + '</div>').slideDown().poof('slow')
   
   
-  if $('#messages').html().length >0
-    $('#messages.on').show('slide').poof('slow')
+  if $('#messages').html().length > 0
+    $('#messages.on').slideDown().poof('slow')
     
     
   
@@ -128,6 +128,7 @@ $(document).ready ->
     , ->
       $('.panel-content, .owner').css('z-index', '').css('margin-left', '')
     )
+    
   
   
   $(".nav-tabs a[href='#remote']").click ->

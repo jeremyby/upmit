@@ -5,12 +5,16 @@ Rails.application.routes.draw do
   # See how all your routes lay out with "rake routes".
   # 
 
+
+  #TODO: remove some routes as there will only be Twitter logins
   devise_scope :user do
     get "login", to: "devise/sessions#new", as: :new_user_session
     post 'login', to: "devise/sessions#create", as: :user_session
     delete "logout", to: "devise/sessions#destroy", as: :destroy_user_session
     get "signup", to: "devise/registrations#new"
     get "forgot_password", to: "devise/passwords#new"
+    
+    get '/users/connect/:provider', :to => redirect("/users/auth/%{provider}"), :as => 'user_omniauth_connect'
   end
   
   resources :deposit, only: [:index]
@@ -47,10 +51,13 @@ Rails.application.routes.draw do
   match '/finish_signup' => 'users#finish_signup', via: [:get, :patch], :as => :finish_signup
   
   match '/confirmation_sent' => 'home#confirmation_sent', via: [:get], :as => :confirmation_sent
+  
+  match '/people' => 'users#index', via: [:get], :as => :people
 
   
   resources :users, path: '', only: [:show] do
     resources :goals, only: [:index, :show, :update]
+    resource :follow, only: [:create, :destroy]
   end
   
   

@@ -83,7 +83,7 @@ module GoalsHelper
   def describe_weekday_last_occur(goal, arr)
     commit = arr.first
     
-    wday = commit.starts_at.in_time_zone(goal.user.timezone).strftime("%A")
+    wday = commit.starts_at.in_time_zone(goal.timezone).strftime("%A")
     
     fa_icon('fa-chevron-left') + wday + (commit.succeed? ? fa_icon('fa-check-circle') : fa_icon('fa-times-circle'))
   end
@@ -91,7 +91,7 @@ module GoalsHelper
   def describe_weekday_next_occur(goal, arr)
     commit = arr.first
     
-    wday = commit.starts_at.in_time_zone(goal.user.timezone).strftime("%A")
+    wday = commit.starts_at.in_time_zone(goal.timezone).strftime("%A")
     
     return (wday + fa_icon('fa-chevron-right')).html_safe
   end

@@ -126,7 +126,7 @@ Devise.setup do |config|
 
   # ==> Configuration for :rememberable
   # The time the user will be remembered without asking for credentials again.
-  config.remember_for = 4.weeks
+  config.remember_for = 30.days
 
   # If true, extends the user's remember period when remembered via cookie.
   # config.extend_remember_period = false
@@ -230,7 +230,13 @@ Devise.setup do |config|
   # Add a new OmniAuth provider. Check the wiki for more information on setting
   # up on your models and hooks.
   # config.omniauth :github, 'APP_ID', 'APP_SECRET', scope: 'user,public_repo'
-  config.omniauth :twitter, 'ylIYuefEqPjcaNrcEnfx7D0ZV', 'jrtwhrxuaT6Oua7cHrEl4ULhfE0naHp870SjHg2nMpIiH0Vvee'
+  if Rails.env.development? || Rails.env.test?
+    config.omniauth :twitter, 'ylIYuefEqPjcaNrcEnfx7D0ZV', 'jrtwhrxuaT6Oua7cHrEl4ULhfE0naHp870SjHg2nMpIiH0Vvee'
+    config.omniauth :facebook, "710998598993021", "d48a03cd8dcae03327aebfbf72c6a0d8"
+  else
+    config.omniauth :twitter, 'n6ZsUUg7EXXq2ikFuRam484do', 'sKoKm30IfHbfCy9ljDIOhv0JLGFFB15q4em00Rfsla6liW0ldS'
+    config.omniauth :facebook, "710997895659758", "4459a621b65063acc2ae7bec4c7211dc"
+  end
 
   # ==> Warden configuration
   # If you want to use other strategies, that are not supported by Devise, or

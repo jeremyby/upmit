@@ -3,7 +3,7 @@
 .avatar= link_to image_tag(asset_path(comment.user.avatar.thumb.url), size: '40x40'), user_path(comment.user)
 .activeable
   .info
-    = link_to comment.user.full_name, user_path(comment.user)
+    = link_to comment.user, user_path(comment.user)
     %span= distance_of_time_in_words_to_now(comment.created_at)
   .body
     - if is_owner?(comment)

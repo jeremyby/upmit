@@ -82,7 +82,7 @@ namespace :check do
       tweets.each do |t|
         puts "Tweet: #{ t.text }"
 
-        auth = Authorization.where(uid: t.user.id).first # Find user with the Twitter uid
+        auth = Authorization.find_by(uid: t.user.id, provider: 'twitter') # Find user with the Twitter uid
 
         unless auth.blank? # No such user
           now = Time.now
@@ -91,6 +91,7 @@ namespace :check do
             hash_array = t.hashtags.collect {|h| h.text}
 
             commits = auth.user.commits.active.joins(:goal)
+                                        .where("goals.checkin_with = 'twitter'")
                                         .where("goals.hash_tag in (?)", hash_array)
                                         .where("commits.starts_at < ?", now)
                                         .group('commits.goal_id')

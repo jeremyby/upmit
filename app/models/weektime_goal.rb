@@ -1,10 +1,7 @@
 class WeektimeGoal < Goal
-  def builder(offset, now, hash)
-
-    self.attributes = hash.permit(:title, :duration, :interval, :interval_unit, :weektimes, :privacy)
-
-    today = now.in_time_zone(self.user.timezone)
-    start_time = (today - today.wday.days + (offset * 7).days).beginning_of_day
+  def get_schedule(now)
+    today = now.in_time_zone(self.timezone)
+    start_time = (today - today.wday.days + (self.starts * 7).days).beginning_of_day
     schedule = IceCube::Schedule.new(start_time)
     end_time = start_time + (self.duration - 1).days
 
@@ -12,9 +9,9 @@ class WeektimeGoal < Goal
     # but need to multiple goal.occurrence
     schedule.add_recurrence_rule IceCube::Rule.weekly.until(end_time)
     
-    self.occurrence = schedule.all_occurrences.size * self.weektimes.to_i
+    occurrence = schedule.all_occurrences.size * self.weektimes.to_i
     
-    return start_time, schedule
+    return start_time, schedule, occurrence
   end
   
   def describe_last_occur
@@ -29,7 +26,6 @@ class WeektimeGoal < Goal
     'describe_weektime_next_occur'
   end
   
-  private
   def create_first_commit
     # override super's method
     self.schedule.first(2).each do |o|

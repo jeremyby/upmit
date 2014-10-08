@@ -4,7 +4,7 @@
     
     = nav_link(controller?('goals') && (@user.present? && @user == current_user), 'Goals', user_goals_path(current_user), 'fa-star-o')
     
-    = nav_link(controller?('deposit'), 'Balance', deposit_index_path, 'fa-usd')
+    = nav_link(controller?('deposit'), 'Deposit', deposit_index_path, 'fa-usd')
     
     = nav_link((@user.present? && @user != current_user) || (controller?('users') && action?('index')), 'People', people_path, 'fa-share-alt')
     

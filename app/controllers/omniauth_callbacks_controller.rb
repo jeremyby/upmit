@@ -7,23 +7,26 @@ class OmniauthCallbacksController < Devise::OmniauthCallbacksController
 
     if @user.persisted?
       sign_in_and_redirect @user, event: :authentication
-      
-      remember_me(@user)
-      
+      session[:provider] = auth.provider
       set_flash_message(:notice, :success, kind: "#{ auth.provider }".capitalize) if is_navigational_format?
     else
       session["devise.#{ auth.provider }_data"] = auth
-      redirect_to new_user_registration_url
+      redirect_to signin_path
     end
   end
   
   alias_method :twitter, :all
+  alias_method :facebook, :all
   
   def after_sign_in_path_for(resource)
-    if resource.email_valid?
+    unless resource.timezone.blank?
       super resource
     else
       finish_signup_path
     end
+  end
+  
+  def after_omniauth_failure_path_for(resource)
+    signin_path
   end
 end

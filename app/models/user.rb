@@ -9,21 +9,24 @@ class User < ActiveRecord::Base
 
   mount_uploader :avatar, AvatarUploader
 
-  validates_presence_of :first_name
+  validates_presence_of :display_name
   validates :username, presence: true
 
   has_many :authorizations, dependent: :destroy
 
   has_many :goals
+  has_many :deposits
   has_many :commits
   has_many :comments
   has_many :reminders, dependent: :destroy
+  has_many :notifications, dependent: :destroy
   
   
   acts_as_followable
   acts_as_follower
   
-  # after_create :create_email_reminder, if: Proc.new { |u| u.email_valid? }
+  # create Email reminder after an email is confirmed
+  after_commit :create_email_reminder_on_create, on: :create, if: Proc.new { |u| u.email_valid? }
   after_commit :create_email_reminder, on: :update, if: Proc.new { |u| u.previous_changes['confirmed_at'].present? && u.confirmed? }
   
   attr_accessor :follow_upmit, :current_password
@@ -46,11 +49,10 @@ class User < ActiveRecord::Base
   #
   # ###################################################################################
   
-  TEMP_EMAIL_PREFIX = 'please_change_now@'
-  TEMP_EMAIL_REGEX = /\Aplease_change_now@/
+  TEMP_EMAIL_PREFIX = 'please_change_me@'
+  TEMP_EMAIL_REGEX = /\Aplease_change_me@/
   
   def self.find_for_oauth(auth, existing_user = nil)
-
     # Get the auth and user if they exist
     authorization = Authorization.find_with(auth)
 
@@ -62,38 +64,35 @@ class User < ActiveRecord::Base
 
     # Create the user if needed
     if user.nil?
-
       # Get the existing user by email if the provider gives us a verified email.
       # If no verified email was provided we assign a temporary email and ask the
       # user to verify it on the next step via UsersController.finish_signup
       email_is_verified = auth.info.email.present? && (auth.info.verified || auth.info.verified_email)
       email = auth.info.email if email_is_verified
-      user = User.where(email: email).first if email.present?
+      
+      user = User.find_by(email: email) if email.present?
 
       # Create the user if it's a new registration
       if user.nil?
-        if auth.info.first_name.blank?
-          arr = auth.info.name.split
-          last_name = arr.pop
-          first_name = arr.shift || auth.info.nickname
-        else
-          last_name = auth.info.last_name
-          first_name = auth.info.first_name
-        end
-        
         user = User.new(
-          first_name: first_name,
-          last_name: last_name, 
-          username: auth.info.name,
-          email: email.present? ? email : "#{ TEMP_EMAIL_PREFIX }#{ authorization.provider }-#{ authorization.uid }.com"
+          display_name: auth.info.name, 
+          username: auth.info.nickname || auth.info.name,
+          email: email.present? ? email : "#{ TEMP_EMAIL_PREFIX }#{ authorization.provider }-#{ authorization.uid }.com",
+          checkin_with: auth.provider,
+          remote_avatar_url: auth.info.image
         )
         
         user.skip_confirmation!
+        
+        # Generate the slug here bacause validation will be skipped
+        user.slug = user.normalize_friendly_id(user.username)
+        
         user.save!(validate: false)
       end
     end
 
     # Associate the auth with the user if needed
+    # The only case this is not needed is returning user signing in
     if authorization.user != user
       authorization.user = user
       authorization.save!
@@ -129,15 +128,12 @@ class User < ActiveRecord::Base
   # 
   # Format & Outputs
   #
-  # ###################################################################################
-  def full_name
-    str = self.first_name
-    str += " #{ self.last_name }" if self.last_name.present?
-    
-    return str.titlecase
+  # ###################################################################################  
+  
+  def to_s
+    return self.display_name
   end
-
-  alias_method :to_s, :full_name
+  
 
 
   #####################################################################################
@@ -145,16 +141,20 @@ class User < ActiveRecord::Base
   # Callbacks
   #
   # ###################################################################################
-  private
+
   def get_username
-    self.username = self.full_name if self.username.blank?
+    self.username ||= self.display_name
     
     return self.username
   end
   
+  def create_email_reminder_on_create
+    self.create_email_reminder
+  end
+  
   def create_email_reminder
     reminder = self.reminders.find_or_initialize_by(type: 'EmailReminder')
-    reminder.attributes = { recipient: self.first_name, recipient_id: self.email }
+    reminder.attributes = { recipient: self.to_s, recipient_id: self.email }
     
     reminder.save!
   end

@@ -1,8 +1,6 @@
 
 - @body_class = 'homer'
 
-.background-image-overlay
-
 #outer-background-container(data-default-background-img="#{ asset_path('bg1.jpg') }" style="background-image:url(#{ asset_path('bg1.jpg') });")
 
 / Outer Container
@@ -33,33 +31,33 @@
   %section#main-content.clearfix
     %article#intro.section-wrapper.clearfix(data-custom-background-img="#{ asset_path('bg1.jpg') }")
       .content-wrapper.clearfix
-        .col-sm-8.col-md-7.pull-right
+        .col.col-sm-10.col-md-9.col-lg-8
           %section.feature-text
             %h1 Up + Commit
-            %p 
-              Upmit helps to make real changes about yourself,
-              %br
-              so you can
-              %a.link-scroll(href='#better')
+            .block
+              %p 
+                Upmit helps to make real changes about yourself,
+                %br
+                so you can
                 %strong be the better you
-            %p
-              %a.link-scroll.btn.btn-outline-inverse.btn-lg(href='#better') Find out more
-              %span or,
-              %a.signin(href="/login") sign in
+              %p.btns
+                %a.link-scroll.btn.btn-outline-inverse.btn-lg(href='#better') Find out more
+                %span or
+                %a.signin(href="/signin") sign in
 
     %article#better.section-wrapper.clearfix(data-custom-background-img="#{ asset_path('bg3.jpg') }")
       .content-wrapper.clearfix
-        .col-sm-10.col-md-9.pull-right
+        .col.col-sm-11.col-md-10.col-lg-9
           %h1.section-title Be the Better You
-          %p.feature-paragraph
-            %img.lazy.pull-right(alt="Lorem Ipsum" data-img-src="#{ asset_path('transp-image5b.png') }")
-            Changing ourselves for the better is always hard. It starts easy with a resolution, but sticking to it is the painful part.
+          .block
+            %p.feature-paragraph
+              %img.lazy.pull-right(alt="Lorem Ipsum" data-img-src="#{ asset_path('transp-image5b.png') }")
+              Changing for the better is always hard. It starts easy with a resolution, but sticking to it is the painful part.
             
-          %h4 Upmit is here to help
-          %p Set up a goal of doing something for a given time span and make a deposit of one dollar for every day you committed. You are then required to check in with us on Twitter and failed to do so you will lose the one dollar you deposited.
+            %h4 Upmit is the push behind your back
+            %p We will take one dollar deposit for every day you committed to action. You have to check in by posting a tweet and then earn the dollar back.
 
           
-
 
     %article#carousel.section-wrapper.clearfix(data-custom-background-img="#{ asset_path('bg2.jpg') }")
       .content-wrapper.clearfix

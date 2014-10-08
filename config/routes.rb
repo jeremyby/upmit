@@ -8,23 +8,21 @@ Rails.application.routes.draw do
 
   #TODO: remove some routes as there will only be Twitter logins
   devise_scope :user do
-    get "login", to: "devise/sessions#new", as: :new_user_session
-    post 'login', to: "devise/sessions#create", as: :user_session
+    get "signin", to: "devise/sessions#new", as: :signin
     delete "logout", to: "devise/sessions#destroy", as: :destroy_user_session
-    get "signup", to: "devise/registrations#new"
-    get "forgot_password", to: "devise/passwords#new"
     
     get '/users/connect/:provider', :to => redirect("/users/auth/%{provider}"), :as => 'user_omniauth_connect'
   end
   
   resources :deposit, only: [:index]
   
-  resources :goals, except: [:show, :edit, :update, :destroy] do
-    resources :deposit, except: [:index]  do
+  resources :goals, except: [:index, :show, :edit, :update, :destroy] do
+    resources :deposit, only: [:new, :create]  do
       collection do
         get 'confirm'
         get 'cancel'
         get 'done'
+        get 'refund'
       end
     end
   end

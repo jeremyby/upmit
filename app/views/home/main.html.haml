@@ -1,13 +1,11 @@
 / main container
 .content
-  - if  current_user.goals.size == 0
+  - if  current_user.goals.active.size == 0
     #pad-wrapper
       = render 'home/jumbotron'
-  
-  - elsif @active.blank?
-    
+          
   - else
-    #pad-wrapper
+    #pad-wrapper.main-wrapper
       / upper main stats
       #main-stats
         .row.stats-row
@@ -19,7 +17,7 @@
               = 'goal'.pluralize(active_goals)
 
             .date
-              active
+              active now
 
           .col-md-3.col-sm-3.stat
             .data
@@ -29,7 +27,7 @@
               = 'day'.pluralize(active_commits)
 
             .date
-              committed
+              committed to act
 
           .col-md-3.col-sm-3.stat
             .data
@@ -46,7 +44,7 @@
               %span#earn-back.number $#{ current_user.commits.succeed.size }
               Earned back
             .date
-              so far
+              in total
               
       .row
         .col-md-12
@@ -54,7 +52,7 @@
             %i.fa.fa-plus
             New Goal
 
-          %h4 Active goals
+          %h3 Your progress
       
       = render 'commits/commit_modal', id: 'commit-detail', title: 'Add note and a photo', cancel: 'Not now'
       

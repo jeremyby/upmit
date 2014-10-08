@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140930104808) do
+ActiveRecord::Schema.define(version: 20141007130844) do
 
   create_table "authorizations", force: true do |t|
     t.integer  "user_id"
@@ -126,29 +126,42 @@ ActiveRecord::Schema.define(version: 20140930104808) do
   create_table "goals", force: true do |t|
     t.string   "title",                       null: false
     t.text     "description"
-    t.text     "schedule_yaml",               null: false
+    t.string   "timezone",                    null: false
+    t.text     "schedule_yaml"
     t.integer  "user_id",                     null: false
     t.integer  "state",         default: 0,   null: false
     t.string   "weekdays"
     t.string   "interval",      default: "1", null: false
     t.string   "interval_unit",               null: false
-    t.datetime "start_time",                  null: false
+    t.datetime "start_time"
     t.string   "slug"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "weektimes"
     t.integer  "duration",                    null: false
-    t.integer  "occurrence",                  null: false
+    t.integer  "occurrence"
     t.string   "legend"
     t.string   "type"
     t.string   "hash_tag"
     t.integer  "privacy",       default: 10
+    t.string   "checkin_with"
+    t.integer  "starts",        default: 1
   end
 
   add_index "goals", ["user_id"], name: "index_goals_on_user_id", using: :btree
 
   create_table "mention_pointers", force: true do |t|
     t.integer  "since_id",   limit: 8, default: 1
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "notifications", force: true do |t|
+    t.string   "notifyable_type"
+    t.integer  "notifyable_id"
+    t.integer  "user_id",                         null: false
+    t.boolean  "read",            default: false
+    t.string   "event"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -167,8 +180,7 @@ ActiveRecord::Schema.define(version: 20140930104808) do
 
   create_table "users", force: true do |t|
     t.string   "avatar"
-    t.string   "first_name"
-    t.string   "last_name"
+    t.string   "display_name"
     t.string   "username"
     t.string   "slug"
     t.datetime "created_at"
@@ -188,7 +200,7 @@ ActiveRecord::Schema.define(version: 20140930104808) do
     t.datetime "confirmation_sent_at"
     t.string   "unconfirmed_email"
     t.string   "timezone"
-    t.string   "bio"
+    t.string   "checkin_with"
   end
 
   add_index "users", ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true, using: :btree

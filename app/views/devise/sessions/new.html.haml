@@ -7,35 +7,33 @@
 .login-wrapper
   = link_to (image_tag(asset_path('logo-lg.png'), class: 'logo')), root_path
   
-  .twitter
-    = link_to image_tag(asset_path('twitter.png')) + 'Sign in with Twitter', user_omniauth_connect_path(:twitter), class: 'btn-glow primary'
+
   
   .box
     .content-wrap
-      %h6 Sign in
+      %h3 Sign in
+      
+      .connect= link_to image_tag(asset_path('twitter.png')) + 'Sign in with Twitter', user_omniauth_connect_path(:twitter), class: 'btn-glow primary'
+      .connect= link_to image_tag(asset_path('facebook.png')) + 'Sign in with Facebook', user_omniauth_connect_path(:facebook), class: 'btn-glow primary'
+      
+      
+      .desc
+        %p
+          Your credential will be
+          %strong only
+          used for
+        %ul
+          %li signing you in,
+          %li receiving reminders,
+          %li tracking your check-in tweets.
+        %p.post 
+          We will 
+          %strong not
+          post on your behalf.
+        
 
-      = form_for(resource, as: resource_name, url: session_path(resource_name), role: 'form') do |f|
-        
-        .form-group.email
-          = f.label :email, 'Email address', class: 'sr-only'
-          = f.email_field :email, class: "form-control", placeholder: "Email address", autofocus: true
-          
-        .form-group  
-          = f.label :password, 'Password', class: 'sr-only'
-          = f.password_field :password, class: "form-control", placeholder: "Your password", autocomplete: "off"
-        
-        = link_to 'Forgot password?', forgot_password_path, class: 'forgot'
-        
-        - if devise_mapping.rememberable?
-          .remember
-            = f.check_box :remember_me
-            = f.label :remember_me, "Remember me"
-        
-        = f.submit "Log in", class: "btn-glow primary"
-        
-  .no-account
-    %p
-      Integration with other social platforms, e.g. Facebook,
-      %br
-      is coming soon.
+  %p.help-block
+    Integration with other social platforms, e.g. Facebook,
+    %br
+    is coming soon.
 

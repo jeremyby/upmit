@@ -9,9 +9,23 @@
         .logo-image.text-center
           %img(alt="New Goal" src="#{ asset_path('new_goal.png') }")
           %h3 New Goal
-          
+
+      
       / form column
       .col-md-9.new-goal
+        - if current_user.timezone.blank?
+          .alert.alert-warning
+            %i.fa.fa-warning.fa-lg
+            You haven't
+            = link_to 'set the locale', account_users_path, class: 'alert-link'
+            for your account yet. It is required to create new goals.
+      
+        
+        - if @goal.errors.present?
+          .alert.alert-danger
+            %i.fa.fa-warning.fa-lg
+            = @goal.errors.messages[:title][0]
+                
         .alert.alert-info
           %i.fa.fa-lightbulb-o.fa-lg
           Make a
@@ -24,6 +38,8 @@
 
         .form
           = form_for @goal, url: goals_path, html: { class: "form-horizontal", role: "form" } do |f|
+            = f.hidden_field :timezone, value: current_user.timezone
+          
             .form-group.title
               %label.col-md-2 I will
               .col-md-10
@@ -77,16 +93,13 @@
                       %button.btn.btn-default#1y(data-value='#{ get_days(1.year) }') 1 year
             
             .actions.col-md-10.col-md-offset-2
-              = button_tag class: 'btn-glow primary', type: 'submit', name: 'commit', data: { disable_with: 'Please wait...' } do
+              %button.btn-glow.primary(type='submit' name='commit' data-disable_with='Please wait...')
                 Create & Proceed to Deposit
                 %i.fa.fa-arrow-right
                 
                 
             %p.help-block.settings
-              %span.title Defaults:
-              %span.result
-                starting tomorrow and public visibility
-                %a.btn.btn-default.btn-sm(href='#') Change
+              %span.title Default:
               %span.fields
                 %span.starts.btn-group-sm(data-toggle="buttons")
                   %label Starting&nbsp;

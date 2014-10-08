@@ -1,29 +1,43 @@
-.content
-  #pad-wrapper.finish_signup
-    .row
-      .col-md-8
-        %h3 Finishing up
+- @no_nav = true
+
+- @body_class = 'login'
+  
+.background-image-overlay
+
+
+
+.login-wrapper.finish-signup
+  = link_to (image_tag(asset_path('logo-lg.png'), class: 'logo')), root_path
+  
+  .box
+    .content-wrap
+      %h3 Finishing up
   
         
-    = form_for(current_user, :as => 'user', :url => finish_signup_path(current_user), :html => { role: 'form' }) do |f|
-      = f.hidden_field :timezone
+      = form_for(current_user, :as => 'user', :url => finish_signup_path, :html => { role: 'form' }) do |f|
+        = f.hidden_field :timezone
       
-      .row
-        .form-group.col-md-6
-          = f.text_field :email, :autofocus => true, :value => '', class: 'form-control input-lg', placeholder: 'Email address'
-          - if current_user.errors.any?
-            #error_explanation
-              - current_user.errors.full_messages.each do |msg|
-                = msg
-                %br
-          %p.help-block Please provide your email address. No spam.
+        - unless current_user.email_valid?
+          .form-group
+            = f.text_field :email, :autofocus => true, :value => '', class: 'form-control input-lg', placeholder: 'Email address'
+            - if current_user.errors.any?
+              #error_explanation.text-left
+                - current_user.errors.full_messages.each do |msg|
+                  = msg
+                  %br
+            %p.help-block Provide your email address to receive email reminders. We will not spam.
         
-      .row
-        .form-group.col-md-6
-          = f.label :follow_upmit, 'Follow @upmit on Twitter', class: 'follow'
-          = f.check_box :follow_upmit, checked: true
-          %p.help-block Required to receive reminders via Twitter Direct Messages. We will not make change to your Twitter account after this.
+        
+        - if session[:provider] == 'twitter'
+          .form-group.follow
+            = f.check_box :follow_upmit, checked: true
+            = f.label :follow_upmit, 'Follow @upmit on Twitter', class: 'follow'
+          
+            %p.help-block Required to receive reminders via Twitter Direct Messages.
       
-      .row
-        .actions.col-md-6.text-right
+        .form-group.remember
+          = f.check_box :remember_me, checked: true
+          = f.label :remember_me, 'Remember me for 30 days'
+      
+        .actions
           = f.submit 'Continue', :class => 'btn-glow primary'

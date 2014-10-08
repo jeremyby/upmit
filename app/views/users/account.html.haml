@@ -8,6 +8,14 @@
 
     .row.line-break
     
+    .row.username
+      .lbl.col-md-2.col-sm-2.col-xs-2
+        Username
+      .input.col-md-6.col-sm-6.col-xs-6
+        %a.editable(href='#' data-type='text' data-name='user[username]' data-url='/settings/update')
+          = @user.username
+        %p.help-block https://upmit.com/#{ @user.slug }
+    
     .row.email
       .lbl.col-md-2.col-sm-2.col-xs-2
         Email
@@ -18,32 +26,32 @@
           %p.help-block
             pending confirmation for: #{ @user.unconfirmed_email }
           
-    
-    .row.password
-      .lbl.col-md-2.col-sm-2.col-xs-2
-        Password
-      .input.col-md-6.col-sm-8.col-xs-10
-        = form_for @user, url: '/settings/update', method: :put, remote: true, html: { :'data-type' => 'json' }, role: 'form' do |f|
-          - unless @user.encrypted_password.blank?
-            .form-group
-              = f.label :password, 'Current password', class: 'sr-only'
-              = f.password_field :current_password, autocomplete: "off", class: "form-control", placeholder: "Current password", data: { placement: 'right' }
+    - if false
+      .row.password
+        .lbl.col-md-2.col-sm-2.col-xs-2
+          Password
+        .input.col-md-6.col-sm-8.col-xs-10
+          = form_for @user, url: '/settings/update', method: :put, remote: true, html: { :'data-type' => 'json' }, role: 'form' do |f|
+            - unless @user.encrypted_password.blank?
+              .form-group
+                = f.label :password, 'Current password', class: 'sr-only'
+                = f.password_field :current_password, autocomplete: "off", class: "form-control", placeholder: "Current password", data: { placement: 'right' }
         
-          .form-group
-            = f.label :password, 'New password', class: 'sr-only'
-            = f.password_field :password, autocomplete: "off", class: "form-control", placeholder: "New password", data: { placement: 'right' }
+            .form-group
+              = f.label :password, 'New password', class: 'sr-only'
+              = f.password_field :password, autocomplete: "off", class: "form-control", placeholder: "New password", data: { placement: 'right' }
 
-          .form-group
-            = f.label :password_confirmation, 'Confirm new password', class: 'sr-only'
-            = f.password_field :password_confirmation, autocomplete: "off", class: "form-control", placeholder: "Confirm new password", data: { placement: 'right' }
+            .form-group
+              = f.label :password_confirmation, 'Confirm new password', class: 'sr-only'
+              = f.password_field :password_confirmation, autocomplete: "off", class: "form-control", placeholder: "Confirm new password", data: { placement: 'right' }
 
-          .action.text-right
-            = f.submit "Update", class: "btn-glow primary btn-sm", data: { disable_with: 'Update' }
+            .action.text-right
+              = f.submit "Update", class: "btn-glow primary btn-sm", data: { disable_with: 'Update' }
     
     
-    .row.line-break
+      .row.line-break
     
-    .row
+    .row.timezone
       .lbl.col-md-2.col-sm-2.col-xs-2
         Time Zone
       .input.col-md-5.col-sm-6.col-xs-8

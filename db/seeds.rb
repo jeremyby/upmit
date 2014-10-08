@@ -12,15 +12,16 @@
 # end
 
 
-User.create! first_name: 'Jeremy', last_name: 'Yang', email: 'jeremyby@gmail.com', password: '19781115', password_confirmation: '19781115', timezone: 'Asia/Shanghai'
-User.create! first_name: 'Bin', last_name: 'Yang', email: 'b.yang@live.com', password: '19781115', password_confirmation: '19781115', timezone: 'America/New_York'
-User.create! first_name: 'Jeremy', last_name: 'Yang', email: 'jeremyyang@gmail.com', password: '19781115', password_confirmation: '19781115', timezone: 'Asia/Shanghai', confirmed_at: Time.now
-
-User.first.confirm!
+# User.create! display_name: 'Jeremy Yang', email: 'jeremyby@gmail.com', password: '19781115', password_confirmation: '19781115', timezone: 'Asia/Shanghai'
+# User.create! display_name: 'Bin Yang', email: 'b.yang@live.com', password: '19781115', password_confirmation: '19781115', timezone: 'America/New_York'
+# User.create! display_name: 'Jeremy Yang', email: 'jeremyyang@gmail.com', password: '19781115', password_confirmation: '19781115', timezone: 'Asia/Shanghai', confirmed_at: Time.now
+# 
+# User.first.confirm!
 
 def create_goal(goal, schedule)
   goal.occurrence = schedule.all_occurrences.size * (goal.weektimes.blank? ? 1 : goal.weektimes)
   goal.schedule_yaml = schedule.to_yaml
+  goal.timezone = 'Asia/Shanghai'
   goal.save
 
   if goal.active?
@@ -96,6 +97,19 @@ create_goal(g, schedule)
 g = User.first.goals.build title: 'not smoke', duration: 100, interval_unit: 'day', type: 'DailyGoal', hash_tag: 'NoSmoking'
 
 start_time = Time.now.in_time_zone('Asia/Shanghai').beginning_of_day
+schedule = IceCube::Schedule.new(start_time)
+end_time = start_time + (g.duration - 1).days
+
+schedule.add_recurrence_rule IceCube::Rule.daily.until(end_time)
+
+g.start_time = start_time
+create_goal(g, schedule)
+
+
+# 6th goal of first user, finished today
+g = User.first.goals.build title: 'do something useful', state: 10, duration: 100, interval_unit: 'day', type: 'DailyGoal', hash_tag: 'do'
+
+start_time = (Time.now.in_time_zone('Asia/Shanghai') - 99.days).beginning_of_day
 schedule = IceCube::Schedule.new(start_time)
 end_time = start_time + (g.duration - 1).days
 

@@ -19,6 +19,7 @@ set :deploy_to, '/var/www/upmit'
 # Default value for :log_level is :debug
 # set :log_level, :debug
 
+
 # Default value for :pty is false
 # set :pty, true
 

@@ -11,10 +11,10 @@ CarrierWave.configure do |config|
     config.storage = :fog
     config.fog_credentials = {
       :provider               => 'AWS',
-      :aws_access_key_id      =>  'some_access_key_id',
-      :aws_secret_access_key  => 'some_secret_key',
-      :region                 => 'eu-west-1'
+      :aws_access_key_id      =>  'AKIAJIHRGWHE6L2VFPUQ',
+      :aws_secret_access_key  => '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',
+      :region                 => 'us-west-2'
     }
-    config.fog_directory = 'bucket_name'
+    config.fog_directory = 'upmit'
   end
 end

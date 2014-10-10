@@ -80,18 +80,16 @@ gem "acts_as_follower"
 
 
 
-group :assets do
-  
 
-  # Use Uglifier as compressor for JavaScript assets
-  gem 'uglifier'
+# Use Uglifier as compressor for JavaScript assets
+gem 'uglifier'
 
-  # Use CoffeeScript for .js.coffee assets and views
-  gem 'coffee-rails'
-  
-  gem 'fog', require: "fog/aws/storage"
-  gem 'asset_sync'
-end
+# Use CoffeeScript for .js.coffee assets and views
+gem 'coffee-rails'
+
+gem 'fog', require: "fog/aws/storage"
+gem 'asset_sync'
+
 
 
 group :development, :test do

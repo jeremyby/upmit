@@ -32,7 +32,7 @@
         - if is_current_user_owner_of_goal
           .legends(tabindex='-1')
             - LEGEND_MAP.each do |l|
-              - img = image_tag asset_path("/assets/legends/#{ l[0] }.png")
+              - img = image_tag asset_path("legends/#{ l[0] }.png")
               - content = "<div class='legend'><div class='wrapper'>#{ img }</div></div>"
           
               = link_to content.html_safe, user_goal_path(current_user, @goal, goal: { legend: l[0]} ), remote: true, method: :put, data: { url: asset_path("/assets/legends/#{ l[0] }.png") }

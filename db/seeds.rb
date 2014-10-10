@@ -39,7 +39,7 @@ def create_goal(goal, schedule)
 end
 
 # 1st goal of first user, daily
-g = User.first.goals.build title: 'make real progress at work', state: 10, duration: 100, interval_unit: 'day', type: 'DailyGoal', hash_tag: 'MakeProgress'
+g = User.first.goals.build title: 'make real progress at work', state: 10, duration: 100, interval_unit: 'day', type: 'DailyGoal', hash_tag: 'MakeProgress', duration_desc: 'for 100 days'
 
 start_time = (Time.now.in_time_zone('Asia/Shanghai') - 110.days).beginning_of_day
 schedule = IceCube::Schedule.new(start_time)
@@ -53,7 +53,7 @@ g.deposit.completed!
 
 
 # 2nd goal of first user, weekdays
-g = User.first.goals.build title: 'run for 10 minutes', state: 10, duration: 184, interval_unit: 'week', weekdays: [1, 3, 5], type: 'WeekdayGoal', hash_tag: 'running', checkin_with: 'facebook'
+g = User.first.goals.build title: 'run for 10 minutes', state: 10, duration: 184, interval_unit: 'week', weekdays: [1, 3, 5], type: 'WeekdayGoal', hash_tag: 'running', checkin_with: 'facebook', duration_desc: 'for 6 month'
 
 start_date = Time.now.in_time_zone('Asia/Shanghai') - 82.days
 start_time = (start_date - start_date.wday.days).beginning_of_day
@@ -67,7 +67,7 @@ create_goal(g, schedule)
 
 
 # 3rd goal of first user, twice a week
-g = User.first.goals.build title: 'shopping', state: 10, duration: 365, interval_unit: 'week', weektimes: 2, type: 'WeektimeGoal', hash_tag: 'shopping', checkin_with: 'twitter'
+g = User.first.goals.build title: 'shopping', state: 10, duration: 365, interval_unit: 'week', weektimes: 2, type: 'WeektimeGoal', hash_tag: 'shopping', checkin_with: 'twitter', duration_desc: 'for 1 year'
 
 start_date = Time.now.in_time_zone('Asia/Shanghai') - 24.days
 start_time = (start_date - start_date.wday.days).beginning_of_day
@@ -81,7 +81,7 @@ create_goal(g, schedule)
 
 
 # 4th goal of first user, same title of the 1st one
-g = User.first.goals.build title: 'make real progress at work', state: 10, duration: 365, interval_unit: 'day', type: 'DailyGoal', hash_tag: 'ProgressAtWork', checkin_with: 'twitter'
+g = User.first.goals.build title: 'make real progress at work', state: 10, duration: 365, interval_unit: 'day', type: 'DailyGoal', hash_tag: 'ProgressAtWork', checkin_with: 'twitter', duration_desc: 'for 1 year'
 
 start_time = (Time.now.in_time_zone('Asia/Shanghai') - 56.days).beginning_of_day
 schedule = IceCube::Schedule.new(start_time)
@@ -94,7 +94,7 @@ create_goal(g, schedule)
 
 
 # 5th goal of first user, new goal
-g = User.first.goals.build title: 'not smoke', duration: 100, interval_unit: 'day', type: 'DailyGoal', hash_tag: 'NoSmoking', checkin_with: 'twitter'
+g = User.first.goals.build title: 'not smoke', duration: 100, interval_unit: 'day', type: 'DailyGoal', hash_tag: 'NoSmoking', checkin_with: 'twitter', duration_desc: 'for 100 days'
 
 start_time = Time.now.in_time_zone('Asia/Shanghai').beginning_of_day
 schedule = IceCube::Schedule.new(start_time)
@@ -107,7 +107,7 @@ create_goal(g, schedule)
 
 
 # 6th goal of first user, finished today
-g = User.first.goals.build title: 'do something useful', state: 10, duration: 100, interval_unit: 'day', type: 'DailyGoal', hash_tag: 'do', checkin_with: 'twitter'
+g = User.first.goals.build title: 'do something useful', state: 10, duration: 100, interval_unit: 'day', type: 'DailyGoal', hash_tag: 'do', checkin_with: 'twitter', duration_desc: 'for 100 days'
 
 start_time = (Time.now.in_time_zone('Asia/Shanghai') - 99.days).beginning_of_day
 schedule = IceCube::Schedule.new(start_time)

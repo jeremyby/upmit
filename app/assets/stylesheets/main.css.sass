@@ -76,7 +76,7 @@
       
       .info,
       .occurs,
-      .prog
+      .check
         float: none
         display: table-cell
         vertical-align: middle
@@ -97,8 +97,7 @@
           margin-bottom: 2px
         
         .freq
-          color: #999
-          font-style: italic
+          color: #888
           text-decoration: none
           font-size: 12px
       
@@ -115,9 +114,6 @@
           line-height: 2em
           
           position: relative
-        
-          .label-default
-            background: #aaa
           
           i
             color: #aaa
@@ -170,37 +166,27 @@
           .info
             position: absolute
             top: 100%
-            left: -13px
+            left: -15px
           
             .last-occur,
             .next-occur
               float: left
-              color: #aaa
+              color: #888
               font-size: 13px
-
-              i.fa-circle
-                position: relative
-                top: -1px
-
-                color: #7d848c
-                font-size: 8px
-                margin: 0 0.9em 0 1.2em
+              
+              .dot,
+              .today
+                margin: 0 5px
+                
+              .today
+                margin-right: 0
+              
+              strong
+                font-size: 14px
 
               
-      .prog
+      .check
         text-align: center
-        
-        font-size: 16px
-        
-        color: #999
-        
-        .past
-          font-size: 22px
-          font-weight: 600
-          color: #32a0ee
-          
-        .total
-          font-style: italic
           
       
       &:hover
@@ -221,8 +207,10 @@
             display: inline-block
   
 
-
-
+    .select
+      #goal_hash_tags
+        width: 400px
+    
 .modal-dialog
   #note
     color: #333

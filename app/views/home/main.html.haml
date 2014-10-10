@@ -54,7 +54,7 @@
 
           %h3 Your progress
       
-      = render 'commits/commit_modal', id: 'commit-detail', title: 'Add note and a photo', cancel: 'Not now'
+      = # render 'commits/commit_modal', id: 'commit-detail', title: 'Add note and a photo', cancel: 'Not now'
       
         
       - @active.each do |goal|
@@ -71,32 +71,51 @@
               
               .occur.today-occur
                 - if today.blank?
-                  = label_maker(fa_icon('fa-circle') + 'Today')
-                  Not scheduled.
+                  No action today.
                 - else
                   = send(goal.describe_today_occur, goal, today)
               
                 .info
                   .last-occur
-                    - unless last.blank?
-                      = send(goal.describe_last_occur, goal, last)
+                    - if last.blank?
+                      This is a new goal
+                      - if today.blank?
+                        %span.dot •
+                      
                     - else
-                      New goal
+                      = send(goal.describe_last_occur, goal, last)
+                      %span.dot •
               
                   .next-occur
-                    = fa_icon('fa-circle')
+                    - unless today.blank?
+                      %span.today<
+                        %strong>= goal.commits.past.size + 1
+                        \/
+                        = goal.occurrence
+
+                      - unless next_occur.blank?
+                        %span.dot •
                 
                     - if next_occur.blank?
-                      Congrads! This is the last commitment.
+                      Congrats! This is the last commitment.
                     - else
                       = send(goal.describe_next_occur, goal, next_occur)
                       
+                      - if today.blank?
+                        %span.today<
+                          %strong>= goal.commits.past.size + 1
+                          \/
+                          = goal.occurrence
+                        
+                      = fa_icon('fa-chevron-right')
+                      
 
 
-            .prog.col-md-3
-              %span.past= goal.commits.past.size
-              \/
-              %span.total>= goal.occurrence
-        
+            .check.col-md-3
+
+      
+      .row.select
+        .col-md-12
+          = select_tag "goal_hash_tags", options_for_select(@active.collect{ |g| ["##{g.hash_tag}", g.hash_tag] }), multiple: true, style: 'width: 400px'
 
               

@@ -25,7 +25,7 @@ module GoalsHelper
   end
   
   def get_goal_legend(g)
-    image_tag asset_path("/assets/legends/#{g.legend}.png")
+    image_tag asset_path("legends/#{g.legend}.png")
   end
   
   def label_maker(text, type = 'default', title = nil)
@@ -58,7 +58,7 @@ module GoalsHelper
   def describe_daily_last_occur(goal, arr)
     commit = arr.first
     
-    fa_icon('fa-chevron-left') + 'Yesteday' + (commit.succeed? ? fa_icon('fa-check-circle') : fa_icon('fa-times-circle'))
+    fa_icon('fa-chevron-left') + ' Yesteday' + (commit.succeed? ? fa_icon('fa-check-circle') : fa_icon('fa-times-circle'))
   end
   
   def describe_daily_today_occur(goal, arr)
@@ -68,7 +68,7 @@ module GoalsHelper
     
     case
     when commit.active?
-       label_maker(str, 'info') + "Did you #{ h goal.title }?  " + checkin_btn_group(commit, 'today')
+       label_maker(str, 'info') + "Did you #{ h goal.title }?"
     when commit.succeed?
       label_maker(str) + check_icon
     when commit.failed?
@@ -77,7 +77,7 @@ module GoalsHelper
   end
   
   def describe_daily_next_occur(goal, arr)
-    ('Tomorrow' + fa_icon('fa-chevron-right')).html_safe
+    'Tomorrow'
   end
   
   def describe_weekday_last_occur(goal, arr)
@@ -85,7 +85,7 @@ module GoalsHelper
     
     wday = commit.starts_at.in_time_zone(goal.timezone).strftime("%A")
     
-    fa_icon('fa-chevron-left') + wday + (commit.succeed? ? fa_icon('fa-check-circle') : fa_icon('fa-times-circle'))
+    fa_icon('fa-chevron-left') + ' ' + wday + (commit.succeed? ? fa_icon('fa-check-circle') : fa_icon('fa-times-circle'))
   end
   
   def describe_weekday_next_occur(goal, arr)
@@ -93,11 +93,11 @@ module GoalsHelper
     
     wday = commit.starts_at.in_time_zone(goal.timezone).strftime("%A")
     
-    return (wday + fa_icon('fa-chevron-right')).html_safe
+    return wday
   end
   
   def describe_weektime_last_occur(goal, arr)
-    icons = fa_icon('fa-chevron-left') + 'Last week'
+    icons = fa_icon('fa-chevron-left') + ' Last week'
     
     arr.each do |c|
       icons << (c.succeed? ? fa_icon('fa-check-circle') : fa_icon('fa-times-circle'))
@@ -123,13 +123,12 @@ module GoalsHelper
     
     if active.size > 0 
       actions << "Did you #{ h goal.title }?  "
-      actions << checkin_btn_group(active.first, 'today')
     end
 
     today_label + str.html_safe + actions.html_safe
   end
   
   def describe_weektime_next_occur(goal, arr)
-    ('Next week' + fa_icon('fa-chevron-right')).html_safe
+    'Next week'
   end
 end

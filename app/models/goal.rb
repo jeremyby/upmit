@@ -1,10 +1,19 @@
 class TitleValidator < ActiveModel::EachValidator
   def validate_each(record, attribute, value)
     unless Goal.where("id <> ? AND user_id = ? AND title = ?", record.id, record.user_id, value).where('state >= -1').blank?
-      record.errors[attribute] << 'You have another goal with the same title and not completed.'
+      record.errors[attribute] << 'You have another ongoing goal with the same title.'
     end
   end
 end
+
+class TagValidator < ActiveModel::EachValidator
+  def validate_each(record, attribute, value)
+    unless Goal.where("id <> ? AND user_id = ? AND hash_tag = ?", record.id, record.user_id, value).where('state >= -1').blank?
+      record.errors[attribute] << 'You have another ongoing goal with the same hash tag.'
+    end
+  end
+end
+
 
 class Goal < ActiveRecord::Base
   extend FriendlyId
@@ -28,6 +37,7 @@ class Goal < ActiveRecord::Base
   
   validates :user_id, presence: true
   validates :title, presence: true, title: true
+  validates :hash_tag, tag: true
   
   before_create :select_legend
   

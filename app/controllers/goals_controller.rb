@@ -45,7 +45,7 @@ class GoalsController < ApplicationController
       if @goal.update_attributes(params[:goal].permit([:title, :description, :legend, :hash_tag, :privacy]))
         format.json { head :no_content } # 204 No Content
       else
-        format.json { render json: @gaal.errors, status: :unprocessable_entity }
+        format.json { render json: @goal.errors.values[0][0], status: :unprocessable_entity }
       end
     end
   end

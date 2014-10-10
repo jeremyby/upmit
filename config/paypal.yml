@@ -19,8 +19,10 @@ test:
 production:
   <<: *default
   
-  # username: jeremyby_api1.gmail.com
-  # password: DCDCEG2EUV387MVY
-  # signature: A0vRMvRTFWJMDFGr.4rGunwMOEb1AGq9myGZf1BSPao7oT1RaooJx9G7
-  # 
-  # mode: live
+  app_id: APP-41A84619BU816430J
+  
+  username: jeremyby_api1.gmail.com
+  password: DCDCEG2EUV387MVY
+  signature: A0vRMvRTFWJMDFGr.4rGunwMOEb1AGq9myGZf1BSPao7oT1RaooJx9G7
+   
+  mode: live

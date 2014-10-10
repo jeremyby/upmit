@@ -1,6 +1,5 @@
 
 namespace :commits do
-  desc "This task is called by the Heroku scheduler add-on"
   task :expire => :environment do
     puts "Failing commits that are active and late..."
 

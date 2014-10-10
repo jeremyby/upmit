@@ -1,0 +1,31 @@
+defaults: &defaults
+  fog_provider: 'AWS'
+  aws_access_key_id: "AKIAJIHRGWHE6L2VFPUQ"
+  aws_secret_access_key: "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"
+  # To use AWS reduced redundancy storage.
+  # aws_reduced_redundancy: true
+  fog_directory: "upmit"
+  # You may need to specify what region your storage bucket is in
+  fog_region: "us-west-2"
+  existing_remote_files: keep
+  # To delete existing remote files.
+  # existing_remote_files: delete
+  # Automatically replace files with their equivalent gzip compressed version
+  gzip_compression: true
+  # Fail silently.  Useful for environments such as Heroku
+  # fail_silently: true
+
+development:
+  <<: *defaults
+  enabled: false
+
+test:
+  <<: *defaults
+  enabled: false
+
+staging:
+  <<: *defaults
+  fog_directory: "upmit-staging-assets"
+
+production:
+  <<: *defaults

@@ -23,7 +23,7 @@ Rails.application.configure do
   config.serve_static_assets = false
   
   
-  config.assets.enabled = true.
+  config.assets.enabled = true
   
   # Compress JavaScripts and CSS.
   config.assets.js_compressor = :uglifier

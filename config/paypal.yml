@@ -1,8 +1,7 @@
 development: &default
-
   # Mode can be 'live' or 'sandbox'
   mode: sandbox
-
+  
   # Credentials for Classic APIs
   app_id: APP-80W284485P519543T
   username: upcommit-facilitator_api1.gmail.com
@@ -11,8 +10,7 @@ development: &default
   # # With Certificate
   # cert_path: "config/cert_key.pem"
   sandbox_email_address: upcommit-facilitator@gmail.com
-
-
+  
 test:
   <<: *default
  

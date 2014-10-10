@@ -32,7 +32,11 @@ class DepositController < ApplicationController
     
     # Access Response
     if response.success?
-      redirect_to "https://www.sandbox.paypal.com/incontext?useraction=commit&token=#{ response.Token }"
+      if Rails.env.development?
+        redirect_to "https://www.sandbox.paypal.com/incontext?useraction=commit&token=#{ response.Token }"
+      else
+        redirect_to "https://www.paypal.com/incontext?useraction=commit&token=#{ response.Token }"
+      end
     else
       render 'error'
     end

@@ -16,4 +16,7 @@ else
   PAYPAL_BUTTON = 'https://www.paypal.com/en_US/i/btn'
 end
 
-Facebook_user_access_token = 'CAAKGpkLtxH0BAJvLpLctBuKf5N2i9tQF29dJLpSSVVE9UM3XMZA4xzoiZAykkK6W8sucXm51hHuWSV4pSlzrNsBHX0PExIITyTJyPzbakqIVhriwD7tHUPHKG8FlF4ybS07LGKTAal1JhSq7ezpFyRQ8js6E5pwbZA3M03hKcvMSK6TJ5MtNioqF9viTOQvZBohm29dISxFvDzVBb1TJ'
+UpmitMentionSince = MentionPointer.find_or_create_by(id: 1) if ActiveRecord::Base.connection.table_exists? 'upmit_dev.mention_pointers'
+
+Facebook_user_access_token = 'CAAKGpkLtxH0BALmsphgDYNHUZBQ8m5jrDIS1JqiKSEcKHF1zMPMhZBZC6ZBo46xTcVPD2uD031u7Gkb5ZCfCpKVs04gLpiMZAaFZC2y77j45eDVxXJFCTRoWm4lmZCdgZAL4fMWGhd5zLtDENBIVpCHTpiNyfUHju6CQnaYBcgBYVE36nnFGS9wZBn1F1sju6qZBPYNC2zkOZA6tZApzDA1k5QxFG'
+Facebook_page_id = '720802234659954'

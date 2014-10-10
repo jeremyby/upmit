@@ -6,7 +6,8 @@
     
     = nav_link(controller?('deposit'), 'Deposit', deposit_index_path, 'fa-usd')
     
-    = nav_link((@user.present? && @user != current_user) || (controller?('users') && action?('index')), 'People', people_path, 'fa-share-alt')
+    - if current_user.following_by_type('User').size + current_user.followers.size > 0
+      = nav_link((@user.present? && @user != current_user) || (controller?('users') && action?('index')), 'People', people_path, 'fa-share-alt')
     
     
     - account_active = controller?('users') && (@user.present? && @user == current_user) && !(controller?('users') && action?('index'))

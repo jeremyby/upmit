@@ -75,13 +75,16 @@ $(document).ready ->
     $trigger.click (e) ->
       e.preventDefault()
       e.stopPropagation()
-
-      # hide all other pop-dialogs
-      $(".notification-dropdown .pop-dialog").removeClass "is-visible"
-      $(".notification-dropdown .trigger").removeClass "active"
+      
       $dialog.toggleClass "is-visible"
+      
       if $dialog.hasClass("is-visible")
         $(this).addClass "active"
+        
+        if $trigger.find('.count').is(':visible')
+          $.post("/notifications/read", ->
+            $trigger.find('.count').hide('poof')
+          )
       else
         $(this).removeClass "active"
 

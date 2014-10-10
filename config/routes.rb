@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  get 'notifications/read'
+
   devise_for :users, skip: [:sessions], controllers: { omniauth_callbacks: 'omniauth_callbacks', :registrations => 'registrations' }
   
   # The priority is based upon order of creation: first created -> highest priority.
@@ -16,6 +18,12 @@ Rails.application.routes.draw do
   
   resources :deposit, only: [:index]
   
+  resources :notifications, only: [] do
+    collection do
+      post 'read'
+    end
+  end
+  
   resources :goals, except: [:index, :show, :edit, :update, :destroy] do
     resources :deposit, only: [:new, :create]  do
       collection do
@@ -23,6 +31,7 @@ Rails.application.routes.draw do
         get 'cancel'
         get 'done'
         get 'refund'
+        post 'refund'
       end
     end
   end

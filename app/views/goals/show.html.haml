@@ -82,9 +82,11 @@
 
 
       .col-md-2.side
-        .status= label_maker @goal.state_in_words, Goal::Labels[@goal.state]
-        .status= label_maker image_tag(asset_path("#{ @goal.checkin_with }.png")), 'primary'
-        
+        .status
+          - if @goal.state >= -1
+            = label_maker image_tag(asset_path("#{ @goal.checkin_with }.png"), size: '24x24') + @goal.state_in_words, Goal::Labels[@goal.state], "The goal can be checked in from #{ @goal.checkin_with.capitalize }."
+          - else
+            = label_maker @goal.state_in_words, Goal::Labels[@goal.state]
 
     
     .row.line-break.col-md-11
@@ -101,27 +103,32 @@
                 = @goal.start_time.in_time_zone(@goal.timezone).strftime("%b %d, %Y")
         
             - unless @goal.inactive?
-              .col-md-2.col-sm-2.col-xs-2.col-md-offset-1.col-sm-offset-1.field.short Ends:
-              .col-md-3.col-sm-3.col-xs-4.data= (@goal.start_time + (@goal.duration - 1).days).in_time_zone(@goal.timezone).strftime("%b %d, %Y")
+              .col-md-2.col-sm-2.col-xs-2.col-md-offset-1.col-sm-offset-1.field Ends:
+              .col-md-3.col-sm-3.col-xs-4.data
+                = (@goal.start_time + (@goal.duration - 1).days).in_time_zone(@goal.timezone).strftime("%b %d, %Y")
+          
+            
+          .row
+            .col-md-2.col-sm-2.col-xs-2.field 
+              Committed:
+            .col-md-3.col-sm-3.col-xs-4.data
+              = @goal.occurrence
+              
+            .col-md-2.col-sm-2.col-xs-2.col-md-offset-1.col-sm-offset-1.field Duration:
+            .col-md-3.col-sm-3.col-xs-4.data
+              = @goal.duration
+              days
           
           - unless @goal.inactive?
-            .row
-              .col-md-2.col-sm-2.col-xs-2.field 
-                Committed:
-              .col-md-3.col-sm-3.col-xs-4.data
-                = @goal.occurrence
-                days
-          
-          - past = @goal.commits.past.size
-          - unless @goal.inactive?          
+            - past = @goal.commits.past.size     
             .row
               .col-md-2.col-sm-2.col-xs-2.field Success:
-            
+          
               - succeed = @goal.commits.succeed.size
               .col-md-3.col-sm-3.col-xs-4.data= succeed
 
-              .col-md-2.col-sm-2.col-xs-2.col-md-offset-1.col-sm-offset-1.field.short Fail:
-          
+              .col-md-2.col-sm-2.col-xs-2.col-md-offset-1.col-sm-offset-1.field Fail:
+        
               - failed = @goal.commits.failed.size
               .col-md-3.col-sm-3.col-xs-4.data= failed
           
@@ -129,15 +136,15 @@
             - unless @goal.completed?
               .row
                 .col-md-2.col-sm-2.col-xs-2.field
-                  Total:
-            
+                  Progress:
+        
                 .col-md-3.col-sm-3.col-xs-4.data
                   = @goal.occurrence - past
-                  days to go
+                  to go
 
         
         .col-md-3.col-sm-12.col-xs-12.donut-wrapper
-          - percentage = past == 0 ? 0 : past * 100 / @goal.occurrence
+          - percentage = past.blank? ? 0 : past * 100 / @goal.occurrence
 
           .donut(data-dimension="140"
                   data-text="#{ percentage }%"

@@ -68,7 +68,7 @@ namespace :check do
     puts "Retrieve @upmit tweets to check users in..."
 
     begin
-      tweets = UpmitTwitter.mentions(since_id: UpmitMentionSince.since_id, count: 200)
+      tweets = UpmitTwitter.mentions(since_id: UpmitMentionSince.twiiter, count: 200)
     rescue Twitter::Error::TooManyRequests => error
       # NOTE: Your process could go to sleep for up to 15 minutes but if you
       # retry any sooner, it will almost certainly fail with the same exception.
@@ -108,8 +108,74 @@ namespace :check do
           end
         end
 
-        UpmitMentionSince.update_attribute(:since_id, tweets.first.id)
+        UpmitMentionSince.update_attribute(:twitter, tweets.first.id)
       end
     end
+  end
+  
+  task  :facebook => :environment do
+    puts "Checking posts Facebook users tagged the page @upmit"
+    
+    
+    graph = Koala::Facebook::API.new(Facebook_user_access_token)
+    
+    results = []
+    
+    posts = graph.get_connections(Facebook_page_id, 'tagged')
+    
+    results += posts
+    
+    first_id = posts.first['id'].split('_').last.to_i
+    last_id = posts.last['id'].split('_').last.to_i
+    
+    # retrive all new posts
+    while last_id > UpmitMentionSince.facebook do
+      posts = posts.next_page
+      
+      results += posts
+      
+      last_id = posts.last['id'].split('_').last.to_i
+    end
+    
+    results.delete_if {|r| r['id'].split('_').last.to_i <= UpmitMentionSince.facebook }
+    
+    puts "#{ results.size } new posts need to check."
+    
+    unless results.blank?
+      results.each do |r|
+        auth = Authorization.find_by(uid: r['from']['id'], provider: 'facebook') # Find user with the Facebook uid
+        
+        unless auth.blank? # No such user
+          messages = r['message'].split
+          
+          messages.delete_if {|m| m[0] != '#' }
+          
+          unless messages.blank?
+            now = Time.now
+            
+            messages.each {|m| m[0] = ''}
+            
+            commits = auth.user.commits.active.joins(:goal)
+                                        .where("goals.checkin_with = 'facebook'")
+                                        .where("goals.hash_tag in (?)", messages)
+                                        .where("commits.starts_at < ?", now)
+                                        .group('commits.goal_id')
+            
+            #pp commits
+            
+            unless commits.blank?
+              Commit.transaction do
+                commits.each do |c|
+                  c.update state: 1, note: r['message'], checked_by: 'facebook', checked_at: Time.parse(r['created_time']), remote_photo_url: r['picture']
+                end
+              end
+            end
+          end
+        end
+      end
+    end
+    
+    UpmitMentionSince.update_attribute(:facebook, first_id)
+    
   end
 end

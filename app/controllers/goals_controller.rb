@@ -11,7 +11,7 @@ class GoalsController < ApplicationController
   end
 
   def new
-    @goal = Goal.new(interval_unit: 'day', duration: 100, interval: 1)
+    @goal = Goal.new(interval_unit: 'day', duration: 100, interval: 1, duration_desc: 'for 100 days')
   end
 
   def create

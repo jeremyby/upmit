@@ -14,7 +14,75 @@
       a.normal
         color: #31708F
   
+  span
+    font-weight: 600
   
+  .goal
+    padding: 15px 0
+    
+    a
+      font-weight: 600
+  
+  .head
+    clear: left
+    margin-bottom: 30px
+    
+    &.lower
+      padding-top: 20px
+    
+    
+  .total
+    margin: 0 -15px
+    
+    font-size: 1.1em
+    
+    .detail
+      position: absolute
+      top: -1px
+      right: 0
+    
+      margin-right: 45px
+      
+
+    
+    .col-md-2
+      text-align: right
+      
+  .current
+    .col-md-2
+      text-align: right
+  
+  .line-break
+    margin: 30px 0 40px
+  
+    
+  h4.history
+    margin-bottom: 20px
+    
+  
+  .refund-total
+    
+    .col-md-2
+      text-align: right
+      
+    .list
+      i
+        +transition-property(all)
+        +transition-duration(0.3s)
+      
+  .row.history
+    display: none
+  
+    .col-md-2
+      text-align: right
+    
+
+  
+
+@media (min-width: 992px)
+  #pad-wrapper.deposit-index
+    .line-break
+      margin-right: 30px
 
 #pad-wrapper.new-deposit
   position: relative
@@ -22,24 +90,23 @@
   .goal
     position: absolute
     
-    left: 30px
-    bottom: 270px
+    left: 50px
+    top: 60px
     
     padding: 15px 15px 13px 15px
     
-    border: 6px dotted #32a0ee
-    +border-radius(15px)
+    border: 1px solid #ccc
+    +border-radius(4px)
     
     h4
-      margin: -35px 0 0 28%
+      margin: -30px 0 0 35%
       padding: 0 10px
       
       float: left
       
-      color: #32a0ee
       background: #fff
       font-style: normal
-      font-weight: bold
+      font-weight: 600
     
     p.desc
       clear: left
@@ -55,7 +122,7 @@
         font-weight: 600
   
   .title
-    padding: 30px 0
+    padding: 30px 0 50px
     
     h2
       margin-top: 10px
@@ -102,3 +169,45 @@
     .button
       padding-top: 12px
     
+    
+#pad-wrapper.refund-deposit
+  h2
+    margin: 28px 0 15px
+    
+  .goal
+    margin-bottom: 50px
+    
+  .amounts
+    line-height: 1.8em
+    
+    span
+      font-weight: 600
+      padding: 0 2px
+      
+  .refund
+    margin: 45px 15px 10px
+    
+    font-size: 1.5em
+    span
+      color: #32a0ee
+      font-weight: 600
+      padding: 0 15px 0 5px
+      font-style: normal      
+      
+    .total
+      display: inline-block
+      
+    form
+      display: inline-block
+        
+      input
+        margin-top: -5px
+    
+        font-size: 0.8em
+        padding: 10px 20px
+  
+  .payer
+    span
+      font-weight: 600
+      
+      

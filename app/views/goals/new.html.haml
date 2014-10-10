@@ -39,7 +39,8 @@
         .form
           = form_for @goal, url: goals_path, html: { class: "form-horizontal", role: "form" } do |f|
             = f.hidden_field :timezone, value: current_user.timezone
-          
+            = f.hidden_field :duration_desc
+            
             .form-group.title
               %label.col-md-2 I will
               .col-md-10

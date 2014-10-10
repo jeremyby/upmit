@@ -52,10 +52,10 @@ class Goal < ActiveRecord::Base
   
   Labels = {
     10  => 'primary',
-    0   => 'default',
-    -1  => 'success',
-    -5  => 'warning',
-    -10 => 'danger'
+    0   => 'danger',
+    -1  => 'warning',
+    -5  => 'success',
+    -10 => 'default'
   }
   
   Privacy = {
@@ -73,6 +73,8 @@ class Goal < ActiveRecord::Base
   acts_as_stateable states: States
   
   acts_as_commentable
+  
+  scope :actionable, -> { where("state >= -1") }
   
   serialize :weekdays
   
@@ -98,12 +100,11 @@ class Goal < ActiveRecord::Base
       DailyGoal.new
     end
     
-    @goal.attributes = hash.permit(:title, :duration, :interval, :interval_unit, :weektimes, :privacy, :timezone)
+    @goal.attributes = hash.permit(:title, :duration, :interval, :interval_unit, :weektimes, :privacy, :timezone, :starts, :duration_desc)
     @goal.weekdays = hash[:weekdays] if hash[:weekdays].present?
     
     @goal.user = user
     @goal.checkin_with = user.checkin_with
-    @goal.starts = hash[:starts].to_i
     
     start_time, schedule, occurrence = @goal.get_schedule(Time.now)
     @goal.occurrence = occurrence
@@ -193,7 +194,7 @@ class Goal < ActiveRecord::Base
   end
   
   def to_s
-    self.to_frequency + " for #{ self.duration } days"
+    self.to_frequency + " " + self.duration_desc
   end
   
   

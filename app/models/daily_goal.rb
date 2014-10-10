@@ -1,7 +1,7 @@
 class DailyGoal < Goal
   def get_schedule(now)
     start_time = (now.in_time_zone(self.timezone) + self.starts.day).beginning_of_day
-    schedule = IceCube::Schedule.new(self.start_time)
+    schedule = IceCube::Schedule.new(start_time)
     end_time = start_time + (self.duration - 1).days
 
     schedule.add_recurrence_rule IceCube::Rule.daily(self.interval.to_i).until(end_time)

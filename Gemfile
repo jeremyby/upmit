@@ -11,15 +11,6 @@ gem 'mysql2'
 
 gem 'sprockets', '2.11.0'
 
-# Use SCSS for stylesheets
-gem 'sass-rails'
-gem 'compass-rails'
-
-# Use Uglifier as compressor for JavaScript assets
-gem 'uglifier'
-
-# Use CoffeeScript for .js.coffee assets and views
-gem 'coffee-rails'
 # See https://github.com/sstephenson/execjs#readme for more supported runtimes
 gem 'therubyracer', '0.11.3', platforms: :ruby
 
@@ -50,12 +41,6 @@ gem 'puma'
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 
-# Use Capistrano for deployment
-group :development, :test do
-  gem 'capistrano-rails'
-  gem 'capistrano3-puma'
-  gem 'capistrano-rbenv'
-end
 
 # Use debugger
 # gem 'debugger', group: [:development, :test]
@@ -69,6 +54,7 @@ gem 'omniauth-facebook'
 gem 'paypal-sdk-merchant', git: 'https://github.com/paypal/merchant-sdk-ruby.git'
 
 gem 'twitter'
+gem "koala"
 
 gem 'friendly_id'
 gem 'stringex'
@@ -84,16 +70,34 @@ gem 'carrierwave'
 gem 'rmagick', require: false
 gem 'remotipart'
 
-gem 'fog', require: "fog/aws/storage"
 
 gem 'acts_as_commentable_with_threading'
 
 gem "acts_as_follower"
 
-gem "koala"
+
+
+group :assets do
+  # Use SCSS for stylesheets
+  gem 'sass-rails'
+  gem 'compass-rails'
+
+  # Use Uglifier as compressor for JavaScript assets
+  gem 'uglifier'
+
+  # Use CoffeeScript for .js.coffee assets and views
+  gem 'coffee-rails'
+  
+  gem 'fog', require: "fog/aws/storage"
+  gem 'asset_sync'
+end
 
 
 group :development, :test do
+  gem 'capistrano-rails'
+  gem 'capistrano3-puma'
+  gem 'capistrano-rbenv'
+  
   gem 'guard-rspec',      :require => false
   gem 'guard-livereload', :require => false
   gem 'rack-livereload'

@@ -1,0 +1,36 @@
+- @title = 'Deposit refund'
+- verb, verbed = (Time.now.utc - @deposit.created_at) > 60.days ? ["transfer", "transferred"] : ["refund", "refunded"]
+
+.content
+  #pad-wrapper.refund-deposit
+    .row.col-md-11.text-center
+      %h2 Congrats! Your goal is completed.
+    
+    .goal.row.col-md-11.text-center
+      %h4= link_to (@goal.title + ' ' + @goal.to_s).titlecase, user_goal_path(current_user, @goal)
+    
+    .amounts.row.col-md-9.col-md-offset-1
+      The deposit you made for the goal was&nbsp;
+      %span> $#{ @deposit.amount }
+      \. You have earned back
+      %span $#{ @goal.commits.succeed.size }
+      by checking in on the days committed to action, and lost
+      %span $#{ @goal.commits.failed.size }
+      for failing to do so.
+      
+    .refund.row.col-md-9.col-md-offset-1.text-center
+      .total
+        Total:
+        %span $#{ @goal.commits.succeed.size }
+      = button_to verb.upcase + ' with Paypal', refund_goal_deposit_index_path(@goal), class: 'btn-glow primary'
+      
+    .payer.row.col-md-9.col-md-offset-1
+      - if @deposit.payer.blank?
+        %p.help-block The above amount will refunded to the credit/debit card you've used for deposit.
+      - else
+        %p.help-block
+          The above amount will be
+          = verbed
+          to the Paypal account associated with:&nbsp;
+          %span>= @deposit.payer
+          \.

@@ -1,17 +1,29 @@
 / main container
 .content
   #pad-wrapper.people-wrapper
-  
-    %h3 Friends
     
-    %h4 Following
+    %h3 Following
     - followings = current_user.following_by_type('User')
-    - followings.each do |f|
-      .user
-        = link_to (image_tag asset_path(f.avatar.thumb.url)), user_path(f)
+    
+    - if followings.blank?
+      %p Not following anyone.
+    - else 
+      - followings.each do |f|
+        %a(href='#{ user_path(f) }')
+          .user
+            = image_tag asset_path(f.avatar.thumb.url)
+            %br
+            = f.display_name
     
     %h4 Followers
     - followers = current_user.followers
-    - followers.each do |f|
-      .user
-        = link_to (image_tag asset_path(f.avatar.thumb.url)), user_path(f)
+    
+    - if followers.blank?
+      %p Not been followed yet.
+    - else
+      - followers.each do |f|
+        %a(href='#{ user_path(f) }')
+          .user
+            = image_tag asset_path(f.avatar.thumb.url), size: '24x24'
+            %br
+            = f.display_name

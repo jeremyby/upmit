@@ -9,6 +9,9 @@ class OmniauthCallbacksController < Devise::OmniauthCallbacksController
       sign_in_and_redirect @user, event: :authentication
       session[:provider] = auth.provider
       set_flash_message(:notice, :success, kind: "#{ auth.provider }".capitalize) if is_navigational_format?
+    elsif @user.errors[:auth].present?
+      flash[:alert] = @user.errors[:auth][0]
+      redirect_to preference_users_path
     else
       session["devise.#{ auth.provider }_data"] = auth
       redirect_to signin_path

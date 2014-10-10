@@ -104,7 +104,7 @@ class UsersController < ApplicationController
     providers = %w(twitter facebook)
 
     if request.post?
-      if params[:user][:switch_to].present? && providers.include?(params[:user][:switch_to]) # disconnecting social networks
+      if params[:user][:switch_to].present? && providers.include?(params[:user][:switch_to]) # switching check-in social network
         type = params[:user][:switch_to]
         providers.delete(type)
         auth = @user.authorizations.find_by(provider: type)
@@ -113,7 +113,7 @@ class UsersController < ApplicationController
           if @user.goals.active.where(checkin_with: providers[0]).blank?
             @user.update_attribute(:checkin_with, type)
           else
-            flash[:alert] = "There are goals listening for check-ins from #{ providers[0].capitalize }. You can switch form #{ providers[0].capitalize } after they are all completed."
+            flash.now[:alert] = "There are goals listening for check-ins from #{ providers[0].capitalize }. You can switch form #{ providers[0].capitalize } after they are all completed."
           end
         end
       elsif params[:user][:disconnect].present? && providers.include?(params[:user][:disconnect]) # disconnecting social networks
@@ -124,10 +124,10 @@ class UsersController < ApplicationController
 
         if auth.present?
           if @user.authorizations.size <= 1
-            flash[:alert] = "Cannot disconnect your #{ type.capitalize } account. It is the only authorization you have with us."
+            flash.now[:alert] = "Cannot disconnect your #{ type.capitalize } account. It is the only authorization you have with us."
 
           elsif @user.goals.active.where(checkin_with: type).size > 0
-            flash[:alert] = "There are goals listening for check-ins from #{ type.capitalize }. You can disconnect after they are all completed."
+            flash.now[:alert] = "There are goals listening for check-ins from #{ type.capitalize }. You can disconnect after they are all completed."
 
           else
             Authorization.transaction do

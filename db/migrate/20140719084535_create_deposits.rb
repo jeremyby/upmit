@@ -2,7 +2,7 @@ class CreateDeposits < ActiveRecord::Migration
   def change
     create_table :deposits do |t|
       t.string      :source,    null: false
-      t.string      :payer,     null: false
+      t.string      :payer
       t.string      :token,     null: false
       t.references  :goal,      null: false
       t.references  :user,      null: false

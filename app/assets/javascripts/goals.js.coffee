@@ -213,6 +213,7 @@ $(document).ready ->
     $('.new-goal-wrapper #goal_duration').slider('setValue', $(this).data('value'), true)
     
     $(".new-goal-wrapper .duration h3 span").text(text)
+    $('.new-goal-wrapper #goal_duration_desc').val(text)
     
     e.preventDefault()
   

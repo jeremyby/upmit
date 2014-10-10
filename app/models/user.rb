@@ -60,7 +60,19 @@ class User < ActiveRecord::Base
     # to prevent the auth being locked with accidentally created accounts.
     # Note that this may leave zombie accounts (with no associated auth) which
     # can be cleaned up at a later date.
-    user = existing_user.blank? ? authorization.user : existing_user
+    #
+    # user = existing_user.blank? ? authorization.user : existing_user
+
+    if existing_user.blank? 
+      user = authorization.user
+    else
+      if authorization.persisted? # existing user have an existing authorization
+        user = User.new
+        user.errors[:auth] << "You already have another account connected to your #{ authorization.provider.capitalize } account."
+      else
+        user = existing_user
+      end
+    end
 
     # Create the user if needed
     if user.nil?
@@ -92,8 +104,8 @@ class User < ActiveRecord::Base
     end
 
     # Associate the auth with the user if needed
-    # The only case this is not needed is returning user signing in
-    if authorization.user != user
+    # not applicable if a) returning user signing in, or b) existing user having another auth already
+    if user.persisted? && authorization.user != user
       authorization.user = user
       authorization.save!
     end

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141007130844) do
+ActiveRecord::Schema.define(version: 20141009154152) do
 
   create_table "authorizations", force: true do |t|
     t.integer  "user_id"
@@ -78,15 +78,17 @@ ActiveRecord::Schema.define(version: 20141007130844) do
   add_index "delayed_jobs", ["priority", "run_at"], name: "delayed_jobs_priority", using: :btree
 
   create_table "deposits", force: true do |t|
-    t.string   "source",                   null: false
-    t.string   "payer",                    null: false
-    t.string   "token",                    null: false
-    t.integer  "goal_id",                  null: false
-    t.integer  "user_id",                  null: false
-    t.integer  "amount_cents",             null: false
-    t.integer  "state",        default: 0, null: false
+    t.string   "source",                     null: false
+    t.string   "payer"
+    t.string   "token",                      null: false
+    t.integer  "goal_id",                    null: false
+    t.integer  "user_id",                    null: false
+    t.integer  "amount_cents",               null: false
+    t.integer  "state",          default: 0, null: false
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "payer_id"
+    t.string   "transaction_id"
   end
 
   create_table "follows", force: true do |t|
@@ -146,12 +148,14 @@ ActiveRecord::Schema.define(version: 20141007130844) do
     t.integer  "privacy",       default: 10
     t.string   "checkin_with"
     t.integer  "starts",        default: 1
+    t.string   "duration_desc"
   end
 
   add_index "goals", ["user_id"], name: "index_goals_on_user_id", using: :btree
 
   create_table "mention_pointers", force: true do |t|
-    t.integer  "since_id",   limit: 8, default: 1
+    t.integer  "twitter",    limit: 8, default: 1
+    t.integer  "facebook",   limit: 8, default: 722859861120858
     t.datetime "created_at"
     t.datetime "updated_at"
   end

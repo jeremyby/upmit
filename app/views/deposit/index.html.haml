@@ -1,7 +1,12 @@
+- @title = 'Deposit'
+
 / main container
 .content
   #pad-wrapper.deposit-index
-    - if current_user.goals.inactive.size >0
+    - if current_user.goals.size == 0
+      = render 'home/jumbotron'
+    
+    - else
       - pending = current_user.goals.inactive
       - unless pending.blank?
         .row.col-md-12
@@ -13,8 +18,7 @@
                 = link_to p.title.titlecase, user_goal_path(current_user, p), class: 'normal'
                 is #{ link_to 'pending deposit', new_goal_deposit_path(p), class: 'alert-link' }.
 
-  
-    - if current_user.goals.active.size > 0
+
       - refunding = current_user.deposits.refund
       - unless refunding.blank?
         .row.col-md-12
@@ -28,35 +32,105 @@
                 = link_to "#{ r.goal.commits.succeed.size } dollars", refund_goal_deposit_index_path(r.goal), class: 'alert-link'
                 are refundable.
     
-      .row
-        .col-md-12
-          .col-md-3.text-right
-            %h3 Total in deposit
-          .col-md-1
-            - total = current_user.deposits.paid.sum(:amount_cents) / 100
-            = total
-          .col-md-1
-            Refundable
-          .col-md-1
-            - refund = current_user.commits.succeed.joins(:goal).where('goals.state = 10').count
-            = refund
-          .col-md-1
-            At Stake
-          .col-md-1
-            - refund = current_user.commits.active.joins(:goal).where('goals.state = 10').count
-            = refund
-          .col-md-1
-            Lost
-          .col-md-1
-            - refund = current_user.commits.failed.joins(:goal).where('goals.state = 10').count
-            = refund
-            
-          .col-md-1
-            Breakdown
+      %h3.head(class="#{ 'lower' unless pending.blank? && refunding.blank? }")
+        Current deposit
+        %small for active goals
+    
+      - active = current_user.goals.active
+    
+    
+      .row.total
+        .col-md-3.col-sm-4.col-xs-4.title
+          %span
+            = active.size
+            active
+            = 'goal'.pluralize(active.size)
       
+        - if active.size > 1
+          .col-md-2.col-sm-2.col-xs-2
+            %span Total:
+            - total = current_user.deposits.paid.sum(:amount_cents) / 100
+            $#{ total }
+          .col-md-2.col-sm-2.col-xs-2
+            %span Refundable:
+            - refund = current_user.commits.succeed.joins(:goal).where('goals.state = 10').count
+            $#{ refund }
+          .col-md-2.col-sm-2.col-xs-2
+            %span At stake:
+            - stake = current_user.commits.active.joins(:goal).where('goals.state = 10').count
+            $#{ stake }
+          .col-md-2.col-sm-2.col-xs-2
+            %span Lost:
+            - lost = current_user.commits.failed.joins(:goal).where('goals.state = 10').count
+            $#{ lost }
+        - else
+          .col-md-2.col-sm-2.col-xs-2
+            %span Total
+          .col-md-2.col-sm-2.col-xs-2
+            %span Refundable
+          .col-md-2.col-sm-2.col-xs-2
+            %span At stake
+          .col-md-2.col-sm-2.col-xs-2
+            %span Lost
     
-    
-    
-    - else
-      = render 'home/jumbotron'
+      .row.current
+        - active.each do |a|
+          .goal
+            .col-md-3.col-sm-4.col-xs-4.title= link_to a.title.titlecase, user_goal_path(current_user, a)
+
+            .col-md-2.col-sm-2.col-xs-2 $#{ a.commits.size }
+            .col-md-2.col-sm-2.col-xs-2 $#{ a.commits.succeed.size }
+            .col-md-2.col-sm-2.col-xs-2 $#{ a.commits.active.size }
+            .col-md-2.col-sm-2.col-xs-2 $#{ a.commits.failed.size }
+
+      
+      - refunded = current_user.deposits.completed
+      - unless refunded.blank?
+        .line-break
+        
+        %h4.history History
+        
+        - succeed = 0
+        - refunded.each do |r|
+          - succeed += r.goal.commits.succeed.size
+          
+        .row.refund-total
+          .col-md-3.col-sm-4.col-xs-4.title            
+            - if refunded.size > 1
+              %span
+                = refunded.size
+                completed
+                = 'goal'.pluralize(refunded.size)
+            - else
+              = link_to refunded.first.goal.title.titlecase, user_goal_path(current_user, refunded.first.goal)
+          
+          .col-md-2.col-sm-2.col-xs-2
+            %span Total:
+            - total = current_user.deposits.completed.sum(:amount_cents) / 100
+            $#{ total }
+          .col-md-2.col-sm-2.col-xs-2
+            %span Refunded:
+            $#{ succeed }
+          .col-md-2.col-sm-2.col-xs-2
+            %span Lost:
+            $#{ total - succeed }
+            
+            
+          - if refunded.size > 1
+            .list.col-md-2.col-sm-2.col-xs-2
+              %a(href='#')
+                List
+                %i.fa.fa-chevron-down
+        
+        .row.history
+          - refunded.each do |r|
+            .goal
+              .col-md-3.col-sm-4.col-xs-4.title            
+                = link_to r.goal.title.titlecase, user_goal_path(current_user, r.goal)
+          
+              .col-md-2.col-sm-2.col-xs-2 $#{ r.goal.commits.size }
+              .col-md-2.col-sm-2.col-xs-2 $#{ r.goal.commits.succeed.size }
+              .col-md-2.col-sm-2.col-xs-2 $#{ r.goal.commits.failed.size }
+            
+          
           

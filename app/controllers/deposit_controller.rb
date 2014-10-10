@@ -30,6 +30,8 @@ class DepositController < ApplicationController
     # Make API call & get response
     response = api.set_express_checkout(request_object)
     
+    # raise response.inspect
+    
     # Access Response
     if response.success?
       if Rails.env.development?

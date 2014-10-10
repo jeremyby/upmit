@@ -18,6 +18,9 @@ gem 'jquery-rails'
 
 gem 'detect_timezone_rails'
 
+# Use SCSS for stylesheets
+gem 'sass-rails'
+gem 'compass-rails'
 
 # Turbolinks makes following links in your web application faster. Read more: https://github.com/rails/turbolinks
 gem 'turbolinks'
@@ -78,9 +81,7 @@ gem "acts_as_follower"
 
 
 group :assets do
-  # Use SCSS for stylesheets
-  gem 'sass-rails'
-  gem 'compass-rails'
+  
 
   # Use Uglifier as compressor for JavaScript assets
   gem 'uglifier'

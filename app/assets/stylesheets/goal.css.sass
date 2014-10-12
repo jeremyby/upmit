@@ -139,7 +139,6 @@
           line-height: 18px
           
           font-size: 12px
-          font-weight: 400
 
           background: #a8bdcc
           
@@ -296,16 +295,18 @@
     
       .visibility,
       .hash-tag,
-      .desc
+      .desc,
+      .deposit,
+      .delete
         display: inline-block
+        margin-right: 15px
       
       .icon
         position: relative
         top: 1px
         
-        font-size: 16px
+        font-size: 14px
         
-      
       span,
       i
         color: #888
@@ -323,14 +324,10 @@
         font-size: 13px
       
       .hash-tag
-        margin-right: 15px
-        
         .icon
-          margin-right: -2px
-      
-      .visibility
-        margin-right: 15px
+          font-size: 16px
 
+      .visibility
         .icon
           font-size: 15px
       
@@ -338,10 +335,21 @@
         a
           span
             border-bottom: 1px dashed #0088cc
-          
-        .icon
-          font-size: 14px
 
+          
+      .deposit
+        
+      
+      .delete
+        i,
+        span
+          color: #aaa
+          
+        a:hover 
+          i,
+          span
+            color: #888
+      
     .side
       span.label
         font-size: 13px
@@ -351,6 +359,8 @@
       .status
         margin-top: 5px
         
+        text-transform: uppercase
+        
         img
           position: relative
           
@@ -359,7 +369,8 @@
 
     
   .detail
-    padding: 40px 0
+    .inner
+      padding: 30px 0
    
     .field,
     .data
@@ -380,7 +391,9 @@
         font-weight: normal
         font-style: italic
     
-      
+    .donut-wrapper
+      margin: 30px 0
+  
   .activities
     margin-top: 40px
     
@@ -437,7 +450,7 @@
           
           strong
             color: #666
-            font-weight: 500
+            font-weight: 600
         
           span
             color: #999
@@ -539,13 +552,14 @@
         padding: 0
     
         .status
-          margin: 0 0 0 32px
+          margin: 0 0 0 15px
 
     .detail
-      padding: 23px 0 13px
+      .inner
+        padding: 23px 0
       
       .donut-wrapper
-        margin-top: 25px
+        margin: 10px 0
         
         .donut
           left: 45%
@@ -713,7 +727,6 @@
         .date
           margin-top: 8px
           
-          font-weight: 200
           font-size: 12px
           color: #7d848c
       
@@ -727,6 +740,7 @@
       .btn-toolbar
         margin-top: 5px
         button
+          font-weight: 300
           color: #7d848c
 
 
@@ -753,19 +767,19 @@
       padding-top: 25px
       padding-left: 9%
       
-      color: #999
+      color: #888
+      font-size: 13px
+      
       
       label
         float: none
-        
-        font-size: 13px
+        font-weight: normal
 
         cursor: default
       
       
-      
       .starts
-        margin-left: 10px
+        margin-left: 15px
         
         label
           padding: 0
@@ -773,7 +787,6 @@
           &.btn.btn-default
             cursor: pointer
             
-            font-style: normal
             
             font-size: 12px
             

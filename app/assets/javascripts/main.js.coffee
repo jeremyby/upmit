@@ -159,8 +159,6 @@ $(document).ready ->
     $('.modal-footer button').hide()
   )
   
-  $('.main-wrapper .select #goal_hash_tags').select2()
-  
   
 show_chart = (d) ->
   setTimeout( ->

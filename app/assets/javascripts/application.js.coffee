@@ -15,10 +15,8 @@
 #= require jquery_ujs
 #= require jquery.remotipart
 
-
 #= require detect_timezone
 #= require jquery.detect_timezone
-
 
 #= require lib/jquery.easing.1.3
 #= require lib/jquery.backstretch.min

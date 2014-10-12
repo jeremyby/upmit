@@ -106,10 +106,10 @@
                   %label Starting&nbsp;
                   %label.btn.btn-default.left(class='#{ "active" if @goal.starts != 1 }')>
                     = f.radio_button :starts, 0
-                    %span today
+                    %span Today
                   %label.btn.btn-default.right(class='#{ "active" if @goal.starts == 1 }')
                     = f.radio_button :starts, 1
-                    %span tomorrow
+                    %span Tomorrow
                 %span.privacy
                   = f.label :privacy, 'Visibility'
                   = f.select :privacy, Goal::Privacy.map {|p| [p[1], p[0]] }

@@ -221,7 +221,7 @@ textarea::-webkit-input-placeholder {
 .navbar-inverse .navbar-brand {
 	color: #ffffff;
 	text-transform: uppercase;
-	font-weight: lighter;
+	
 	padding: 10px 20px;
 	height: 45px;
 }

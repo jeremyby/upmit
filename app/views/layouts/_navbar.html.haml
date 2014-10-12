@@ -32,7 +32,7 @@
             %h3 You have #{ unread } new #{ 'notification'.pluralize(notices.size) }
             - notices.each do |n|
               - if n.event == 'start-refund'              
-                %a.item(href="/deposit" class="#{ 'unread' unless n.read }")
+                %a.item(href="#{ refund_goal_deposit_index_path(n.notifyable.goal) }" class="#{ 'unread' unless n.read }")
                   %i.fa.fa-usd
                   You have a deposit refundable.
                   %span.time

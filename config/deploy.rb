@@ -27,7 +27,7 @@ set :deploy_to, '/var/www/upmit'
 # set :linked_files, %w{config/database.yml}
 
 # Default value for linked_dirs is []
-set :linked_dirs, %w{bin log tmp/pids tmp/cache tmp/sockets vendor/bundle public/system}
+set :linked_dirs, %w{log tmp/pids tmp/cache tmp/sockets vendor/bundle public/system}
 
 # Default value for default_env is {}
 # set :default_env, { path: "/opt/ruby/bin:$PATH" }
@@ -38,7 +38,7 @@ set :linked_dirs, %w{bin log tmp/pids tmp/cache tmp/sockets vendor/bundle public
 set :rbenv_type, :user # or :system, depends on your rbenv setup
 set :rbenv_ruby, '2.1.2'
 set :rbenv_prefix, "RBENV_ROOT=#{fetch(:rbenv_path)} RBENV_VERSION=#{fetch(:rbenv_ruby)} #{fetch(:rbenv_path)}/bin/rbenv exec"
-set :rbenv_map_bins, %w{rake gem bundle ruby rails}
+# set :rbenv_map_bins, %w{rake gem bundle ruby}
 set :rbenv_roles, :all # default value
 
 
@@ -76,5 +76,29 @@ namespace :deploy do
       # end
     end
   end
+end
 
+namespace :rails do
+  desc "Start a rails console, for now just with the primary server"
+  task :c do
+    on roles(:app), primary: true do |role|
+      rails_env = fetch(:rails_env)
+      execute_remote_command_with_input "#{bundle_cmd_with_rbenv} #{current_path}/script/rails console #{rails_env}"
+    end
+  end
+
+  def execute_remote_command_with_input(command)
+    host = 'cambridge'
+    puts "opening a console on: #{host}...."
+    cmd = "ssh #{host} -t 'cd #{deploy_to}/current && #{command}'"
+    exec cmd
+  end
+
+  def bundle_cmd_with_rbenv
+    if fetch(:rbenv_ruby)
+      "RBENV_VERSION=#{fetch(:rbenv_ruby)} RBENV_ROOT=#{fetch(:rbenv_path)}  #{File.join(fetch(:rbenv_path), '/bin/rbenv')} exec bundle exec"
+    else
+      "ruby "
+    end
+  end
 end

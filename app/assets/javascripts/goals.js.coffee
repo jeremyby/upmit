@@ -5,6 +5,8 @@ $(document).ready ->
   
   upmit.timeoutid = 0
   
+  upmit.monthNames = [ "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" ]
+  
   $.fn.editable.defaults.mode = 'inline'
   $.fn.editable.defaults.ajaxOptions = {type: "PUT"}
   
@@ -305,14 +307,14 @@ update_frequency_title = ->
     else
       str = 'everyday'
       
-    $('.new-goal-wrapper .starts label.left span').text('today').attr('title', '')
-    $('.new-goal-wrapper .starts label.right span').text('tomorrow')
+    $('.new-goal-wrapper .starts label.left span').text('Today').attr('title', '')
+    $('.new-goal-wrapper .starts label.right span').text('Tomorrow')
   else
     w = $('.new-goal-wrapper .frequency .week select').val()
     t = if w > 1 then 'times' else 'time'
     str = "#{ w } #{ t } a week"
     
-    output = 'this week'
+    output = 'This week'
     output = '<i class="fa fa-exclamation"></i> ' + output if upmit.now.getDay() > 1
     
     $('.new-goal-wrapper .starts label.left span').html(output)
@@ -327,7 +329,7 @@ update_frequency_title = ->
     else
       $('.new-goal-wrapper .starts label.left').attr('title', '')
     
-    $('.new-goal-wrapper .starts label.right span').text('next week')
+    $('.new-goal-wrapper .starts label.right span').text('Next week')
     
   $('.new-goal-wrapper .frequency h3 span').html(str)
 

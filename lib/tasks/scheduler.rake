@@ -67,7 +67,7 @@ namespace :check do
     puts "Retrieve @upmit tweets to check users in..."
 
     begin
-      tweets = UpmitTwitter.mentions(since_id: UpmitMentionSince.twiiter, count: 200)
+      tweets = UpmitTwitter.mentions(since_id: UpmitMentionSince.twitter, count: 200)
     rescue Twitter::Error::TooManyRequests => error
       # NOTE: Your process could go to sleep for up to 15 minutes but if you
       # retry any sooner, it will almost certainly fail with the same exception.

@@ -57,33 +57,27 @@ set :puma_init_active_record, true
 set :puma_preload_app, true
 
 
+set :delayed_job_args, "-n 2"
+
+
+set :whenever_identifier, ->{ "#{fetch(:application)}_#{fetch(:stage)}" }
+
+
 namespace :deploy do
-  desc 'Restart application'
-  task :restart do
-    on roles(:app), in: :sequence, wait: 5 do
-      # Your restart mechanism here, for example:
-      # execute :touch, release_path.join('tmp/restart.txt')
-    end
-  end
-
-  after :publishing, :restart
-
-  after :restart, :clear_cache do
-    on roles(:web), in: :groups, limit: 3, wait: 10 do
-      # Here we can do anything such as:
-      # within release_path do
-      #   execute :rake, 'cache:clear'
-      # end
-    end
-  end
+  task :delayed_jobs do                                                                                                               
+      invoke 'delayed_job:restart'                                                
+    end 
 end
+
+after 'deploy:publishing', 'deploy:delayed_jobs'
+
 
 namespace :rails do
   desc "Start a rails console, for now just with the primary server"
   task :c do
     on roles(:app), primary: true do |role|
       rails_env = fetch(:rails_env)
-      execute_remote_command_with_input "#{bundle_cmd_with_rbenv} #{current_path}/script/rails console #{rails_env}"
+      execute_remote_command_with_input "#{bundle_cmd_with_rbenv} #{current_path}/bin/rails console #{rails_env}"
     end
   end
 

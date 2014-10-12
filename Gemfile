@@ -66,8 +66,10 @@ gem 'ice_cube'
 
 gem 'money-rails'
 
-gem 'delayed_job_active_record'
+
 gem 'daemons'
+gem 'delayed_job_active_record'
+
 
 gem 'carrierwave'
 gem 'rmagick', require: false
@@ -89,6 +91,9 @@ gem 'coffee-rails'
 
 gem 'fog', require: "fog/aws/storage"
 gem 'asset_sync'
+
+
+gem 'whenever', :require => false
 
 
 

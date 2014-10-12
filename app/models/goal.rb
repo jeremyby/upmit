@@ -1,7 +1,7 @@
 class TitleValidator < ActiveModel::EachValidator
   def validate_each(record, attribute, value)
     unless Goal.where("id <> ? AND user_id = ? AND title = ?", record.id, record.user_id, value).where('state >= -1').blank?
-      record.errors[attribute] << 'You have another ongoing goal with the same title.'
+      record.errors[attribute] << 'You have another live goal with the same title.'
     end
   end
 end
@@ -9,7 +9,7 @@ end
 class TagValidator < ActiveModel::EachValidator
   def validate_each(record, attribute, value)
     unless Goal.where("id <> ? AND user_id = ? AND hash_tag = ?", record.id, record.user_id, value).where('state >= -1').blank?
-      record.errors[attribute] << 'You have another ongoing goal with the same hash tag.'
+      record.errors[attribute] << 'You have another live goal with the same hash tag.'
     end
   end
 end
@@ -32,6 +32,7 @@ class Goal < ActiveRecord::Base
   
   belongs_to :user
   has_one :deposit
+  
   has_many :commits, dependent: :destroy
   has_many :activities, class_name: 'GoalActivities', dependent: :destroy
   
@@ -48,6 +49,7 @@ class Goal < ActiveRecord::Base
   
   # Completed, state from 'active' to 'completed'
   after_commit :process_deposit, on: :update, :if => Proc.new { |g| g.previous_changes['state'] == [10, -5] }
+  
   
   
   WEEKDAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
@@ -69,24 +71,38 @@ class Goal < ActiveRecord::Base
   }
   
   Privacy = {
-    10  => 'public',
-    5   => 'friends',
-    1   => 'private'
+    10  => 'Public',
+    5   => 'Friends',
+    1   => 'Private'
   }
   
   PrivacySelect = [
-    { value: 10, text: 'public'},
-    { value: 5, text: 'friends'},
-    { value: 1, text: 'private'}
+    { value: 10, text: 'Public'},
+    { value: 5, text: 'Friends'},
+    { value: 1, text: 'Private'}
   ]
   
   acts_as_stateable states: States
   
   acts_as_commentable
   
-  scope :actionable, -> { where("state >= -1") }
+  scope :live, -> { where("state >= -1") }
   
   serialize :weekdays
+  
+  #####################################################################################
+  # 
+  # Flags & Conditions
+  #
+  # ###################################################################################
+  
+  def live?
+    self.state >= -1
+  end
+  
+  def deleteable?
+    self.inactive? || (self.active? && (Time.now - self.deposit.created_at) < 3.days)
+  end
   
   #####################################################################################
   # 

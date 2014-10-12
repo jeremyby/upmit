@@ -24,7 +24,7 @@ Rails.application.routes.draw do
     end
   end
   
-  resources :goals, except: [:index, :show, :edit, :update, :destroy] do
+  resources :goals, only: [:new, :create] do
     resources :deposit, only: [:new, :create]  do
       collection do
         get 'confirm'
@@ -63,7 +63,7 @@ Rails.application.routes.draw do
 
   
   resources :users, path: '', only: [:show] do
-    resources :goals, only: [:index, :show, :update]
+    resources :goals, only: [:index, :show, :update, :destroy]
     resource :follow, only: [:create, :destroy]
   end
   

@@ -1,17 +1,17 @@
 class DepositController < ApplicationController
   before_action :authenticate_user!
   before_action :get_my_goal, only: [:new, :create, :confirm, :refund]
-  
+
   layout 'payment', except: [:index, :new, :refund]
 
   def index
 
   end
-  
+
   def cancel
     render 'error'
   end
-  
+
   def new
     if @goal.deposit.blank?
       @deposit = @goal.build_deposit(user: current_user)
@@ -26,12 +26,12 @@ class DepositController < ApplicationController
 
     # Build request object
     request_object = checkout_builder(@goal.occurrence)
-    
+
     # Make API call & get response
     response = api.set_express_checkout(request_object)
-    
+
     # raise response.inspect
-    
+
     # Access Response
     if response.success?
       if Rails.env.development?
@@ -47,11 +47,11 @@ class DepositController < ApplicationController
   def confirm
     begin
       api = PayPal::SDK::Merchant::API.new
-      
+
       raise 'Deposit was already made.' unless @goal.deposit.blank?
-      
+
       @deposit = @goal.build_deposit user: current_user, token: params[:token], payer_id: params[:PayerID], amount: @goal.occurrence, source: 'paypal'
-      
+
       checkout_object = api.build_do_express_checkout_payment({
                                                                 :DoExpressCheckoutPaymentRequestDetails => {
                                                                   :PaymentAction => "Sale",
@@ -60,15 +60,15 @@ class DepositController < ApplicationController
                                                                   :PaymentDetails => [{
                                                                                         :OrderTotal => {
                                                                                           :currencyID => "USD",
-                                                                                          :value => @deposit.amount.to_param 
+                                                                                          :value => @deposit.amount.to_param
                                                                                         }
-                                                                                      }]
+                                                                  }]
                                                                 }
-                                                              })
+      })
 
       # Make API call & get response
       @checkout_response = api.do_express_checkout_payment(checkout_object)
-      
+
       raise 'Paypal payment failed.' unless @checkout_response.success?
 
       transaction_id = @checkout_response.DoExpressCheckoutPaymentResponseDetails.PaymentInfo[0].TransactionID
@@ -80,71 +80,45 @@ class DepositController < ApplicationController
       @redirecter = user_goal_url(current_user, @goal)
     rescue => error
       flash.now[:alert] = error
-      render 'error' 
+      render 'error'
     end
   end
-  
-  
+
+  #TODO: Need to test
   def refund
     unless @goal.deposit.refund?
       flash[:alert] = 'The goal is not completed yet.'
-      
+
       redirect_to user_goal_path(current_user, @goal) and return
     end
-    
+
     @deposit = @goal.deposit
-    
-    @deposit.notification.destroy! unless @deposit.notification.blank?
-    
+
     if request.post?
       api = PayPal::SDK::Merchant::API.new
-      
+
       refund = @goal.commits.succeed.size
-      
+
       if (Time.now.utc - @deposit.created_at) > 60.days # Masspay
-        mass_pay = api.build_mass_pay({
-          :ReceiverType => "EmailAddress",
-          :MassPayItem => [{
-            :ReceiverEmail => @deposit.payer,
-            :Amount => {
-              :currencyID => "USD",
-              :value => refund } }] })
+        response = @deposit.make_mass_pay(refund)
+      else                                              # Refund
+        response = @deposit.make_refund(refund)
+      end
+
+      if response.success?
+        @deposit.notification.destroy! unless @deposit.notification.blank?
         
-        mass_pay_response = api.mass_pay(mass_pay)
-        
-        if mass_pay_response.success?
-          @deposit.completed!
-          
-          flash[:notice] = 'Transfer request is acceptted by Paypal.'
-          redirect_to deposit_index_path
-        else
-          flash.now[:alert] = mass_pay_response.Errors[0].LongMessage
-        end
-      else # Refund
-        refund_transaction = api.build_refund_transaction({
-          :TransactionID => @deposit.transaction_id,
-          :RefundType => @deposit.amount > refund ? 'Partial' : 'Full',
-          :Amount => {
-            :currencyID => "USD",
-            :value => refund },
-          :RefundSource => "default" })
-        
-        refund_response = api.refund_transaction(refund_transaction)
-        
-        if refund_response.success?
-          @deposit.completed!
-          
-          flash[:notice] = 'Refund request is acceptted by Paypal.'
-          redirect_to deposit_index_path
-        else
-          flash.now[:alert] = refund_response.Errors[0].LongMessage
-        end
+        @deposit.completed!
+
+        flash[:notice] = 'The request to refund was acceptted by Paypal. Please check your Paypal account or credit/debit card in a while.'
+        redirect_to deposit_index_path
+      else
+        flash.now[:alert] = response.Errors[0].LongMessage
       end
     end
   end
-  
-  
-  
+
+
   private
   def get_my_goal
     @goal = current_user.goals.find_by_slug(params[:goal_id])
@@ -169,7 +143,7 @@ class DepositController < ApplicationController
                                                     Quantity: "#{ occurrence }",
                                                     Amount: {
                                                       currencyID: "USD",
-                                                      value: "1.00" },
+                                                    value: "1.00" },
                              ItemCategory: "Digital" }],
         PaymentAction: "Sale" }] }
     })

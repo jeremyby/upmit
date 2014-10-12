@@ -1,6 +1,7 @@
 class GoalsController < ApplicationController
   before_action :authenticate_user!
-  before_action :get_user_and_goal, only: [:show, :update]
+  before_action :get_user_and_goal, only: [:show, :update, :destroy]
+  before_action :current_owner, only: [:update, :destroy]
 
   def index
     begin
@@ -27,13 +28,12 @@ class GoalsController < ApplicationController
   def show
     cond = '1 = 1'
     cond = ["id < ?", params[:since]] unless params[:since].blank?
-    
+
     @limit = 10
     @limit = 25 if params[:limit].present?
-    
+
     @activities = @goal.activities.includes(:activeable).order('id DESC').limit(@limit).where(cond)
-    
-    
+
     respond_to do |format|
       format.html
       format.js { render partial: 'activities' }
@@ -50,6 +50,31 @@ class GoalsController < ApplicationController
     end
   end
 
+  def destroy
+    if @goal.inactive?
+      @goal.destroy!
+
+      flash[:notice] = "Your goal \"#{ h @goal.title.titlecase }\" is deleted."
+      redirect_to user_goals_path(current_user)
+    else
+      response = @goal.deposit.make_refund
+      
+      if response.success?
+        @goal.deposit.cancelled!
+        @goal.cancelled!
+
+        flash[:notice] = "Your goal \"#{ h @goal.title.titlecase }\" is cancelled."
+        redirect_to user_goals_path(current_user)
+      else
+        @goal.errors.add(:deposit, "was not refunded. Please try again later." )
+        
+        flash[:alert] = response.Errors[0].LongMessage || @goal.errors.full_messages
+
+        redirect_to user_goal_path(current_user, @goal)
+      end
+    end
+  end
+
   private
   def get_user_and_goal
     begin
@@ -57,6 +82,12 @@ class GoalsController < ApplicationController
       @goal = @user.goals.find_by_slug!(params[:id])
     rescue
       go_404
+    end
+  end
+
+  def current_owner
+    unless current_user == @user
+      return false
     end
   end
 end

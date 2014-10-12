@@ -96,6 +96,8 @@ gem 'asset_sync'
 gem 'whenever', :require => false
 
 
+gem 'newrelic_rpm'
+
 
 group :development, :test do
   gem 'capistrano-rails'

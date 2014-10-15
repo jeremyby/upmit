@@ -27,13 +27,13 @@ namespace :commits do
     User.remindables.find_each do |u|
       now = Time.now
 
-      goals = u.goals.joins(:commits)
-                      .where("commits.state = 0")
-                      .where("commits.starts_at < ?", now)
-                      .where("(goals.type <> 'WeektimeGoal' AND commits.reminded < 0)
-                              OR (goals.type = 'WeektimeGoal' AND commits.reminded < ?)",
-                             now.in_time_zone(u.timezone).wday)
-                      .select('DISTINCT goals.*')
+      goals = u.goals.active.joins(:commits)
+                            .where("commits.state = 0")
+                            .where("commits.starts_at < ?", now)
+                            .where("(goals.type <> 'WeektimeGoal' AND commits.reminded < 0)
+                                    OR (goals.type = 'WeektimeGoal' AND commits.reminded < ?)",
+                                   now.in_time_zone(u.timezone).wday)
+                            .select('DISTINCT goals.*')
 
       # goals can be blank for User.remindables picks all users with weektime goals
       unless goals.blank?
@@ -91,6 +91,7 @@ namespace :check do
 
             commits = auth.user.commits.active.joins(:goal)
                                         .where("goals.checkin_with = 'twitter'")
+                                        .where("goals.state = 10")
                                         .where("goals.hash_tag in (?)", hash_array)
                                         .where("commits.starts_at < ?", now)
                                         .group('commits.goal_id')
@@ -156,6 +157,7 @@ namespace :check do
             
             commits = auth.user.commits.active.joins(:goal)
                                         .where("goals.checkin_with = 'facebook'")
+                                        .where("goals.state = 10")
                                         .where("goals.hash_tag in (?)", messages)
                                         .where("commits.starts_at < ?", now)
                                         .group('commits.goal_id')
@@ -175,6 +177,5 @@ namespace :check do
     end
     
     UpmitMentionSince.update_attribute(:facebook, first_id)
-    
   end
 end

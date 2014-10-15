@@ -26,14 +26,53 @@ class Deposit < ActiveRecord::Base
   after_commit :refund_completed, on: :update, :if => Proc.new { |d| d.previous_changes['state'] == [5, 10] && d.completed? }
   
   def retrieve_payer_email
-    api = PayPal::SDK::Merchant::API.new
+    detail = PaypalAPI.build_get_transaction_details({ TransactionID: self.transaction_id })
     
-    detail = api.build_get_transaction_details({ TransactionID: self.transaction_id })
-    
-    response = api.get_transaction_details(detail)
+    response = PaypalAPI.get_transaction_details(detail)
     
     self.update payer: response.PaymentTransactionDetails.PayerInfo.Payer
   end
+  
+  
+  def self.set_checkout_for(goal, return_url, cancel_url)
+    request_object = PaypalAPI.build_set_express_checkout(
+      {
+        SetExpressCheckoutRequestDetails: {
+          ReturnURL: return_url,
+          CancelURL: cancel_url,
+          PaymentDetails: [{
+                             OrderTotal: { currencyID: "USD", value: "#{ goal.occurrence }.00" },
+                             PaymentDetailsItem: [{
+                                                    Name: "One dollar deposit per day",
+                                                    Quantity: "#{ goal.occurrence }",
+                                                    Amount: { currencyID: "USD", value: "1.00" },
+                             ItemCategory: "Digital" }],
+        PaymentAction: "Sale" }] }
+    })
+    
+    return PaypalAPI.set_express_checkout(request_object)
+  end
+  
+  
+  def express_checkout
+    checkout_object = PaypalAPI.build_do_express_checkout_payment({
+                                                              :DoExpressCheckoutPaymentRequestDetails => {
+                                                                :PaymentAction => "Sale",
+                                                                :Token => self.token,
+                                                                :PayerID => self.payer_id,
+                                                                :PaymentDetails => [{
+                                                                                      :OrderTotal => {
+                                                                                        :currencyID => "USD",
+                                                                                        :value => self.amount.to_param
+                                                                                      }
+                                                                }]
+                                                              }
+    })
+
+    # Make API call & get response
+    return PaypalAPI.do_express_checkout_payment(checkout_object)
+  end
+  
   
   
   def make_mass_pay(value)

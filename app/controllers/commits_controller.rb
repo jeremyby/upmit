@@ -1,18 +1,51 @@
 class CommitsController < ApplicationController
   before_action :authenticate_user!
-  before_action :find_commit
-  before_action :load_variables, only: [:check, :fail]
+  before_action :find_commit, only: :update
 
-  skip_before_filter :verify_authenticity_token, :only => :update
+  skip_before_filter :verify_authenticity_token, only: :update
 
-  def check
-    @commit.update state: 1, checked_by: 'web', checked_at: Time.now
-  end
 
-  def fail
-    @commit.update state: -10, checked_by: 'web', checked_at: Time.now
+  def check_in
+    begin
+      text = params[:content]
 
-    render "check"
+      tags = text.split
+      tags.delete_if {|t| t[0] != '#' }
+      tags.each {|m| m[0] = ''}
+
+      now = Time.now
+      commits = current_user.commits.active.joins(:goal)
+                                            .where("goals.checkin_with = ?", current_user.checkin_with)
+                                            .where("goals.hash_tag in (?)", tags)
+                                            .where("commits.starts_at < ?", now)
+                                            .group('commits.goal_id')
+
+      # raise commits.inspect
+
+      raise 'There are no commitments to check in.' if commits.blank?
+
+      updates = { state: 1, note: text, checked_by: 'upmit', checked_at: now }
+
+      if params[:photo].present?
+        updates.merge({ photo: params[:photo]})
+      elsif params[:remote_photo_url].present?
+        updates.merge({ remote_photo_url: params[:remote_photo_url]})
+      end
+
+      Commit.transaction do
+        commits.each do |c|
+          c.update updates
+        end
+      end
+      
+      auth = current_user.authorizations.find_by provider: current_user.checkin_with
+      post_service = "#{ current_user.checkin_with.capitalize }PostService".constantize.new(auth)
+      
+      post_service.delay.post(text)
+
+    rescue => error
+      @error = error
+    end
   end
 
   def update
@@ -23,9 +56,9 @@ class CommitsController < ApplicationController
     elsif params[:remote_photo_url].present?
       @commit.remote_photo_url = params[:remote_photo_url]
     end
-    
+
     unless @commit.save
-      @error = 'There has been some problem. Please try again later.' 
+      @error = 'There has been some problem. Please try again later.'
     end
   end
 
@@ -34,11 +67,5 @@ class CommitsController < ApplicationController
     id = params[:commit_id] || params[:id]
 
     @commit = current_user.commits.find(id)
-  end
-
-  def load_variables
-    last, today, next_occur = Commit.get_occurrence_of(@commit.goal)
-
-    @occur = today
   end
 end

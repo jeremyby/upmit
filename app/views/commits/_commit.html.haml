@@ -6,16 +6,17 @@
 
 
 - if commit.failed?
-  .activeable(class='fail')
+  .activeable.fail
     .info
-      %strong Failed
+      %strong Missed
       %span= date
       
 - else
   .avatar= link_to image_tag(asset_path(commit.user.avatar.thumb.url), size: '40x40'), user_path(commit.user)
-  .activeable(class='success')
+  .activeable.success
     .info
-      %strong Checked in
+      %strong
+        Checked in
       %span via #{ commit.checked_by.capitalize }
       %span= date
     - unless commit.note.blank?
@@ -26,6 +27,6 @@
       .edit
         %a(href='#')
           %i.fa.fa-edit
-          Edit note and photo
+          Edit
   
 .clearfix

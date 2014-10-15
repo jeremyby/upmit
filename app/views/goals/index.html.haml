@@ -24,7 +24,7 @@
 / main container
 .content(class="#{ 'panel-content' unless is_current_user_the_user }")
   #pad-wrapper.goals-wrapper
-    - if is_current_user_the_user && current_user.goals.size == 0
+    - if is_current_user_the_user && current_user.goals.live.size == 0 && @completed.blank?
       = render 'home/jumbotron'
     
     - else

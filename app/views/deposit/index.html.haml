@@ -14,8 +14,7 @@
             - pending.each do |p|
               %p
                 %i.fa.fa-warning.fa-lg
-                Your goal:
-                = link_to p.title.titlecase, user_goal_path(current_user, p), class: 'normal'
+                Your goal "#{ link_to p.title.titlecase, user_goal_path(current_user, p), class: 'normal' }"
                 is #{ link_to 'pending deposit', new_goal_deposit_path(p), class: 'alert-link' }.
 
 
@@ -26,18 +25,14 @@
             - refunding.each do |r|
               %p
                 %i.fa.fa-dollar.fa-lg
-                Your goal:
-                = link_to r.goal.title.titlecase, user_goal_path(current_user, r.goal), class: 'normal'
-                is completed.
-                = link_to "#{ r.goal.commits.succeed.size } dollars", refund_goal_deposit_index_path(r.goal), class: 'alert-link'
-                are refundable.
+                Your goal "#{ link_to r.goal.title.titlecase, user_goal_path(current_user, r.goal), class: 'normal' }" is completed.
+                #{ link_to "#{ r.goal.commits.succeed.size } dollars are refundable", refund_goal_deposit_index_path(r.goal), class: 'alert-link' }.
     
       %h3.head(class="#{ 'lower' unless pending.blank? && refunding.blank? }")
         Current deposit
         %small for active goals
     
       - active = current_user.goals.active
-    
     
       .row.total
         .col-md-3.col-sm-4.col-xs-4.title

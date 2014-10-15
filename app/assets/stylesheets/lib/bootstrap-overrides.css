@@ -1,17 +1,28 @@
 /* Some overrides from default bootstrap styles */
 
+body {
+  color: #222;
+}
+
 h1,h2,h3,h4,h5,h6{
-	font-weight: normal;
+	font-weight: 600;
 }
 
 
 h1 { font-size:2.28em }
-h2 { font-size:2em }
-h3 { font-size:1.7em }
+h2 { font-size:1.85em }
+h3 { font-size:1.55em }
 h4 { font-size:1.28em }
 h5 { font-size:1.15em }
 h6 { font-size:1em }
 
+a {
+  color: #3777AF;
+}
+
+a:hover {
+  color: #28567E;
+}
 
 /* COMPONENTS */
 
@@ -52,6 +63,9 @@ h6 { font-size:1em }
 	color: #d5393e;
 }
 
+.alert .alert-link {
+  font-weight: 600;
+}
 
 /* code*/
 code {

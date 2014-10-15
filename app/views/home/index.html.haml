@@ -3,6 +3,8 @@
 
 #outer-background-container(data-default-background-img="#{ asset_path('bg1.jpg') }" style="background-image:url(#{ asset_path('bg1.jpg') });")
 
+.background-image-overlay
+
 / Outer Container
 #outer-container
 
@@ -21,41 +23,37 @@
         %a(href="#better") better you
       %li#menu-item-carousel.menu-item.scroll
         %a(href="#carousel") how it works
-      %li#menu-item-grid.menu-item.scroll
-        %a(href="#grid") Grid
-      %li#menu-item-featured.menu-item.scroll
-        %a(href="#featured") Featured
-      %li#menu-item-signup.menu-item.scroll
-        %a(href="#signup") start now!
+      %li#menu-item-feature.menu-item.scroll
+        %a(href="#feature") features
+      %li#menu-item-signin.menu-item.scroll
+        %a(href="#signin") start now!
 
   %section#main-content.clearfix
     %article#intro.section-wrapper.clearfix(data-custom-background-img="#{ asset_path('bg1.jpg') }")
       .content-wrapper.clearfix
-        .col.col-sm-10.col-md-9.col-lg-8
+        .col.col-sm-10.col-sm-offset-2.col-md-9.col-md-offset-1
           %section.feature-text
             %h1 Up + Commit
-            .block
-              %p 
-                Upmit helps to make real changes about yourself,
-                %br
-                so you can
-                %strong be the better you
-              %p.btns
-                %a.link-scroll.btn.btn-outline-inverse.btn-lg(href='#better') Find out more
-                %span or
-                %a.signin(href="/signin") sign in
+            %p.text
+              Upmit pushes you to achieve your commitments,
+              %br
+              so you can
+              %strong be the better you.
+            %p.btns
+              %a.link-scroll.btn.btn-outline-inverse.btn-lg(href='#better') Find out more
+              %span or
+              %a.signin(href="/signin") sign in
+
 
     %article#better.section-wrapper.clearfix(data-custom-background-img="#{ asset_path('bg3.jpg') }")
       .content-wrapper.clearfix
-        .col.col-sm-11.col-md-10.col-lg-9
+        .col.col-sm-10.col-sm-offset-2.col-md-9.col-md-offset-1
           %h1.section-title Be the Better You
-          .block
-            %p.feature-paragraph
-              %img.lazy.pull-right(alt="Lorem Ipsum" data-img-src="#{ asset_path('transp-image5b.png') }")
-              Changing for the better is always hard. It starts easy with a resolution, but sticking to it is the painful part.
-            
-            %h4 Upmit is the push behind your back
-            %p We will take one dollar deposit for every day you committed to action. You have to check in by posting a tweet and then earn the dollar back.
+          %p.feature-paragraph.text
+            %img.lazy.pull-right(alt="Rocket Up" data-img-src="#{ asset_path('transp-image1s.png') }")
+            Changing for the better is always hard. It starts easy with a resolution, but sticking to it is the painful part.
+          
+          %h4.text We are here to help you up.
 
           
 
@@ -65,9 +63,9 @@
           / Indicators - slide navigation
           %ol.carousel-indicators.title-indicators
             %li.active(data-slide-to="0" data-target="#features-carousel") Commit yourself
-            %li(data-slide-to="1" data-target="#features-carousel") It takes repeation
-            %li(data-slide-to="2" data-target="#features-carousel") Stick to the goal
-            %li(data-slide-to="3" data-target="#features-carousel") Support from people
+            %li(data-slide-to="1" data-target="#features-carousel") Make it real
+            %li(data-slide-to="2" data-target="#features-carousel") Social check-in
+            
           / Wrapper for slides
           .carousel-inner
             / CAROUSEL SLIDE 1
@@ -75,146 +73,77 @@
               .carousel-text-content
                 = image_tag asset_path('goal.png'), alt: 'Goal', class: 'icon'
                 %h2.title Commit yourself
-                %p 
+                %p.text
+                  Wanna start a new habit? Or trying to get rid of an old one? Create a goal by telling us what you are committed to achieve, how often and
+                  for how long.
 
                 
             / CAROUSEL SLIDE 2
             .item
               .carousel-text-content
-                %img.icon(alt="Lorem Ipsum" src="#{ asset_path('transp-image6.png') }")
-                %h2.title Suspendisse molestie
-                %p Etiam at ligula sit amet arcu laoreet consequat. Duis dictum lorem metus, vitae dapibus risus imperdiet nec. Duis dictum lorem metus.
-                %p
-                  %a.btn.btn-outline-inverse.btn-sm(href="#") read more
-                #modal-content-3.content-to-populate-in-modal
+                %img.icon(alt="One Dollar" src="#{ asset_path('onedollar.png') }")
+                %h2.title Make it real
+                %p.text
+                  For every day you committed to take the action, you have to make 
+                  %strong one dollar deposit
+                  upfront. Only by successfully checking in on that day, you can earn that dollar back.
+                
 
             / CAROUSEL SLIDE 3
             .item
               .carousel-text-content
                 %img.icon(alt="Lorem Ipsum" src="#{ asset_path('transp-image7.png') }")
-                %h2.title Maecenas id dolor
-                %p Fusce erat augue, fermentum sit amet congue a, ullamcorper ac enim. Maecenas id dolor imperdiet, mollis felis ut, pellentesque ante. Sed id congue arcu. Nulla eget commodo sem. Suspendisse suscipit, sem ac.
-                %p
-                  %a.btn.btn-outline-inverse.btn-sm(href="#") read more
-                
-            / CAROUSEL SLIDE 4
-            .item
-              .carousel-text-content
-                %img.icon(alt="Lorem Ipsum" src="#{ asset_path('transp-image4.png') }")
-                %h2.title Sed scelerisque
-                %p Aenean a est fringilla, malesuada eros vel, condimentum augue. Sed lorem sapien, vestibulum quis nisl volutpat, fermentum adipiscing massa. Cras ac faucibus nisl. Proin ac convallis sapien.
-                %p
-                  %a.btn.btn-outline-inverse.btn-sm(href="") read more
+                %h2.title Social check-in
+                %p.text
+                  You will have to check in your commitments by posting on Twitter or Facebook. Your family and friends are
+                  gonna to be the best support you need.
 
           / Controls
           %a.left.carousel-control(data-slide="prev" href="#features-carousel")
           %a.right.carousel-control(data-slide="next" href="#features-carousel")
 
-    %article#grid.section-wrapper.clearfix(data-custom-background-img="#{ asset_path('bg2.jpg') }")
+    %article#feature.section-wrapper.clearfix(data-custom-background-img="#{ asset_path('bg5.jpg') }")
       .content-wrapper.clearfix
         .col-sm-11.col-md-10.pull-right
-          %h1.section-title Grid
-          / grid
           %section.grid.row.clearfix.clearfix-for-2cols
             / grid item
             .grid-item.col-md-6
               .item-content.clearfix
                 %i.icon.fa.fa-bar-chart-o
                 .text-content
-                  %h5 Lorem ipsum dolor sit amet
-                  %p Nullam ac rhoncus sapien, non gravida purus. Aliquam adipiscing eros non elit imperdiet congue. Integer ultricies.
+                  %h5 Get reminded
+                  %p.text We will send you a reminder every day if committed to action.
 
             .grid-item.col-md-6
               .item-content.clearfix
                 %i.icon.fa.fa-compass
                 .text-content
-                  %h5 Aliquam adipiscing eros non elit
-                  %p Nullam ac rhoncus sapien, non gravida purus. Alinon elit imperdiet congue. Integer ultricies sed ligula eget tempus.
+                  %h5 100% Free
+                  %p.text Our service is 100% free. If you all checked in, you will have every dollar of your deposit back.
 
             .grid-item.col-md-6
               .item-content.clearfix
                 %i.icon.fa.fa-lock
                 .text-content
-                  %h5 Integer ultricies sed ligula
-                  %p Aliquam adipiscing eros non elit imperdiet congue. Integer ultricies sed ligula ligula eget.
+                  %h5 Secure payment
+                  %p.text Your payment and refund will be securely processed by Paypal.
 
             .grid-item.col-md-6
               .item-content.clearfix
                 %i.icon.fa.fa-file
                 .text-content
                   %h5 Lorem ipsum dolor sit amet
-                  %p Nullam ac rhoncus. Aliquam adipiscing eros non elit imperdiet congue. Integer ultricies sed ligula eget tempus.
+                  %p.text Nullam ac rhoncus. Aliquam adipiscing eros non elit imperdiet congue. Integer ultricies sed ligula eget tempus.
 
-    %article#featured.section-wrapper.clearfix(data-custom-background-img="#{ asset_path('bg3.jpg') }")
+
+    %article#signin.section-wrapper.clearfix(data-custom-background-img="#{ asset_path('bg4.jpg') }")
       .content-wrapper.clearfix
-        .col-sm-11.pull-right
-          %h1.section-title Featured
-          / feature columns
-          %section.feature-columns.row.clearfix
-            / feature 1
-            %article.feature-col.col-md-4
-              %a.thumbnail.linked(href="#")
-                .image-container
-                  %img.lazy.item-thumbnail(alt="Lorem Ipsum" data-img-src="#{ asset_path('project-3.jpg') }")
-                .caption
-                  %h5 Image Carousel
-                  %p This feature contains an image carousel when you open popup.
+        %h1.section-title Start Now!
+        .btns
+          = link_to image_tag(asset_path('twitter.png')) + 'Sign in with Twitter', user_omniauth_connect_path(:twitter), class: 'btn btn-primary'
+          = link_to image_tag(asset_path('facebook.png')) + 'Sign in with Facebook', user_omniauth_connect_path(:facebook), class: 'btn btn-primary'
 
-            / feature 2
-            %article.feature-col.col-md-4
-              %a.thumbnail.linked(href="#")
-                .image-container
-                  %img.lazy.item-thumbnail(alt="Lorem Ipsum" data-img-src="#{ asset_path('project-2.jpg') }")
-                .caption
-                  %h5 Nullam ac rhoncus
-                  %p Nullam ac rhoncus. Aliquam adipiscing eros non elit imperdiet congue. Integer ultricies.
 
-            / feature 3
-            %article.feature-col.col-md-4
-              %a.thumbnail.linked(href="#")
-                .image-container
-                  %img.lazy.item-thumbnail(alt="Lorem Ipsum" data-img-src="#{ asset_path('project-4.jpg') }")
-                .caption
-                  %h5 Aliquam adipiscing
-                  %p Nullam ac rhoncus. Aliquam adipiscing eros non elit imperdiet.
-
-    %article#signup.section-wrapper.clearfix(data-custom-background-img="#{ asset_path('bg4.jpg') }")
-      .content-wrapper.clearfix
-        %h1.section-title Sign Up
-        / CONTACT DETAILS
-        .contact-details.col-sm-5.col-md-3
-          %p
-            123A,
-            %br
-            Molestie Lorem Avenue,
-            %br
-            Aliquam
-            %br
-            AAA0010
-          %p Tel: (+20) 21 301 524
-          %p
-            %a(href="mailto:info@loremipsum.com") info@loremipsum.com
-
-        / CONTACT FORM
-        .col-sm-7.col-md-9
-          / IMPORTANT: change the email address at the top of the assets/php/mail.php file to the email address that you want this form to send to
-          %form.form-style.validate-form.clearfix(action="/assets/php/mail.php" method="POST" role="form")
-            / form left col
-            .col-md-6
-              .form-group
-                %input#form-name.text-field.form-control.validate-field.required(data-validation-type="string" name="name" placeholder="Full Name" type="text")
-              .form-group
-                %input#form-email.text-field.form-control.validate-field.required(data-validation-type="email" name="email" placeholder="Email Address" type="email")
-              .form-group
-                %input#form-contact-number.text-field.form-control.validate-field.phone(data-validation-type="phone" name="contact_number" placeholder="Contact Number" type="tel")
-
-            .col-md-6
-              .form-group
-                %textarea.form-control.validate-field.required(name="message" placeholder="Message...")
-              .form-group
-                %img.form-loader(src="/assets/theme_images/loader-form.GIF")
-                %button.btn.btn-sm.btn-outline-inverse(type="submit") Submit
-              .form-group.form-general-error-container
 
   / Footer
   %section#footer
@@ -222,10 +151,9 @@
     #go-to-top(onclick="scroll_to_top();")
       %i.icon.fa.fa-chevron-up.fa-lg
     %ul.social-icons
-      - if false
-        %li
-          %a(href="#" target="_blank" title="Facebook")
-            = image_tag asset_path('facebook.png'), alt: 'Facebook'
+      %li
+        %a(href="https://www.facebook.com/upmit" target="_blank" title="Facebook")
+          = image_tag asset_path('facebook.png'), alt: 'Facebook'
       %li
         %a(href="https://twitter.com/upmit" target="_blank" title="Twitter")
           = image_tag asset_path('twitter.png'), alt: 'Twitter'

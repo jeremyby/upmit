@@ -22,13 +22,11 @@ class DepositController < ApplicationController
   end
 
   def create
-    api = PayPal::SDK::Merchant::API.new
-
-    # Build request object
-    request_object = checkout_builder(@goal.occurrence)
+    return_url = confirm_goal_deposit_index_url(@goal)
+    cancel_url = cancel_goal_deposit_index_url(@goal)
 
     # Make API call & get response
-    response = api.set_express_checkout(request_object)
+    response = Deposit.set_checkout_for(@goal, return_url, cancel_url)
 
     # raise response.inspect
 
@@ -46,45 +44,26 @@ class DepositController < ApplicationController
 
   def confirm
     begin
-      api = PayPal::SDK::Merchant::API.new
-
       raise 'Deposit was already made.' unless @goal.deposit.blank?
 
       @deposit = @goal.build_deposit user: current_user, token: params[:token], payer_id: params[:PayerID], amount: @goal.occurrence, source: 'paypal'
 
-      checkout_object = api.build_do_express_checkout_payment({
-                                                                :DoExpressCheckoutPaymentRequestDetails => {
-                                                                  :PaymentAction => "Sale",
-                                                                  :Token => @deposit.token,
-                                                                  :PayerID => @deposit.payer_id,
-                                                                  :PaymentDetails => [{
-                                                                                        :OrderTotal => {
-                                                                                          :currencyID => "USD",
-                                                                                          :value => @deposit.amount.to_param
-                                                                                        }
-                                                                  }]
-                                                                }
-      })
+      response = @deposit.express_checkout
 
-      # Make API call & get response
-      @checkout_response = api.do_express_checkout_payment(checkout_object)
+      raise 'Paypal payment failed.' unless response.success?
 
-      raise 'Paypal payment failed.' unless @checkout_response.success?
+      @deposit.transaction_id = response.DoExpressCheckoutPaymentResponseDetails.PaymentInfo[0].TransactionID
 
-      transaction_id = @checkout_response.DoExpressCheckoutPaymentResponseDetails.PaymentInfo[0].TransactionID
-
-      @deposit.transaction_id = transaction_id
       @deposit.save!
 
-      flash[:notice] = 'The deposit was made successfully. Now your goal is active!'
+      flash[:notice] = 'The deposit was made successfully. Now your goal is activated!'
       @redirecter = user_goal_url(current_user, @goal)
     rescue => error
-      flash.now[:alert] = error
+      flash.now[:alert] = error || response.Errors[0].LongMessage
       render 'error'
     end
   end
 
-  #TODO: Need to test
   def refund
     unless @goal.deposit.refund?
       flash[:alert] = 'The goal is not completed yet.'
@@ -95,8 +74,6 @@ class DepositController < ApplicationController
     @deposit = @goal.deposit
 
     if request.post?
-      api = PayPal::SDK::Merchant::API.new
-
       refund = @goal.commits.succeed.size
 
       if (Time.now.utc - @deposit.created_at) > 60.days # Masspay
@@ -122,30 +99,5 @@ class DepositController < ApplicationController
   private
   def get_my_goal
     @goal = current_user.goals.find_by_slug(params[:goal_id])
-  end
-
-  def checkout_builder(occurrence)
-    @api = PayPal::SDK::Merchant::API.new
-
-    # Build request object
-    @api.build_set_express_checkout(
-      {
-        SetExpressCheckoutRequestDetails: {
-          ReturnURL: confirm_goal_deposit_index_url(@goal),
-          CancelURL: cancel_goal_deposit_index_url(@goal),
-          PaymentDetails: [{
-                             OrderTotal: {
-                               currencyID: "USD",
-                               value: "#{ occurrence }.00"
-                             },
-                             PaymentDetailsItem: [{
-                                                    Name: "One dollar deposit per day",
-                                                    Quantity: "#{ occurrence }",
-                                                    Amount: {
-                                                      currencyID: "USD",
-                                                    value: "1.00" },
-                             ItemCategory: "Digital" }],
-        PaymentAction: "Sale" }] }
-    })
   end
 end

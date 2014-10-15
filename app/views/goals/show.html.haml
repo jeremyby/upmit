@@ -141,12 +141,12 @@
           - unless @goal.inactive?
             - past = @goal.commits.past.size     
             .row
-              .col-md-2.col-sm-2.col-xs-2.field Success:
+              .col-md-2.col-sm-2.col-xs-2.field Checked In:
           
               - succeed = @goal.commits.succeed.size
               .col-md-3.col-sm-3.col-xs-4.data= succeed
 
-              .col-md-2.col-sm-2.col-xs-2.col-md-offset-1.col-sm-offset-1.field Fail:
+              .col-md-2.col-sm-2.col-xs-2.col-md-offset-1.col-sm-offset-1.field Missed:
         
               - failed = @goal.commits.failed.size
               .col-md-3.col-sm-3.col-xs-4.data= failed

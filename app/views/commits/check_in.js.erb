@@ -1,0 +1,9 @@
+$('.content').replaceWith("<%= j render 'home/main' %>")
+
+<% if @error.present? %>
+  upmit.message('<%= @error %>')
+<% else %>
+  upmit.message("You've checked in successfully.", 'notice')
+<% end %>
+
+NProgress.done()

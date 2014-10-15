@@ -3,8 +3,8 @@
  */
 
 // these should match with the bootrstrap defined widths
-window.xs_screen_max = 768;
-window.sm_screen_max = 992;
+window.xs_screen_max = 767;
+window.sm_screen_max = 991;
 
 /* 
  * ================================================================
@@ -1107,7 +1107,7 @@ function initialise_document_ready_functions()
 
    // initialise carousel
    $('#features-carousel').carousel({
-     interval: 6000
+     interval: 10000
    });
 
    // initialise form validation and submit functions 

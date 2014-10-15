@@ -37,23 +37,17 @@ module GoalsHelper
   end
   
   def check_icon
-    content_tag('i', '', class: 'fa fa-check fa-lg')
+    content_tag('i', '', class: 'fa fa-check-circle-o fa-lg')
   end
   
   def cross_icon
-    content_tag('i', '', class: 'fa fa-times fa-lg')
+    content_tag('i', '', class: 'fa fa-times-circle-o fa-lg')
   end
   
   def fa_icon(str)
     content_tag('i', '', class: "fa #{ str }")
   end
   
-  def checkin_btn_group(commit, type)
-    "<div class='check-in btn-group'>
-      <a class='yes btn btn-default' data-method='post' data-remote='true' href='#{ commit_check_path(commit) }' rel='nofollow'><i class='fa fa-check fa-lg'></i>Yes</a>
-      <a class='no btn btn-default' data-method='post' data-remote='true' href='#{ commit_fail_path(commit) }' rel='nofollow'>No</a>
-    </div>".html_safe
-  end
   
   def describe_daily_last_occur(goal, arr)
     commit = arr.first

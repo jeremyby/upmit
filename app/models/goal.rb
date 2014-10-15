@@ -248,7 +248,7 @@ class Goal < ActiveRecord::Base
     self.settle(Time.now)
     self.hash_tag = self.get_hash_tag
     
-    self.save
+    self.save!
     
     self.create_first_commit
   end

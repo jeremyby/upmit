@@ -37,8 +37,9 @@ Rails.application.routes.draw do
   end
   
   resources :commits, only: [:update] do
-    post 'check'
-    post 'fail'
+    collection do
+      post 'check_in'
+    end
   end
   
   resources :users, path: 'settings', only: [] do
@@ -60,6 +61,8 @@ Rails.application.routes.draw do
   match '/confirmation_sent' => 'home#confirmation_sent', via: [:get], :as => :confirmation_sent
   
   match '/people' => 'users#index', via: [:get], :as => :people
+  
+  match '/privacy_policy' => 'home#privacy_policy', via: [:get], :as => :privacy_policy
 
   
   resources :users, path: '', only: [:show] do

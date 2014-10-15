@@ -293,29 +293,14 @@
 
 @media (min-width: 1200px)
 
-#loader-main-content
-  display: none
-  height: 200px
-  width: 100%
-  background: image-url("loader.GIF") no-repeat center center
-  opacity: 0.5
-  filter: alpha(opacity = 50)
-
-
-.content-wrapper
-  .block
-    background: rgba(0, 0, 0, 0.29)
-    padding: 1em 1em 0.1em
-    +border-radius(6px)
-
-    p
-      margin: 0 0 1em 0
 
 #main-content .section-wrapper
   display: block
   position: relative
+  
   &.modified-height
     height: auto !important
+    
   .content-wrapper
     display: block
     width: 100%
@@ -327,15 +312,17 @@
     padding: 65px 0 95px 0
     background: image-url("mobile_section_divider.png") no-repeat center bottom
     background-size: 35% auto
+    
   &.modified-height .content-wrapper
     height: auto !important
+    
   &:first-of-type .content-wrapper
     padding-top: 35px
+    
   &:last-of-type .content-wrapper
     padding-bottom: 35px
     background: none
     
-
 
 @media (min-width: 768px)
   #main-content
@@ -350,17 +337,19 @@
         position: absolute
         right: 0
         bottom: 16%
-        text-align: right
         padding: 0
         background: none
         &:first-of-type
           padding-top: 0
         &:last-of-type
           padding-bottom: 0
-          
-        .col
-          float: right
-
+        
+        
+      &#better
+        p,
+        h4
+          text-align: right
+        
 
 
 // General Heading Styles
@@ -378,10 +367,12 @@ body.homer
     line-height: 1.1
     margin: 0.5em 0
     font-weight: bold
+    
   h2
     font-size: 1.85em
     line-height: 1.1
     margin: 0.55em 0
+    
   h3
     font-size: 1.45em
     line-height: 1.1
@@ -457,10 +448,15 @@ body.homer
     color: #444444 !important
     
 #main-content
-  *.section-title
-    text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.4)
+  *.section-title,
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5)
+  
+  *.text,
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.4)
+    
   .feature-paragraph
     font-size: 1em
+    
   .btn-lg
     font-size: 0.9em
     font-weight: 400
@@ -475,14 +471,17 @@ body.homer
     font-size: 0.65em
     font-weight: 400
     padding: 6px 18px
+    
   .btn-lg:hover, .btn-sm:hover
     color: #333
+    
   .feature-text
     display: block
     font-size: 1em
-    
+
     p
       color: #e8e8e8
+      
       
       span,
       .signin
@@ -495,8 +494,10 @@ body.homer
       
       strong
         color: #fff
-        font-weight: 500
-        
+        font-weight: 600
+  
+
+  
   .grid
     display: block
     margin: 1em 0
@@ -548,6 +549,7 @@ body.homer
     .text-content
       display: block
       padding-left: 25%
+      
   .projects-grid
     display: block
     margin: 1em 0
@@ -699,143 +701,9 @@ body.homer
       font-weight: normal
       -webkit-transition: all 0.3s
       transition: all 0.3s
-  .feature-columns
-    display: block
-    margin: 1em 0
-    padding: 0
-    list-style: none
-    .feature-col
-      .thumbnail
-        background-color: transparent
-        background-color: rgba(0, 0, 0, 0)
-        border: 1px solid transparent
-        border: 1px solid rgba(255, 255, 255, 0)
-        border-radius: 0
-        padding: 0
-        color: #fff
-        font-size: 0.85em
-        text-align: left
-        -webkit-box-shadow: none
-        -moz-box-shadow: none
-        box-shadow: none
-        outline: none
-        text-decoration: none
-        -webkit-transition: all 0.3s
-        transition: all 0.3s
-        &:hover
-          background-color: transparent
-          background-color: rgba(0, 0, 0, 0.3)
-          background: #fff
-          border: 1px solid rgba(255, 255, 255, 0.1)
-          color: #000
-          text-decoration: none
-        *
-          color: #fff
-          text-decoration: none
-          outline: none
-          -webkit-transition: color 0.3s
-          transition: color 0.3s
-        &:hover *
-          color: #000
-          text-shadow: none
-        .image-container
-          display: block
-          width: 100%
-          max-width: 100%
-          margin-right: auto
-          margin-left: auto
-          position: relative
-          overflow: hidden
-      a.thumbnail .image-container:after, .linked .image-container:after
-        content: ""
-        display: block
-        position: absolute
-        top: 0
-        left: 0
-        width: 100%
-        height: 100%
-        background: image-url("more-plus-icon.png") no-repeat center center
-        background-color: rgba(0, 0, 0, 0.45)
-        opacity: 0
-        filter: alpha(opacity = 0)
-        -webkit-transition: all 0.3s
-        transition: all 0.3s
-      a.thumbnail:hover .image-container:after, .linked:hover .image-container:after
-        opacity: 1
-        filter: alpha(opacity = 100)
-      .thumbnail
-        img.item-thumbnail
-          width: 100% !important
-          height: auto !important
-          opacity: 0.8
-          filter: alpha(opacity = 80)
-          -webkit-transition: all 0.3s
-          transition: all 0.3s
-        &:hover img.item-thumbnail
-          opacity: 1
-          filter: alpha(opacity = 100)
-        .caption
-          padding: 10px 12px 11px 12px
-          h1, h2, h3, h4, h5, h6, p
-            margin: 0.5em 0
-  .form-style
-    display: block
-    margin: 1em 0
-    padding: 0
-    input.text-field, textarea
-      background: rgba(0, 0, 0, 0.15)
-      border-color: #fff
-      -webkit-border-radius: 0
-      -moz-border-radius: 0
-      border-radius: 0
-      color: #fff
-      height: 34px
-      -webkit-box-shadow: none
-      -moz-box-shadow: none
-      box-shadow: none
-      -webkit-transition: all 0.3s
-      transition: all 0.3s
-    input.text-field
-      &::-webkit-input-placeholder, &:-moz-placeholder, &::-moz-placeholder, &:-ms-input-placeholder
-        color: #fff !important
-        font-weight: bold
-      &:focus
-        color: #000
-        background: #fff
-        border-color: #fff
-        -webkit-box-shadow: none
-        -moz-box-shadow: none
-        box-shadow: none
-    textarea
-      &:focus
-        color: #000
-        background: #fff
-        border-color: #fff
-        -webkit-box-shadow: none
-        -moz-box-shadow: none
-        box-shadow: none
-      height: 125px
-    .alert
-      display: none
-      background: #fff
-      color: #a10000
-      font-size: 0.7em
-      font-family: "Open Sans", sans-serif
-      font-weight: bold
-      border-radius: 0
-      padding: 8px 10px
-      &.success
-        color: #119400
-    .form-general-error-container
-      display: none
-      .alert
-        display: block
-    .form-loader
-      margin-right: 8px
-      display: none
-  .contact-details
-    font-size: 0.9em
-    font-family: "Open Sans", sans-serif
+
+    
+    
   .section-wrapper
     &.modified-height .carousel
       height: 100%
@@ -956,6 +824,25 @@ body.homer
       margin: 0.6em 0 0.7em 0
       display: block
 
+
+  #signin
+    .btns
+      padding: 20px 0 100px
+      
+      a
+        text-transform: uppercase
+        
+        margin-left: 15px
+        padding: 8px 15px 5px
+        
+        img
+          position: relative
+
+          top: -3px
+          margin-right: 5px
+      
+  
+  
 @media (min-width: 768px)
   #main-content
     .btn-lg
@@ -1057,57 +944,7 @@ body.homer
       height: 145px
       font-size: 1.05em
 
-// -------------- FEATURE COLUMNS -----------------
 
-@media (min-width: 768px) and (max-width: 991px)
-  #main-content .feature-columns .feature-col .thumbnail
-    &:before
-      content: " "
-      display: table
-    &:after
-      content: " "
-      display: table
-      clear: both
-    .image-container
-      float: left
-      width: auto !important
-      max-width: 45%
-      height: auto !important
-      margin-right: 17px
-      content: ""
-      display: table
-      clear: both
-    .caption
-      padding: 12px
-
-@media (min-width: 992px)
-  #main-content .feature-columns .feature-col .thumbnail
-    text-align: left
-    .caption
-      padding: 13px 17px 15px 17px
-
-
-// -------------- CONTACT FORM -----------------
-
-@media (min-width: 768px)
-  #main-content .form-style
-    input.text-field
-      height: 35px
-      font-size: 0.85em
-    textarea
-      height: 35px
-      font-size: 0.85em
-      height: 120px
-
-@media (min-width: 992px)
-  #main-content .form-style
-    input.text-field
-      height: 54px
-      font-size: 0.97em
-    textarea
-      height: 54px
-      font-size: 0.97em
-      height: 195px
 
 
 // -------------- GENERAL CAROUSEL -----------------
@@ -1236,7 +1073,8 @@ img
       margin-left: 0
       float: left !important
     &.pull-right
-      margin-left: 40px
+      margin-top: -10px
+      margin-left: 30px
       margin-right: 0
       float: right !important
 
@@ -1244,5 +1082,3 @@ img
   img
     &.pull-left
       margin-right: 50px
-    &.pull-right
-      margin-left: 30px

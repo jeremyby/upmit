@@ -38,7 +38,7 @@
         .date
           margin-left: 50px
 
-          color: rgb(180, 184, 187)
+          color: #b9b9b9
           font-family:  'Lato', 'Open Sans'
           font-style: italic
           font-size: 13px
@@ -101,13 +101,12 @@
           font-size: 12px
       
       .occurs
-        padding: 0 30px
+        padding: 0 0 0 40px
         
         .label
-          margin-right: 5px
-          padding: 0.1em 0.9em 0.15em 0.6em
-          
-          font-size: 12px
+          margin-right: 8px
+          padding: 0.18em 0.7em 0.3em 0.7em
+          font-size: 13px
         
         .today-occur
           line-height: 2em
@@ -130,13 +129,17 @@
             &.fa-times-circle
               margin: 0 0 0 0.3em
             
-            &.fa-check
-              +opacity(0.7)
-              color: green
-           
-            &.fa-times
-              +opacity(0.7)
-              color: red
+            &.fa-check-circle-o,
+            &.fa-times-circle-o
+              position: relative
+              top: 3px
+              
+              font-size: 2.2em
+            
+              color: #7BD675
+              
+            &.fa-times-circle-o
+              color: #EE4740
 
             &.fa-circle
               position: relative
@@ -145,21 +148,6 @@
               font-size: 7px
               color: white
               margin: 0 0.3em 0 0
-
-          .check-in
-            display: none
-
-            .btn
-              padding: 3px 8px
-
-              font-size: 12px
-
-              +transition-property(all)
-              +transition-duration(0.3s)
-              
-            i.fa-check
-              +opacity(0.9)
-              margin: 0 0.2em 0 0
               
             
           .info
@@ -182,12 +170,41 @@
               
               strong
                 font-size: 14px
+                color: #808080
 
               
       .check
-        text-align: center
+        .yes
+          line-height: 70px
+          padding-right: 5px
+          float: left
           
-      
+          +transition-property(all)
+          +transition-duration(0.3s)
+          
+          +opacity(0)
+
+        .fa-stack
+          font-size: 2.2em
+          
+          cursor: pointer
+          
+          &:hover
+            .fa-check
+              color: #83E27D
+              
+          &.active
+            i
+              color: #83E27D
+        
+        i
+          margin-top: 3px
+          color: rgba(200, 200, 200, 0.3)
+          
+          +transition-property(all)
+          +transition-duration(0.3s)
+
+          
       &:hover
         border-color: #e0e0e0
         background: #f9f9f9
@@ -204,11 +221,79 @@
             
           .check-in
             display: inline-block
-  
+        
+        .check
+          i
+            color: rgba(200, 200, 200, 0.5)
+        
+          .yes
+            +opacity(1)
+          
 
-    .select
-      #goal_hash_tags
-        width: 400px
+  .checkin
+    display: none
+    
+    +transition-property(all)
+    +transition-duration(0.3s)
+    
+    margin-top: 15px
+
+    background: #f0f0f0
+    +border-radius(6px)
+    
+    .wrapper
+      display: table
+      width: 100%
+    
+    .title,
+    .fields,
+    .submit
+      float: none
+      display: table-cell
+      vertical-align: middle
+    
+    .title
+      text-align: center
+      color: #666
+      
+      h4
+        font-style: normal
+        
+        i
+          margin-right: 5px
+      
+      
+    .fields
+      padding: 25px 40px 10px
+      
+      input[type="textarea"]
+        font-size: 13px
+        
+
+    .submit
+      text-align: center
+      
+      position: relative
+      left: -1.2em
+      
+      input[type='submit'],
+      input[disabled=disabled][type='submit']
+        font-size: 1.1em
+        padding: 10px 15px
+        
+        border-color: #6AB865
+        +border-radius(12px)
+        +box-shadow(none)
+        
+        +transition-property(all)
+        +transition-duration(0.3s)
+      
+      
+      input[type='submit']
+        +background(linear-gradient(to bottom, #A1EF91 0%, #83E27D 50%, #6FC169 100%))
+      
+      input[disabled=disabled][type='submit']
+        background: #83E27D
     
 .modal-dialog
   #note

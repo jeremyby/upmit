@@ -1,4 +1,4 @@
-class FollowUpmitService
+class TwitterPostService
   def initialize(auth)
     @client = Twitter::REST::Client.new do |config|
       config.consumer_key        = TwitterConfig['api_key']
@@ -8,7 +8,7 @@ class FollowUpmitService
     end
   end
   
-  def follow
-    @client.follow('upmit')
+  def post(text)
+    @client.update("#{ text } via https://upmit.com")
   end
 end

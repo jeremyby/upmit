@@ -132,7 +132,6 @@ $(document).ready ->
     , ->
       $('.panel-content, .owner').css('z-index', '').css('margin-left', '')
     )
-    
   
   
   $(".nav-tabs a[href='#remote']").click ->
@@ -141,23 +140,32 @@ $(document).ready ->
     , 100)
   
   
-  
-  $('#commit-detail').on('shown.bs.modal', ->
-    $('#commit-detail form #note').focus()
-  )
-  
-  $('#commit-detail').on('hidden.bs.modal', ->
-    $('#commit-detail form #note').val('')
-    $('#commit-detail form #photo').val('')
-    $('#commit-detail form #remote_photo_url').val('')
+  $('.active-goal .check .fa-stack').click ->
+    $(this).toggleClass('active')
     
-    $('.modal-footer button').show()
-  )
+    textarea = $('.checkin textarea')
   
-  $('#commit-detail form').on('submit', ->
-    upmit.start_spinner()
-    $('.modal-footer button').hide()
+    if $(this).hasClass('active')
+      textarea.val(textarea.val() + ' ' + $(this).data('hash-tag'))
+      
+      if $('.checkin').is(':hidden')
+        $('.checkin').fadeIn()
+    else
+      if !$('.active-goal .check .fa-stack').hasClass('active')
+        $('.checkin').fadeOut()
+    
+      text = textarea.val()
+      
+      n =  text.search($(this).data('hash-tag'))
+      replace_string = if text[n-1] == ' ' then ' ' + $(this).data('hash-tag') else $(this).data('hash-tag')
+
+      textarea.val(text.replace(replace_string, ''))
+  
+  $('.checkin form').on('submit', ->
+    NProgress.start()
+    
   )
+
   
   
 show_chart = (d) ->

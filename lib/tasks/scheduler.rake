@@ -14,7 +14,7 @@ namespace :commits do
       puts "#{ size } commits were expired."
     else
       Commit.expired_commitments.find_each do |c|
-        c.update state: -10, checked_by: 'host', checked_at: Time.now
+        c.update state: -10, checked_by: 'upbot', checked_at: Time.now
       end
       
       puts "and... done."

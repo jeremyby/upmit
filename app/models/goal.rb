@@ -1,7 +1,9 @@
 class TitleValidator < ActiveModel::EachValidator
   def validate_each(record, attribute, value)
-    unless Goal.where("id <> ? AND user_id = ? AND title = ?", record.id, record.user_id, value).where('state >= -1').blank?
-      record.errors[attribute] << 'You have another live goal with the same title.'
+    cond = record.id.blank? ? '1 = 1' : "id <> #{ record.id }"
+    
+    unless Goal.where("? AND user_id = ? AND title = ?", cond, record.user_id, value).where('state >= -1').blank?
+      record.errors[attribute] << 'You have another active or pending goal with the same title.'
     end
   end
 end
@@ -38,7 +40,7 @@ class Goal < ActiveRecord::Base
   
   validates :user_id, presence: true
   validates :title, presence: true, title: true
-  validates :hash_tag, tag: true
+  validates :hash_tag, tag: true, unless: 'self.hash_tag.blank?'
   
   before_create :select_legend
   
@@ -49,6 +51,10 @@ class Goal < ActiveRecord::Base
   
   # Completed, state from 'active' to 'completed'
   after_commit :process_deposit, on: :update, :if => Proc.new { |g| g.previous_changes['state'] == [10, -5] }
+  
+  
+  # Completed, state from 'active' to 'cancelled'
+  after_commit :after_cancelled, on: :update, :if => Proc.new { |g| g.previous_changes['state'] == [10, -10] }
   
   
   
@@ -134,11 +140,6 @@ class Goal < ActiveRecord::Base
     
     start_time, schedule, occurrence = @goal.get_schedule(Time.now)
     @goal.occurrence = occurrence
-    
-    # start_time, schedule = @goal.builder(offset, now, hash)
-    
-    # @goal.start_time = start_time #giving value to goal will convert to UTC, therefore needing the temp start_time
-    # @goal.schedule_yaml = schedule.to_yaml
     
     return @goal
   end
@@ -255,5 +256,14 @@ class Goal < ActiveRecord::Base
   
   def process_deposit
     self.deposit.refund!
+  end
+  
+  def after_cancelled
+    self.title = "Cancelled - #{ self.title }"
+    self.slug = nil
+    
+    self.save!
+    
+    self.commits.destroy_all
   end
 end

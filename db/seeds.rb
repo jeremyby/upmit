@@ -49,6 +49,7 @@ schedule.add_recurrence_rule IceCube::Rule.daily.until(end_time)
 
 g.start_time = start_time
 create_goal(g, schedule)
+
 g.deposit.completed!
 
 
@@ -81,7 +82,7 @@ create_goal(g, schedule)
 
 
 # 4th goal of first user, same title of the 1st one
-g = User.first.goals.build title: 'make real progress at work', state: 10, duration: 365, interval_unit: 'day', type: 'DailyGoal', hash_tag: 'ProgressAtWork', checkin_with: 'twitter', duration_desc: 'for 1 year'
+g = User.first.goals.build title: 'make real progress', state: 10, duration: 365, interval_unit: 'day', type: 'DailyGoal', hash_tag: 'ProgressAtWork', checkin_with: 'twitter', duration_desc: 'for 1 year'
 
 start_time = (Time.now.in_time_zone('Asia/Shanghai') - 56.days).beginning_of_day
 schedule = IceCube::Schedule.new(start_time)

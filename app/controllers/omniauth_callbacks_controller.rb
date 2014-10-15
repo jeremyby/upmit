@@ -4,7 +4,9 @@ class OmniauthCallbacksController < Devise::OmniauthCallbacksController
   def all
     auth = env["omniauth.auth"]
     @user = User.find_for_oauth(auth, current_user)
-
+    
+    logger.info auth.info.inspect
+    
     if @user.persisted?
       sign_in_and_redirect @user, event: :authentication
       session[:provider] = auth.provider

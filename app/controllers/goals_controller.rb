@@ -17,6 +17,8 @@ class GoalsController < ApplicationController
 
   def create
     @goal = Goal.build_for(current_user, params[:goal])
+    
+    # raise @goal.inspect
 
     if @goal.save
       redirect_to new_goal_deposit_path(@goal)

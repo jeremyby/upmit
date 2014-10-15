@@ -37,7 +37,7 @@
           \. Your new goal will start after the deposit is made. You can change your mind and cancel it in 3 days, and get all money back. So... no worries.
 
         .form
-          = form_for @goal, url: goals_path, html: { class: "form-horizontal", role: "form" } do |f|
+          = form_for @goal.becomes(Goal), url: goals_path, html: { class: "form-horizontal", role: "form" } do |f|
             = f.hidden_field :timezone, value: current_user.timezone
             = f.hidden_field :duration_desc
             

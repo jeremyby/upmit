@@ -2,7 +2,7 @@
 
 / main container
 .content
-  - if  current_user.goals.size == 0
+  - if  current_user.goals.live.size == 0
     #pad-wrapper
       = render 'home/jumbotron'
   

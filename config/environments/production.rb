@@ -88,4 +88,14 @@ Rails.application.configure do
   config.active_record.dump_schema_after_migration = false
   
   config.action_mailer.default_url_options = { :host => "upmit.com" }
+  
+  config.action_mailer.delivery_method = :smtp
+  config.action_mailer.smtp_settings = {
+    address:              'email-smtp.us-west-2.amazonaws.com',
+    port:                 587,
+    domain:               'upmit.com',
+    user_name:            'AKIAIETMTDYZ3NDI5ZCQ',
+    password:             'AnpXwR3TUuyFkH4TnMWifBXdlT99Wl2i+jX5XREe1ojc',
+    authentication:       'plain',
+    enable_starttls_auto: true  }
 end

@@ -2,6 +2,12 @@
 %br 
 %p= @text
  
-%p To check the details, please follow this link: #{ @url }.
+%p
+  - if @user.checkin_with == 'twitter'
+    Tweet us @upmit and include the hash tag of your commitments to check in.
+  - elsif @user.checkin_with == 'facebook'
+    Mention our page @upmit and include the hash tag of your commitments to check in.
+  
+  To see the details, please follow this link: #{ @url }.
  
-%p Stick to the goals and earn your money back!
+%p  Check in the commitments and earn your money back!

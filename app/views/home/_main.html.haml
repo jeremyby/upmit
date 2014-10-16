@@ -66,6 +66,11 @@
             .occurs.col-md-7
               - last, today, next_occur = Commit.get_occurrence_of(goal)
               
+              - unless today.blank?
+                - pos = goal.commits.where("starts_at < ?", today.first.starts_at).size + (goal.is_a?(WeektimeGoal) ? today.to_ary.count {|c| c.succeed?} : 1)
+              - else
+                - pos = goal.commits.where("starts_at < ?", Time.now).size + 1
+              
               .occur.today-occur
                 - if today.blank?
                   No action today.
@@ -85,8 +90,9 @@
               
                   .next-occur
                     - unless today.blank?
+                      - # Get the today's commit's count of all the goals commits
                       %span.today<
-                        %strong>= goal.commits.past.size + 1
+                        %strong>= pos
                         \/
                         = goal.occurrence
 
@@ -100,7 +106,7 @@
                       
                       - if today.blank?
                         %span.today<
-                          %strong>= goal.commits.past.size + 1
+                          %strong>= pos
                           \/
                           = goal.occurrence
                         

@@ -29,18 +29,15 @@ class Commit < ActiveRecord::Base
   def self.get_occurrence_of(goal)
     now = Time.now
     
-    last_time = goal.is_a?(WeektimeGoal) ?  now - now.wday.days - 24.hours : now - 24.hours
-        
-    # find the previous occurrence(s), therefore needs to access schedule
-    last_occur = goal.schedule.previous_occurrence(last_time)
-    last = goal.commits.where(starts_at: last_occur.utc) unless last_occur.blank? # the first occurrence
-    
     # occurrence(s) on today/this week in case of weektimes
     tz = goal.timezone
     today_time = goal.is_a?(WeektimeGoal) ? now.in_time_zone(tz).beginning_of_week(start_day = :sunday).utc : now.in_time_zone(tz).beginning_of_day.utc
     today = goal.commits.where(starts_at: today_time)
     
-    next_occur = goal.commits.where(starts_at: goal.schedule.next_occurrence(now).utc) unless goal.schedule.next_occurrence(now).blank? # the last occurrence
+    last_limit = goal.is_a?(WeektimeGoal) ? goal.weektimes : 1
+    last = goal.commits.where("starts_at < ?", today_time).limit(last_limit)
+    
+    next_occur = goal.commits.where("starts_at > ?", today_time).limit(1)
     
     return last, today, next_occur
   end

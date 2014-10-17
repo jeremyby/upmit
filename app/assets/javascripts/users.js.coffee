@@ -173,7 +173,7 @@ $(document).ready ->
       upmit.message("The verification code should have 4 digits.")
   )
   
-  upmit.make_remind_at_editable ->
+  upmit.make_remind_at_editable = ->
     times = []
     for i in [0..23]
       v = if i > 12 then i - 12 else i

@@ -109,7 +109,7 @@ class UsersController < ApplicationController
         
         @reminder.destroy
         
-        flash[:alert] = "Your phone number #{ @reminder.recipient_id } is removed."
+        flash[:notice] = "Your phone number #{ @reminder.recipient_id } is removed."
         redirect_to '/settings/preference'
         
       elsif params[:user][:switch_to].present? && providers.include?(params[:user][:switch_to]) # switching check-in social network

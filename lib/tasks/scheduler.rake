@@ -101,7 +101,7 @@ namespace :check do
             unless commits.blank?
               Commit.transaction do
                 commits.each do |c|
-                  c.update state: 1, note: t.text, checked_by: 'twitter', checked_at: t.created_at, remote_photo_url: t.media.first.media_url.to_s
+                  c.update state: 1, note: t.text, checked_by: 'twitter', checked_at: t.created_at, remote_photo_url: t.media.first.present? ? t.media.first.media_url.to_s : nil
                 end
               end
             end

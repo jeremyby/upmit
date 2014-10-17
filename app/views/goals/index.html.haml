@@ -24,9 +24,10 @@
 / main container
 .content(class="#{ 'panel-content' unless is_current_user_the_user }")
   #pad-wrapper.goals-wrapper
-    %a.new-goal.btn-glow.primary(href='#{ new_goal_path }')
-      %i.fa.fa-plus
-      New Goal
+    - if is_current_user_the_user
+      %a.new-goal.btn-glow.primary(href='#{ new_goal_path }')
+        %i.fa.fa-plus
+        New Goal
       
     .row.head
       .col-md-12

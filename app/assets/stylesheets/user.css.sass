@@ -310,6 +310,10 @@ body.login
             font-weight: normal
      
     &.reminder
+      h3
+        margin: 0 -15px
+      
+      
       .email,
       .twitter
         margin: 30px 0
@@ -354,3 +358,43 @@ body.login
   .setting-wrapper
     .row.line-break
       margin-right:  0
+      
+      
+#pad-wrapper.people-wrapper
+  a:hover
+    text-decoration: none
+    
+    .link
+      text-decoration: underline
+      
+
+  h3
+    margin: 20px 0 0
+    
+  .following
+    margin: 0
+    a
+      float: left
+      width: 80px
+      text-align: center
+      padding: 5px
+      
+      
+      
+    img
+      +border-radius(50%)
+      border: 2px solid #c3cddb
+  
+  h4
+    margin: 30px 0 0
+  
+  .follower
+    margin: 0
+    a
+      padding: 5px 3px
+      float: left
+      width: 30px
+    img
+      +border-radius(50%)
+      border: 1px solid #c3cddb
+  

@@ -118,10 +118,8 @@ $(document).ready ->
     $('body').css('padding-right', '')
   
   
-  $('.check-in a').on('click', (e) ->
-    upmit.start_spinner()
-    
-    $(this).closest('.occurs').fadeOut()
+  $('#lefter .copy').on('click', ->
+    $('#lefter .links').toggleClass('show')
   )
   
   

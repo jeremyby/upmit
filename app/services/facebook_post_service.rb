@@ -3,7 +3,7 @@ class FacebookPostService
     @graph = Koala::Facebook::API.new(auth.token)
   end
   
-  def post(text)
+  def post(user, text)
     @graph.put_connections("me", "feed", :message => text)
   end
 end

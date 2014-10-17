@@ -63,6 +63,7 @@ Rails.application.routes.draw do
   match '/people' => 'users#index', via: [:get], :as => :people
   
   match '/privacy_policy' => 'home#privacy_policy', via: [:get], :as => :privacy_policy
+  match '/about' => 'home#about', via: [:get], :as => :about
 
   
   resources :users, path: '', only: [:show] do

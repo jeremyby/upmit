@@ -19,7 +19,7 @@
 
 # Learn more: http://github.com/javan/whenever
 
-every 5.minutes do
+every 8.minutes do
   # command "/usr/bin/some_great_command"
   # runner "MyModel.some_method"
   

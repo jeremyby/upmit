@@ -27,9 +27,28 @@
             = @goal.errors.messages[:title][0]
                 
         .alert.alert-info
+          - if current_user.email_valid?
+            - if current_user.confirmed?
+              - email_status = ''
+            - else
+              - email_status = "(#{ link_to 'need to confirm', '/settings/account'})".html_safe
+          - else
+            - email_status = "(#{ link_to 'need to update', '/settings/account'})".html_safe
+        
           %i.fa.fa-lightbulb-o.fa-lg
-          Your new goal will start after the deposit is made. You can change your mind and cancel the new goal in 3 days, and get all the money back. So... no worries.
-
+          Your new goal will start after the deposit is made.
+          At 0 AM every day scheduled for your commitment, we can send you reminder in
+          - if current_user.checkin_with == 'facebook'
+            %a.alert-link(href='/settings/preference#reminders') Email
+            #{email_status} and
+            %a.alert-link(href='/settings/preference#reminders') Text Message.
+          - elsif current_user.checkin_with == 'twitter'
+            %a.alert-link(href='/settings/preference#reminders') Twitter Direct Message
+            (need to follow @upmit), 
+            %a.alert-link(href='/settings/preference#reminders') Email
+            #{email_status} and
+            %a.alert-link(href='/settings/preference#reminders') Text Message.
+          
         .form
           = form_for @goal.becomes(Goal), url: goals_path, html: { class: "form-horizontal", role: "form" } do |f|
             = f.hidden_field :timezone, value: current_user.timezone
@@ -66,6 +85,7 @@
                 %i.fa.fa-chevron-down.pull-right
               
               .details
+                .info slide the blue ball or click on the time below to set the duration
                 .inputs
                   %input(id='goal_duration' name='goal[duration]' data-slider-id='duration_slider' type="text" data-slider-min="7" data-slider-max="#{ get_days(1.year) }" data-slider-step="1" value='#{ @goal.duration }' data-slider-value='#{ @goal.duration }')
                   .date.pull-right

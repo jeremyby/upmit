@@ -41,7 +41,7 @@ class CommitsController < ApplicationController
       auth = current_user.authorizations.find_by provider: current_user.checkin_with
       post_service = "#{ current_user.checkin_with.capitalize }PostService".constantize.new(auth)
       
-      post_service.delay.post(text)
+      post_service.delay.post(current_user, text)
 
     rescue => error
       @error = error

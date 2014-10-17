@@ -87,16 +87,18 @@
 #pad-wrapper.new-deposit
   position: relative
   
-  .goal
+  .board
     position: absolute
     
     left: 50px
     top: 60px
     
-    padding: 15px
     
-    border: 2px solid #aaa
-    +border-radius(6px)
+    .goal
+      padding: 15px
+    
+      border: 2px solid #aaa
+      +border-radius(6px)
     
     h4
       margin: -30px 0 0 33%
@@ -120,6 +122,15 @@
       
       span
         font-weight: 600
+        
+    .alert
+      text-align: left
+      border-width: 2px
+      border-color: #A7D0D7
+      margin-top: 15px
+      font-size: 13px
+      padding: 10px
+        
   
   .title
     padding: 30px 0 50px
@@ -171,13 +182,18 @@
     
 @media (max-width: 767px)
   #pad-wrapper.new-deposit
-    .goal
+    .board
       position: relative
     
-      left: auto
+      left: 0
       top: 0
-
-      border: none
+      
+      .goal
+        border: none
+      
+      .alert
+        border-width: 1px
+        margin-left: -30px
       
       h4
         margin: 0
@@ -190,6 +206,12 @@
     
     .liner
       margin: 0 15px
+
+@media (max-width: 991px)
+  #pad-wrapper.new-deposit
+    .board
+      left: 15px
+      top: 30px
 
 
 #pad-wrapper.refund-deposit

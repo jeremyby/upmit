@@ -28,5 +28,19 @@
         %li= link_to 'Account', account_users_path
         %li= link_to 'Profile', profile_users_path
         %li= link_to 'Preference', preference_users_path
+  
+#lefter
+  %ul.links
+    %li= link_to 'About', '/about'
+    %li
+      %a(href="https://upmit.uservoice.com" target='_blank') 
+        Feedback
+        %i.fa.fa-external-link
+    %li= link_to 'Privacy', '/privacy_policy'
+    %li= link_to 'Contact', '/about#contact'
+  
+  .copy
+    %i.fa.fa-copyright
+    2014 Upmit LLC
         
 

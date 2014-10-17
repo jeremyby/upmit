@@ -1,0 +1,30 @@
+- @body_class = 'login'
+- @no_nav = 'true'
+- @title = 'About - Upmit.com'
+  
+.background-image-overlay
+
+
+.login-wrapper
+  = link_to (image_tag(asset_path('logo-lg.png'), class: 'logo')), root_path
+
+  .text
+    %h2 About Upmit.com
+    
+    
+    %h2#contact Contact Us
+    
+    %p
+      If you are interested in reaching us, you can leave us a message by opening up the Uservoice Widget on the bottom right corner of screen after signing in.
+      Or leave suggestions and feedbacks on #{ link_to 'our portal', 'https://upmit.uservoice.com/'} there.
+      
+
+    %p
+      You may also contact us using the email: 
+      upcommit
+      %o.fa.fa-at
+      gmail.com
+      
+    %p
+      return to:
+      %a(href='/') home

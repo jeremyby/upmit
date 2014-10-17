@@ -3,21 +3,25 @@
 / main container .wide-content is used for this layout without sidebar :)
 .content
   #pad-wrapper.new-deposit
-    .goal.col-md-3.text-center
-      %h4 Goal
-      %p.desc
-        I will
-        = @goal.title
-      %p
-        = @goal.to_s
-        
-      - unless @goal.duration == @goal.occurrence        
+    .board.col-md-3.col-sm-4.text-center
+      .goal
+        %h4 Goal
+        %p.desc
+          I will
+          = @goal.title
         %p
-          %span          
-            = @goal.occurrence
-            days committed to action
-      
-  
+          = @goal.to_s
+        
+        - unless @goal.duration == @goal.occurrence        
+          %p
+            %span          
+              = @goal.occurrence
+              days committed to action
+
+      .alert.alert-info
+        %i.fa.fa-lightbulb-o.fa-lg
+        You can change your mind and cancel the new goal in 3 days, and get all the money back. So... no worries.
+    
     .row
       .title.col-md-7.col-md-offset-3.text-center
         = image_tag asset_path('piggy.png'), alt: "New Deposit"

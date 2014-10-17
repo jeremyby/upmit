@@ -95,7 +95,7 @@
     
     .row.reminder
       .col-md-10
-        %h3 Reminder
+        %h3#reminders Reminders
         
         - email = current_user.reminders.find_by(type: "EmailReminder")
         

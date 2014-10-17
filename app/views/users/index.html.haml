@@ -7,13 +7,14 @@
     
     - if followings.blank?
       %p Not following anyone.
-    - else 
-      - followings.each do |f|
-        %a(href='#{ user_path(f) }')
-          .user
-            = image_tag asset_path(f.avatar.thumb.url)
-            %br
-            = f.display_name
+    - else
+      .following.row
+        - followings.each do |f|
+          %a(href='#{ user_path(f) }')
+            .user
+              = image_tag asset_path(f.avatar.thumb.url)
+            .link
+              = f
     
     %h4 Followers
     - followers = current_user.followers
@@ -21,9 +22,8 @@
     - if followers.blank?
       %p Not been followed yet.
     - else
-      - followers.each do |f|
-        %a(href='#{ user_path(f) }')
-          .user
-            = image_tag asset_path(f.avatar.thumb.url), size: '24x24'
-            %br
-            = f.display_name
+      .follower.row
+        - followers.each do |f|
+          %a(href='#{ user_path(f) }')
+            .user
+              = image_tag asset_path(f.avatar.thumb.url), size: '24x24'

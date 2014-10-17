@@ -8,7 +8,7 @@ class TwitterPostService
     end
   end
   
-  def post(text)
-    @client.update("#{ text } via https://upmit.com")
+  def post(user, text)
+    @client.update("#{ text } https://upmit.com/#{ user.username }")
   end
 end

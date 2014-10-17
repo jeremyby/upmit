@@ -1,0 +1,10 @@
+upmit.pass_tag = true
+
+<% if @reminder.present? && @reminder.persisted? %>
+  upmit.message('<%= @msg %>', 'notice')
+  
+  $('.setting-wrapper .reminder .sms .new').replaceWith("<%= j render 'sms_verify', sms: @reminder %>")
+<% else %>
+  upmit.message('<%= @msg || @reminder.errors.full_messages %>')
+<% end %>
+

@@ -1,0 +1,17 @@
+.btn-group.btn-group-sm(data-toggle="buttons")
+  %label.btn.btn-default(class= "#{ 'active' if sms.active? }")
+    = radio_button_tag 'user[reminder][sms]', 1, sms.active? ? true : false
+    ON
+  %label.btn.btn-default(class= "#{ 'active' unless sms.active? }")
+    = radio_button_tag 'user[reminder][sms]', 0, sms.active? ? false : true
+    OFF
+  
+%span.remind_at
+  %label Text me at
+  %a.editable_select(href='#' data-type='select' data-name='user[remind_at]' data-url='/settings/preference' data-value='#{ sms.remind_at }')
+    = sms.remind_at_in_time
+    
+%span.current
+  = sms.recipient_id
+  %a(href='/settings/preference?sms_remove=true' data-method='post' data-confirm='You are about to remove this phone number. Are you sure?')
+    %i.fa.fa-times

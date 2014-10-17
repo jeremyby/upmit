@@ -44,6 +44,11 @@ class GoalsController < ApplicationController
 
   def update
     respond_to do |format|
+      if params[:goal][:hash_tag].present?
+        params[:goal][:hash_tag].strip!
+        params[:goal][:hash_tag].gsub!(/ /, '-')
+      end
+      
       if @goal.update_attributes(params[:goal].permit([:title, :description, :legend, :hash_tag, :privacy]))
         format.json { head :no_content } # 204 No Content
       else

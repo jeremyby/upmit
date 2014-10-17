@@ -1,8 +1,9 @@
 development: &default
   api_key: ylIYuefEqPjcaNrcEnfx7D0ZV
   api_secret: jrtwhrxuaT6Oua7cHrEl4ULhfE0naHp870SjHg2nMpIiH0Vvee
-  access_token: 2650231424-xOUrj4ejqcHGz5VQ5qy5pqSEgJEOYbbzqY58vfL
-  access_secret: M92RcIM1cAQ6ZIUtMHJN7bCttsS9zRiStO6oJ2ztHDNdR
+  access_token: 2650231424-CjkPoZgk32JY3pvR3MiCBDyjZhNM1jEAQmYGUWN
+  access_secret: XwL1MXoZOxtyX8wa2n5obsnXx2chFPjLtxBdEV1Ovm2yc
+  
 test:
   <<: *default
   

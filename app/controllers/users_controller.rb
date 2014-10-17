@@ -104,7 +104,15 @@ class UsersController < ApplicationController
     providers = %w(twitter facebook)
 
     if request.post?
-      if params[:user][:switch_to].present? && providers.include?(params[:user][:switch_to]) # switching check-in social network
+      if params[:sms_remove] == 'true'
+        @reminder = current_user.reminders.find_by(type: "SmsReminder")
+        
+        @reminder.destroy
+        
+        flash[:alert] = "Your phone number #{ @reminder.recipient_id } is removed."
+        redirect_to '/settings/preference'
+        
+      elsif params[:user][:switch_to].present? && providers.include?(params[:user][:switch_to]) # switching check-in social network
         type = params[:user][:switch_to]
         providers.delete(type)
         auth = @user.authorizations.find_by(provider: type)
@@ -136,13 +144,48 @@ class UsersController < ApplicationController
             end
           end
         end
+      elsif params[:user][:sms].present?
+        if params[:user][:sms][0] != '+'
+          @msg = "Your phone number should start with \"+\". Please include the country code."
+        else
+          @msg = "A text message is sent to #{ params[:user][:sms] }. Please use it to verify the phone number."
+          
+          @reminder = SmsReminder.create user: current_user, recipient: current_user.to_s, recipient_id: params[:user][:sms], verification_code: rand(1000..9999)
+        end
+        
+        render 'sms'
+
+      elsif params[:user][:sms_verify_code].present?
+        @reminder = current_user.reminders.find_by(type: "SmsReminder")
+        
+        if @reminder.verification_code == params[:user][:sms_verify_code]
+          @reminder.update_attribute :verified_at, Time.now
+          
+          @msg = "You've verified the phone number."
+        else
+          @msg = "The verification code does not match. Please check and try again."
+        end
+          
+        render 'sms_verified'
+        
+      elsif params[:user][:remind_at].present?
+        @reminder = current_user.reminders.find_by(type: "SmsReminder")
+        
+        respond_to do |format|
+          if @reminder.update(remind_at: params[:user][:remind_at])
+            format.js { head :no_content }
+          else
+            format.js { head :unprocessable_entity }
+          end
+        end
+      
       elsif params[:user][:reminder].present? # updaing reminder settings
         reminder_params = params[:user][:reminder]
         type = reminder_params[:change]
 
         succeed = true
 
-        if %w(twitter email).include?(type)
+        if %w(twitter email sms).include?(type)
           reminder = @user.reminders.where(type: "#{ type.capitalize }Reminder").first
         else
           succeed = false

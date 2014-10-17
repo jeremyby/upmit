@@ -1,0 +1,8 @@
+.form-inline.verify
+  = text_field_tag 'user[sms_verify_code]', '', class: 'form-control', placeholder: 'verification code'
+  %button.btn.btn-default(data-disable-with='Please wait...') Verify
+  
+%span.current
+  = sms.recipient_id
+  %a(href='/settings/preference?sms_remove=true' data-method='post' data-confirm='You are about to remove this phone number. Are you sure?')
+    %i.fa.fa-times

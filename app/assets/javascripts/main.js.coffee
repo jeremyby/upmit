@@ -42,8 +42,6 @@ $(document).ready ->
     setTimeout(->
       upmit.spinner.removeClass('fa-spin')
     , 500)
-    
-  
   
   $('.donut').circliful()
   

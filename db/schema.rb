@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141009154152) do
+ActiveRecord::Schema.define(version: 20141017182911) do
 
   create_table "authorizations", force: true do |t|
     t.integer  "user_id"
@@ -171,13 +171,16 @@ ActiveRecord::Schema.define(version: 20141009154152) do
   end
 
   create_table "reminders", force: true do |t|
-    t.text     "type",                     null: false
-    t.string   "recipient",                null: false
-    t.string   "recipient_id",             null: false
-    t.integer  "state",        default: 1, null: false
-    t.integer  "user_id",                  null: false
+    t.text     "type",                                       null: false
+    t.string   "recipient",                                  null: false
+    t.string   "recipient_id",                               null: false
+    t.integer  "state",                        default: 1,   null: false
+    t.integer  "user_id",                                    null: false
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "verification_code"
+    t.datetime "verified_at"
+    t.float    "remind_at",         limit: 24, default: 8.0
   end
 
   add_index "reminders", ["user_id"], name: "index_reminders_on_user_id", using: :btree
@@ -205,6 +208,7 @@ ActiveRecord::Schema.define(version: 20141009154152) do
     t.string   "unconfirmed_email"
     t.string   "timezone"
     t.string   "checkin_with"
+    t.boolean  "get_encourage"
   end
 
   add_index "users", ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true, using: :btree

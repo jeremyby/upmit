@@ -2,6 +2,25 @@
 
 - @active = current_user.goals.active.order('created_at desc')
 
+- if current_user.get_encourage
+  #encourage-modal.modal.fade(tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true")
+    .modal-dialog
+      .modal-content
+        .modal-header
+          %h3.modal-title#modalLabel The first commitment, check!
+
+        .modal-body
+          %p Congrats! It is a great start. And you have earned the first dollar back, too.
+          %p Keep up the good work, you can reclaim all of your deposit and get refunded when the goal is completed.
+        .modal-footer
+          %button.btn.btn-success(type="button" data-dismiss="modal") Close me and keep it up
+  
+  :javascript
+    $('#encourage-modal').modal();
+    
+  - current_user.update get_encourage: false
+
+
 / main container
 .content
   - if  current_user.goals.active.size == 0
@@ -56,6 +75,8 @@
             %i.fa.fa-plus
             New Goal
           %h3 Your progress
+          
+          
 
       - @active.each do |goal|
         .row(id='goal-#{ goal.id }')
@@ -140,7 +161,15 @@
                 %i.fa(class='fa-#{ current_user.checkin_with }')
                 Check In
             .fields.col-md-7
+              - if current_user.checkin_with == 'facebook'
+                .alert.alert-warning
+                  The check-in feature is not available at the moment for Facebook users. It will be back alive after a review and authorizing process with Facebook. Please go to
+                  %a.alert-link(href='#{ current_user.authorizations.find_by(provider: 'facebook').link }') your Facebook account
+                  and check in by mentioning our page @upmit and matching hash tags.
               .form-group= text_area_tag :content, '', rows: 3, class: 'form-control'
             .submit.col-md-2
-              = submit_tag 'Submit', class: 'btn-glow primary', data: { disable_with: 'Please wait...' }
+              - if current_user.checkin_with == 'facebook'
+                = submit_tag 'Submit', class: 'btn-glow primary', data: { disable_with: 'Please wait...' }, disabled: "disabled"
+              - else
+                = submit_tag 'Submit', class: 'btn-glow primary', data: { disable_with: 'Please wait...' }
             

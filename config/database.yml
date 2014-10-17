@@ -21,5 +21,7 @@ test:
 
 
 production:
-  <<: *defaults
+  username: jeremyby
+  password: Z0XqZ9g_pOsJu^f
+  host: upmit.cbx2yzgqnzrr.us-west-2.rds.amazonaws.com
   database: upmit

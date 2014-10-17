@@ -21,6 +21,9 @@ class Commit < ActiveRecord::Base
   
   after_commit :after_update_processing, on: :update, :if => Proc.new { |c| c.previous_changes['state'] == [0, 1] || c.previous_changes['state'] == [0, -10] }
   
+  after_commit :show_encourage_screen, on: :update, :if => Proc.new { |c| c.previous_changes['state'] == [0, 1] && c.id == c.user.commits.first.id }
+  
+  
   #####################################################################################
   # 
   # Class Methods
@@ -74,5 +77,9 @@ class Commit < ActiveRecord::Base
     if self == self.goal.commits.last # last_commit?
       self.goal.completed!
     end
+  end
+  
+  def show_encourage_screen
+    self.user.update get_encourage: true
   end
 end

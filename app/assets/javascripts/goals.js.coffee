@@ -49,6 +49,7 @@ $(document).ready ->
     container: 'body'
     mode: 'popup'
     placement: 'right'
+    placeholder: 'No spaces'
   })
   
   $('.goal-wrapper .attrs .visibility.active .editable').editable({

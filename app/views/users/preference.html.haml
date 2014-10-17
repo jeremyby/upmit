@@ -97,10 +97,26 @@
       .col-md-10
         %h3#reminders Reminders
         
+        - sms = current_user.reminders.find_by(type: "SmsReminder")
         - email = current_user.reminders.find_by(type: "EmailReminder")
         
         = form_tag '/settings/preference', method: :post, remote: true, role: 'form' do
           = hidden_field_tag 'user[reminder][change]', ''
+          
+          .sms
+            .lbl.col-md-2.col-sm-2.col-xs-2 SMS
+            - if sms.blank?
+              .form-inline.new
+                = text_field_tag 'user[sms]', '', class: 'form-control', placeholder: '+ country code please'
+                %button.btn.btn-default(data-disable-with='Please wait...') Add
+            - elsif sms.verified_at.blank?
+              = render 'sms_verify', sms: sms
+            - else
+              = render 'sms_switch', sms: sms
+            
+            %p.help-block.col-md-offset-2.col-sm-offset-2.col-xs-offset-2
+              Receive a text message on your phone for all commitments scheduled for the day.
+              
           
           .email(class="#{ 'disabled' if email.blank? }")
             .lbl.col-md-2.col-sm-2.col-xs-2 Email

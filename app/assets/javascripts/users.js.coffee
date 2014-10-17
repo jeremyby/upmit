@@ -27,7 +27,7 @@ $(document).ready ->
         upmit.message('A confirmation letter was sent to your new email address.', 'notice')
   })
   
-  if $('.setting-wrapper .editable_select').length
+  if $('.setting-wrapper .timezone .editable_select').length
     upmit.timezones = []
     keys = Object.keys(jstz.olson.timezones)
   
@@ -36,7 +36,7 @@ $(document).ready ->
       upmit.timezones.push({ value: tz.olson_tz, text: tz.utc_offset + ' ' + tz.olson_tz })
   
   
-  $('.setting-wrapper .editable_select').editable({
+  $('.setting-wrapper .timezone .editable_select').editable({
     onblur: 'ignore',
     source: upmit.timezones,
     success: ->
@@ -125,6 +125,16 @@ $(document).ready ->
   # Preference
   ##################
   
+  $('.setting-wrapper .reminder form input[name="user[reminder][sms]"]').on('change', (e) ->
+    upmit.start_spinner()
+    
+    $('.setting-wrapper .reminder form .sms .btn-group').addClass('disabled').prop('disabled', true)
+    
+    $('.setting-wrapper .reminder #user_reminder_change').val('sms')
+    
+    $('.setting-wrapper .reminder form input[type="submit"]').click()
+  )
+  
   $('.setting-wrapper .reminder form input[name="user[reminder][email]"]').on('change', (e) ->
     upmit.start_spinner()
     
@@ -145,14 +155,54 @@ $(document).ready ->
     $('.setting-wrapper .reminder form input[type="submit"]').click()
   )
   
+  $('.setting-wrapper .reminder .new button').on('click', (e) ->
+    if $('.setting-wrapper .reminder #user_sms').val().length == 0
+      e.preventDefault()
+      upmit.message("Your phone number can't empty.")
+    else if $('.setting-wrapper .reminder #user_sms').val()[0] != '+'
+      e.preventDefault()
+      upmit.message("Your phone number should start with \"+\". Please include the country code.")
+  )
+  
+  $('.setting-wrapper .reminder .verify button').on('click', (e) ->
+    if $('.setting-wrapper .reminder #user_sms_verify_code').val().length == 0
+      e.preventDefault()
+      upmit.message("The verification code can't be empty.")
+    else if $('.setting-wrapper .reminder #user_sms_verify_code').val().length != 4
+      e.preventDefault()
+      upmit.message("The verification code should have 4 digits.")
+  )
+  
+  upmit.make_remind_at_editable ->
+    times = []
+    for i in [0..23]
+      v = if i > 12 then i - 12 else i
+      m = if i > 12 then 'PM' else 'AM'
+
+      times.push({value: "#{i}.0", text: "#{v} #{m}"})
+
+
+    $('.setting-wrapper .sms .editable_select').editable({
+      ajaxOptions:
+        type: 'post'
+      source: times
+      success: ->
+        upmit.message('SMS remind time is successfully updated.', 'notice')
+        upmit.stop_spinner()
+    })
+  
+  
+  upmit.make_remind_at_editable()
+  
   $('.setting-wrapper .reminder form').on('ajax:success', (xhr, data, status) ->
     upmit.stop_spinner()
-    upmit.message('Your reminder preference was successfully updated.', 'notice')
+    
+    upmit.message('Your reminder preference was successfully updated.', 'notice') unless upmit.pass_tag
     
     setTimeout(->
       $('.setting-wrapper .reminder form .btn-group.disabled').prop('disabled', false).removeClass('disabled')
     , 500)
   ).on('ajax:error', (xhr, data, status) ->
     upmit.stop_spinner()
-    upmit.message('Something went wrong. Please reload the page and try again.', 'alert')
+    upmit.message('Something went wrong. Please reload the page and try again.', 'alert') unless upmit.pass_tag
   )

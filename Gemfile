@@ -96,6 +96,8 @@ gem 'asset_sync'
 gem 'whenever', :require => false
 
 
+gem 'twilio-ruby'
+
 gem 'newrelic_rpm'
 
 

@@ -313,13 +313,44 @@ body.login
       h3
         margin: 0 -15px
       
-      
+      .sms,
       .email,
       .twitter
         margin: 30px 0
         
         .lbl
           font-size: 16px
+      
+      .sms
+        position: relative
+      
+        #user_sms
+          width: 200px
+          
+        #user_sms_verify_code
+          width: 130px
+        
+        .remind_at
+          margin-left: 20px
+          line-height: 30px
+          
+          label
+            color: #444
+            
+        .current
+          position: absolute
+          top: 0
+          right: 45px
+          
+          font-size: 13px
+          
+          color: #999
+          line-height: 30px
+          
+          a
+            font-size: 12px
+            +opacity(0.6)
+        
         
       .disabled
         .lbl,

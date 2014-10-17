@@ -1,0 +1,12 @@
+upmit.pass_tag = true
+
+<% if @reminder.verified_at.present? %>
+  upmit.message('<%= @msg %>', 'notice')
+  
+  $('.setting-wrapper .reminder .sms .verify').replaceWith("<%= j render 'sms_switch', sms: @reminder %>")
+  
+  upmit.make_remind_at_editable()
+  
+<% else %>
+  upmit.message('<%= @msg || @reminder.errors.full_messages %>')
+<% end %>

@@ -58,7 +58,7 @@ class GoalsController < ApplicationController
 
       flash[:notice] = "Your goal \"#{ h @goal.title.titlecase }\" is deleted."
       redirect_to user_goals_path(current_user)
-    else
+    elsif @goal.deleteable?
       response = @goal.deposit.make_refund
       
       if response.success?
@@ -74,6 +74,10 @@ class GoalsController < ApplicationController
 
         redirect_to user_goal_path(current_user, @goal)
       end
+    else
+      flash[:alert] = 'You cannot cancel this goal.'
+
+      redirect_to user_goal_path(current_user, @goal)
     end
   end
 

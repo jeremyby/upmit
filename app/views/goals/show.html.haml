@@ -103,10 +103,12 @@
 
       .col-md-2.side
         .status
+          - state = (@goal.state_in_words == 'inactive' ? 'pending' : @goal.state_in_words)
+        
           - if @goal.live?
-            = label_maker image_tag(asset_path("#{ @goal.checkin_with }.png"), size: '24x24') + @goal.state_in_words, Goal::Labels[@goal.state], "The goal can be checked in from #{ @goal.checkin_with.capitalize }."
+            = label_maker image_tag(asset_path("#{ @goal.checkin_with }.png"), size: '24x24') + state, Goal::Labels[@goal.state], "The goal can be checked in from #{ @goal.checkin_with.capitalize }."
           - else
-            = label_maker @goal.state_in_words, Goal::Labels[@goal.state]
+            = label_maker state, Goal::Labels[@goal.state]
 
     
     .row.line-break.col-md-11

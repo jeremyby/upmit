@@ -1,4 +1,5 @@
 class TitleValidator < ActiveModel::EachValidator
+  # Should not have live goals with duplidated title
   def validate_each(record, attribute, value)
     cond = record.id.blank? ? '1 = 1' : "id <> #{ record.id }"
     
@@ -19,11 +20,13 @@ end
 
 class Goal < ActiveRecord::Base
   extend FriendlyId
-  friendly_id :title, use: :slugged
+  friendly_id :title, use: :scoped, scope: :user
   
   def normalize_friendly_id(string)
     s = string.to_ascii.parameterize
     
+    # User can have goals with same title with non-live goals, such as do some goals again
+    # so we need to append a number to it for friendly_id
     if Goal.where("user_id = ? and slug REGEXP ?", self.user_id, "^#{ s }$").count > 0
       offset = Goal.where("user_id = ? and slug REGEXP ?", self.user_id,  "^#{ s }-[\d]*").count + 1
       s << "-#{offset}"

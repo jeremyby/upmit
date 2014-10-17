@@ -70,7 +70,14 @@
               - last, today, next_occur = Commit.get_occurrence_of(goal)
               
               - unless today.blank?
-                - pos = goal.commits.where("starts_at < ?", today.first.starts_at).size + (goal.is_a?(WeektimeGoal) ? today.to_ary.count {|c| c.succeed?} : 1)
+                - if goal.is_a?(WeektimeGoal)
+                  - offset = today.to_ary.count {|c| c.succeed? } + 1
+                  - offset = goal.weektimes if offset > goal.weektimes
+                - else
+                  - offset = 1
+                
+              
+                - pos = goal.commits.where("starts_at < ?", today.first.starts_at).size + offset
               - else
                 - pos = goal.commits.where("starts_at < ?", Time.now).size + 1
               

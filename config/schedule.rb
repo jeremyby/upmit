@@ -24,6 +24,11 @@ every 5.minutes do
   # runner "MyModel.some_method"
   
   rake "commits:remind"
-  rake "commits:expire"
+  
   rake "check:twitter"
+  rake "check:facebook"
+end
+
+every 3.minutes do
+  rake "commits:expire"
 end

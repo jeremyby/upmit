@@ -93,14 +93,14 @@
     left: 50px
     top: 60px
     
-    padding: 15px 15px 13px 15px
+    padding: 15px
     
-    border: 1px solid #ccc
-    +border-radius(4px)
+    border: 2px solid #aaa
+    +border-radius(6px)
     
     h4
-      margin: -30px 0 0 35%
-      padding: 0 10px
+      margin: -30px 0 0 33%
+      padding: 0 15px
       
       float: left
       
@@ -169,7 +169,29 @@
     .button
       padding-top: 12px
     
+@media (max-width: 767px)
+  #pad-wrapper.new-deposit
+    .goal
+      position: relative
     
+      left: auto
+      top: 0
+
+      border: none
+      
+      h4
+        margin: 0
+        padding: 0 0 15px
+        
+        color: #444
+        font-size: 1.8em
+        float: none
+        text-align: center
+    
+    .liner
+      margin: 0 15px
+
+
 #pad-wrapper.refund-deposit
   h2
     margin: 28px 0 15px

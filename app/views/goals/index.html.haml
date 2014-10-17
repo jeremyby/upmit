@@ -24,82 +24,80 @@
 / main container
 .content(class="#{ 'panel-content' unless is_current_user_the_user }")
   #pad-wrapper.goals-wrapper
-    - if is_current_user_the_user && current_user.goals.live.size == 0 && @completed.blank?
-      = render 'home/jumbotron'
-    
-    - else
-      %a.new-goal.btn-glow.primary(href='#{ new_goal_path }')
-        %i.fa.fa-plus
-        New Goal
-        
-      - unless @active.blank?
-        .row.head
-          .col-md-12
-            %h3 Active goals
+    %a.new-goal.btn-glow.primary(href='#{ new_goal_path }')
+      %i.fa.fa-plus
+      New Goal
       
-        .active
-          - today = Time.now.in_time_zone(@user.timezone).to_date
-        
-          - @active.each do |goal|
-            - succeed = goal.commits.succeed.size
-            - failed = goal.commits.failed.size
-            
-            - succeed_percentage = succeed * 100 / goal.occurrence
-            - failed_percentage = failed * 100 / goal.occurrence
-            
-            .row.goal
-              .col-md-3.col-sm-6.col-xs-6.title= link_to (h goal.title).titlecase, user_goal_path(@user, goal)
-              .col-md-3.col-sm-6.col-xs-6= h goal.to_frequency
-              .col-md-6.col-sm-12.col-xs-12
-                .progress
-                  .total
-                    = goal.occurrence
-                    days
-                  .progress-bar.progress-bar-success(role="progressbar" style='min-width: 12px; width: #{ succeed_percentage }%')= succeed
-                  - if failed > 0
-                    .progress-bar.progress-bar-danger(role="progressbar" style='min-width: 12px; width: #{ failed_percentage }%')= failed   
+    .row.head
+      .col-md-12
+        %h3 Active goals
+  
+        - if @active.blank?
+          .active There are no active goals at the moment.
+        - else
+          .active
+            - today = Time.now.in_time_zone(@user.timezone).to_date
+      
+            - @active.each do |goal|
+              - succeed = goal.commits.succeed.size
+              - failed = goal.commits.failed.size
+          
+              - succeed_percentage = succeed * 100 / goal.occurrence
+              - failed_percentage = failed * 100 / goal.occurrence
+          
+              .row.goal
+                .col-md-3.col-sm-6.col-xs-6.title= link_to (h goal.title).titlecase, user_goal_path(@user, goal)
+                .col-md-3.col-sm-6.col-xs-6= h goal.to_frequency
+                .col-md-6.col-sm-12.col-xs-12
+                  .progress
+                    .total
+                      = goal.occurrence
+                      days
+                    .progress-bar.progress-bar-success(role="progressbar" style='min-width: 12px; width: #{ succeed_percentage }%')= succeed
+                    - if failed > 0
+                      .progress-bar.progress-bar-danger(role="progressbar" style='min-width: 12px; width: #{ failed_percentage }%')= failed   
 
         .line-break
         
-      - unless @inactive.blank?
-        .row.head
-          .col-md-12
-            %h4 Pending
-        .pending
-          - @inactive.each do |goal|
-            .row.goal
-              .col-md-3.col-sm-6.col-xs-6.title= link_to (h goal.title).titlecase, user_goal_path(@user, goal)
-              .col-md-3.col-sm-6.col-xs-6= h goal.to_frequency
-              .col-md-6.col-sm-12.col-xs-12
-                .progress
-                  .total
-                    = goal.occurrence
-                    days
-        .line-break
-        
-      - unless @completed.blank?
-        .row.head
-          .col-md-12
-            %h4 Completed
-        
-        
-        - @completed.each do |goal|
+    - unless @inactive.blank?
+      .row.head
+        .col-md-12
+          %h4 Pending
+      .pending
+        - @inactive.each do |goal|
           .row.goal
-            .col-md-3.col-sm-4.col-xs-4.title= link_to (h goal.title).titlecase, user_goal_path(@user, goal)
-            .col-md-3.col-sm-4.col-xs-4= goal.to_s
-            .col-md-3.col-sm-4.col-xs-4
-              - s = goal.start_time.in_time_zone(goal.timezone)
-              - e = (s + goal.duration.days)
-        
-              = s.year == e.year ? s.strftime("%b %d") : s.strftime("%b %d, %Y")
-              \-
-              = e.strftime("%b %d, %Y")
-          .row.detail.col-md-12.col-xs-12
-            #{ goal.occurrence } days committed,
-            - success = goal.commits.succeed.size
-            - if success == goal.occurrence
-              all of which 
-            - else
-              of which #{ success }
-            were successful
+            .col-md-3.col-sm-6.col-xs-6.title= link_to (h goal.title).titlecase, user_goal_path(@user, goal)
+            .col-md-3.col-sm-6.col-xs-6= h goal.to_frequency
+            .col-md-6.col-sm-12.col-xs-12
+              .progress
+                .total
+                  = goal.occurrence
+                  days
+      .line-break
+      
+    - unless @completed.blank?
+      .row.head
+        .col-md-12
+          %h4 Completed
+      
+      
+      - @completed.each do |goal|
+        .row.goal
+          .col-md-3.col-sm-4.col-xs-4.title= link_to (h goal.title).titlecase, user_goal_path(@user, goal)
+          .col-md-3.col-sm-4.col-xs-4= goal.to_s
+          .col-md-3.col-sm-4.col-xs-4
+            - s = goal.start_time.in_time_zone(goal.timezone)
+            - e = (s + goal.duration.days)
+      
+            = s.year == e.year ? s.strftime("%b %d") : s.strftime("%b %d, %Y")
+            \-
+            = e.strftime("%b %d, %Y")
+        .row.detail.col-md-12.col-xs-12
+          #{ goal.occurrence } days committed,
+          - success = goal.commits.succeed.size
+          - if success == goal.occurrence
+            all of which 
+          - else
+            of which #{ success }
+          were successful
                 

@@ -13,7 +13,6 @@
     .content-wrap
       %h3 Finishing up
   
-        
       = form_for(current_user, :as => 'user', :url => finish_signup_path, :html => { role: 'form' }) do |f|
         = f.hidden_field :timezone
       
@@ -26,6 +25,12 @@
                   = msg
                   %br
             %p.help-block Provide your email address to receive email reminders. We will not spam.
+            
+        - else
+          %h5 Your Facebook account is connected:
+          .email
+            %strong= current_user.email
+            
         
         
         - if session[:provider] == 'twitter'
@@ -37,7 +42,7 @@
       
         .form-group.remember
           = f.check_box :remember_me, checked: true
-          = f.label :remember_me, 'Remember me for 30 days'
+          = f.label :remember_me, 'Remember to sign me in for 30 days'
       
         .actions
-          = f.submit 'Continue', :class => 'btn-glow primary'
+          = f.submit 'Enter', :class => 'btn-glow primary'

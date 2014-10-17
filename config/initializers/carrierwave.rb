@@ -16,5 +16,6 @@ CarrierWave.configure do |config|
       :region                 => 'us-west-2'
     }
     config.fog_directory = 'upmit'
+    config.asset_host = 'di9lli9s5lmc4.cloudfront.net'
   end
 end

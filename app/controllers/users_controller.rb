@@ -83,7 +83,7 @@ class UsersController < ApplicationController
         end
 
         sign_in(@user, :bypass => true)
-        redirect_to root_path, notice: 'Your account was successfully updated.'
+        redirect_to root_path, notice: "Your account from #{ session[:provider].capitalize } is now ready."
       end
     end
   end

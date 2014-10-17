@@ -1,12 +1,12 @@
+- @title = 'Home - Upmit.com'
+
 - @active = current_user.goals.active.order('created_at desc')
 
 / main container
 .content
-  - if  current_user.goals.live.size == 0
+  - if  current_user.goals.active.size == 0
     #pad-wrapper
       = render 'home/jumbotron'
-  
-  - elsif current_user.goals.active.size == 0 && current_user.goals.inactive.size > 0
   
   - else
     #pad-wrapper.main-wrapper
@@ -52,6 +52,9 @@
               
       .row
         .col-md-12
+          %a.new-goal.btn-glow.primary(href='#{ new_goal_path }')
+            %i.fa.fa-plus
+            New Goal
           %h3 Your progress
 
       - @active.each do |goal|

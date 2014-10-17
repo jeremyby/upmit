@@ -1,5 +1,16 @@
 .jumbotron
   %h2 Welcome to Upmit!
-  %p 
-    Create your first goal here. Start with a
-    %a.btn.btn-info.btn-lg(href='#{ new_goal_path }' role="button") New Goal
+  
+  %p We are here to help you to achieve difficult goals about yourself.
+  
+  %p
+    Create your first goal here.
+    %a.btn.btn-primary(href='#{ new_goal_path }' role="button")
+      %i.fa.fa-plus
+      New Goal
+  
+  - if current_user.goals.inactive.present?
+    %p
+      Or,
+      = link_to 'make deposit', '/deposit'
+      for the pending ones.

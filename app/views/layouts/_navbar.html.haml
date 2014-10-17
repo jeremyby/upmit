@@ -47,7 +47,7 @@
     %li.current_user
       %a(href='/settings/profile')
         .avatar= image_tag asset_path(current_user.avatar.thumb.url), size: '32x32'
-        .username= current_user.username
+        .username= current_user.display_name
        
     %li.dropdown.settings
       %a.dropdown-toggle.hidden-xs(data-toggle="dropdown" href="#")

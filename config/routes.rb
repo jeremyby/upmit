@@ -11,6 +11,7 @@ Rails.application.routes.draw do
   #TODO: remove some routes as there will only be Twitter logins
   devise_scope :user do
     get "signin", to: "devise/sessions#new", as: :signin
+    get "signin", to: "devise/sessions#new", as: :new_user_session
     delete "logout", to: "devise/sessions#destroy", as: :destroy_user_session
     
     get '/users/connect/:provider', :to => redirect("/users/auth/%{provider}"), :as => 'user_omniauth_connect'

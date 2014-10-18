@@ -101,7 +101,31 @@
                     %span Delete
                   - else
                     %span Cancel
-
+                    
+          - if @goal.active? && is_current_user_owner_of_goal && current_user.commits.succeed.size == 0
+            .check-in-help.alert.alert-info
+              %button.close(type="button"data-dismiss="alert")
+                %span(aria-hidden="true")
+                  %i.fa.fa-times
+                %span.sr-only Close
+                
+              %i.fa.fa-arrow-up
+              %strong ##{ @goal.hash_tag }
+              is the goal's hash tag.
+              
+              - if current_user.checkin_with == 'twitter'
+                Tweet 
+                %strong @upmit
+                with
+                %strong #jog
+                to check in for the goal. You can check in from Home page, too.
+              - elsif current_user.checkin_with == 'facebook'
+                Compose a Facebook post, mention 
+                %strong @upmit
+                and then select our page Upmit. Add
+                %strong ##{ @goal.hash_tag }
+                to check in for the goal.
+                
       .col-md-2.side
         .status
           - state = (@goal.state_in_words == 'inactive' ? 'pending' : @goal.state_in_words)

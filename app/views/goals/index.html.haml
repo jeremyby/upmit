@@ -60,7 +60,10 @@
                     - if failed > 0
                       .progress-bar.progress-bar-danger(role="progressbar" style='min-width: 12px; width: #{ failed_percentage }%')= failed   
 
-        .line-break
+
+
+    - unless @inactive.blank? && @completed.blank?
+      .line-break
         
     - unless @inactive.blank?
       .row.head

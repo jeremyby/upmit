@@ -19,6 +19,15 @@ class SmsReminder < Reminder
     return true
   end
   
+  def when_to_deliver
+    diff = self.remind_at - Time.now.hour
+    diff = 0 if diff < 0
+    
+    return diff.hours.from_now
+  end
+  
+  handle_asynchronously :deliver, :run_at => Proc.new { |r| r.when_to_deliver }
+  
   private
   def send_verification_code
     @client = Twilio::REST::Client.new

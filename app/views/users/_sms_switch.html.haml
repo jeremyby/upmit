@@ -12,6 +12,6 @@
     = sms.remind_at_in_time
     
 %span.current
-  = sms.recipient_id
+  %span= sms.recipient_id
   %a(href='/settings/preference?sms_remove=true' data-method='post' data-confirm='You are about to remove this phone number. Are you sure?')
     %i.fa.fa-times

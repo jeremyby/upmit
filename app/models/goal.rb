@@ -120,7 +120,8 @@ class Goal < ActiveRecord::Base
   # ###################################################################################
   def self.samples
     [
-      'run', 'work out', 'not smoke', 'eat less', 'try harder at work', 'not procrastinate', 'study a new language'
+      'run', 'work out', 'not smoke', 'eat less', 'try harder at work', 'not procrastinate', 'study a new language',
+      'not drink'
     ]
   end
   

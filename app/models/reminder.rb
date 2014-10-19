@@ -7,4 +7,5 @@ class Reminder < ActiveRecord::Base
   }
   
   acts_as_stateable states: States
+
 end

@@ -23,24 +23,22 @@
               %i.fa.fa-dollar.fa-lg
               Your goal "#{ link_to r.goal.title.titlecase, user_goal_path(current_user, r.goal), class: 'normal' }" is completed.
               #{ link_to "#{ r.goal.commits.succeed.size } dollars are refundable", refund_goal_deposit_index_path(r.goal), class: 'alert-link' }.
-
-
-    %h3.head(class="#{ 'lower' unless pending.blank? && refunding.blank? }")
-      Current deposit
-      %small for active goals
+              
 
     - active = current_user.goals.active
     
     - if active.blank?
+      %h3.head(class="#{ 'lower' unless pending.blank? && refunding.blank? }")
+        Deposit
       .row
         .col-md-12 There are no active goals at the moment.
     - else
-      .row.total
+      .row.total(class="#{ 'lower' unless pending.blank? && refunding.blank? }")
         .col-md-3.col-sm-4.col-xs-4.title
           %span
             = active.size
-            active
-            = 'goal'.pluralize(active.size)
+            Active
+            = 'Goal'.pluralize(active.size)
   
         - if active.size > 1
           .col-md-2.col-sm-2.col-xs-2

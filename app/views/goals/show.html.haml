@@ -1,5 +1,5 @@
 
-- @title = (is_owner?(@goal) ? 'I will ' : @goal.user.to_s + ': ')  + "#{ h @goal.title } #{ @goal.to_s }".titlecase
+- @title = (is_owner?(@goal) ? 'I Will ' : @goal.user.to_s + ': ')  + "#{ h @goal.title } #{ @goal.to_s }".titlecase
 - is_current_user_owner_of_goal = is_owner?(@goal)
 
 - unless is_current_user_owner_of_goal
@@ -21,7 +21,32 @@
           The goal is pending deposit. Please 
           = link_to 'make the deposit', new_goal_deposit_path(@goal), class: 'alert-link'
           so we can start tracking your progress.
-
+    
+    - if @goal.active? && is_current_user_owner_of_goal && current_user.commits.succeed.size == 0
+      .check-in-help.alert.alert-info
+        %button.close(type="button"data-dismiss="alert")
+          %span(aria-hidden="true")
+            %i.fa.fa-times
+          %span.sr-only Close
+          
+        %i.fa.fa-info-circle
+        Your goal is assigned with a hash tag:&nbsp;
+        %strong> ##{ @goal.hash_tag }
+        \.
+        
+        - if current_user.checkin_with == 'twitter'
+          Tweet 
+          %strong @upmit
+          with
+          %strong ##{ @goal.hash_tag }
+          to check in. You can check in from Home page, too.
+        - elsif current_user.checkin_with == 'facebook'
+          Compose a Facebook post, mention 
+          %strong @upmit
+          and then select our page Upmit. Add
+          %strong ##{ @goal.hash_tag }
+          to check in for the goal.
+    
     .row.goal
       .col-md-9
         .legend#goal-legend
@@ -102,29 +127,6 @@
                   - else
                     %span Cancel
                     
-          - if @goal.active? && is_current_user_owner_of_goal && current_user.commits.succeed.size == 0
-            .check-in-help.alert.alert-info
-              %button.close(type="button"data-dismiss="alert")
-                %span(aria-hidden="true")
-                  %i.fa.fa-times
-                %span.sr-only Close
-                
-              %i.fa.fa-arrow-up
-              %strong ##{ @goal.hash_tag }
-              is the goal's hash tag.
-              
-              - if current_user.checkin_with == 'twitter'
-                Tweet 
-                %strong @upmit
-                with
-                %strong ##{ @goal.hash_tag }
-                to check in for the goal. You can check in from Home page, too.
-              - elsif current_user.checkin_with == 'facebook'
-                Compose a Facebook post, mention 
-                %strong @upmit
-                and then select our page Upmit. Add
-                %strong ##{ @goal.hash_tag }
-                to check in for the goal.
                 
       .col-md-2.side
         .status
@@ -135,11 +137,12 @@
           - else
             = label_maker state, Goal::Labels[@goal.state]
 
-    
-    .row.line-break.col-md-11
+    .row.col-md-11.line-break
     
     .row
       .col-md-11.detail
+        %h5 Details
+        
         .inner.col-md-9.col-sm-12.col-xs-12
           .row
             .col-md-2.col-sm-2.col-xs-2.field Starts:
@@ -200,8 +203,7 @@
                     data-fgcolor="#50BB50"
                     data-bgcolor="#eee"
                     data-fill="#ddd")
-    
-    .row.line-break.col-md-11
+
     
     .row
       .col-md-11.activities

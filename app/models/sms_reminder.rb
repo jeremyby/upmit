@@ -20,10 +20,12 @@ class SmsReminder < Reminder
   end
   
   def when_to_deliver
-    diff = self.remind_at - Time.now.hour
-    diff = 0 if diff < 0
+    now = Time.now
+    local = now.in_time_zone(self.user.timezone)
     
-    return diff.hours.from_now
+    time = local.hour > self.remind_at ? now : local.change(hour: self.remind_at.to_i, min: 0)
+    
+    return time
   end
   
   handle_asynchronously :deliver, :run_at => Proc.new { |r| r.when_to_deliver }

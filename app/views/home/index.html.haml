@@ -21,140 +21,136 @@
     
     %ul#main-menu
       %li#menu-item-better.menu-item.scroll
-        %a(href="#better") better you
+        %a(href="#intro") home
       %li#menu-item-carousel.menu-item.scroll
         %a(href="#carousel") how it works
       %li#menu-item-feature.menu-item.scroll
         %a(href="#feature") features
       %li#menu-item-signin.menu-item.scroll
-        %a(href="#signin") start now!
+        %a(href="#signin") sign in
 
   %section#main-content.clearfix
     %article#intro.section-wrapper.clearfix(data-custom-background-img="#{ asset_path('bg1.jpg') }")
-      .content-wrapper.clearfix
-        .col.col-sm-10.col-sm-offset-2.col-md-9.col-md-offset-1
-          %section.feature-text
-            %h1 Up + Commit
-            %p.text
-              Upmit pushes you to achieve your commitments,
-              %br
-              so you can
-              %strong be the better you.
-            %p.btns
-              %a.link-scroll.btn.btn-outline-inverse.btn-lg(href='#better') Find out more
-              %span or
-              %a.signin(href="/signin") sign in
-
-
-    %article#better.section-wrapper.clearfix(data-custom-background-img="#{ asset_path('bg3.jpg') }")
-      .content-wrapper.clearfix
-        .col.col-sm-10.col-sm-offset-2.col-md-9.col-md-offset-1
-          %h1.section-title Be the Better You
-          %p.feature-paragraph.text
-            %img.lazy.pull-right(alt="Rocket Up" data-img-src="#{ asset_path('transp-image1s.png') }")
-            Changing for the better is always hard. It starts easy with a resolution, but sticking to it is the painful part.
-          
-          %h4.text We are here to help you up.
-
+      .wrapper
+        .content-wrapper.clearfix
+          .col.col-sm-11.col-md-10.col-md-offset-1
+            %section.feature-text
+              %h1
+                Up + Commit
+              
+              .lower
+                %h2
+                  Upmit pushes you to achieve your goals.
+                %ul.text
+                  %li Build your goal into daily commitments
+                  %li Pay deposit upfront: $1 a day
+                  %li Check in and earn your money back
+              
+                %p.btns
+                  %a.link-scroll.btn.btn-outline-inverse.btn-lg(href='#carousel') Find out more
+                  %span or
+                  %a.signin(href="/signin") sign in
           
 
     %article#carousel.section-wrapper.clearfix(data-custom-background-img="#{ asset_path('bg2.jpg') }")
-      .content-wrapper.clearfix
-        #features-carousel.carousel.slide.with-title-indicators.max-height(data-height-percent="60" data-ride="carousel")
-          / Indicators - slide navigation
-          %ol.carousel-indicators.title-indicators
-            %li.active(data-slide-to="0" data-target="#features-carousel") Commit yourself
-            %li(data-slide-to="1" data-target="#features-carousel") Make it real
-            %li(data-slide-to="2" data-target="#features-carousel") Social check-in
-            %li(data-slide-to="3" data-target="#features-carousel") Get money back
+      .wrapper
+        .content-wrapper.clearfix
+          #features-carousel.carousel.slide.with-title-indicators.max-height(data-height-percent="60" data-ride="carousel")
+            / Indicators - slide navigation
+            %ol.carousel-indicators.title-indicators
+              %li.active(data-slide-to="0" data-target="#features-carousel") Commit yourself
+              %li(data-slide-to="1" data-target="#features-carousel") Make it real
+              %li(data-slide-to="2" data-target="#features-carousel") Social check-in
+              %li(data-slide-to="3" data-target="#features-carousel") Get money back
             
-          / Wrapper for slides
-          .carousel-inner
-            / CAROUSEL SLIDE 1
-            .item.active
-              .carousel-text-content
-                = image_tag asset_path('goal.png'), alt: 'Goal', class: 'icon'
-                %h2.title Commit yourself
-                %p.text
-                  Wanna start a new habit? Or trying to get rid of an old one? Create a goal by telling us what you are committed to achieve, how often and
-                  for how long.
+            / Wrapper for slides
+            .carousel-inner
+              / CAROUSEL SLIDE 1
+              .item.active
+                .carousel-text-content
+                  = image_tag asset_path('goal.png'), alt: 'Goal', class: 'icon'
+                  %h2.title Commit yourself
+                  %p.text
+                    Wanna start a new habit? Or trying to get rid of an old one? Create a goal by telling us what you are committed to achieve, how often and
+                    for how long.
 
                 
-            / CAROUSEL SLIDE 2
-            .item
-              .carousel-text-content
-                %img.icon(alt="One Dollar" src="#{ asset_path('onedollar.png') }")
-                %h2.title Make it real
-                %p.text
-                  For every day you committed to take the action, you have to make 
-                  %strong one dollar deposit
-                  upfront. Only by successfully checking in on that day, you can earn that dollar back.
+              / CAROUSEL SLIDE 2
+              .item
+                .carousel-text-content
+                  %img.icon(alt="One Dollar" src="#{ asset_path('onedollar.png') }")
+                  %h2.title Make it real
+                  %p.text
+                    For every day you committed to take the action, you have to make 
+                    %strong $1 deposit
+                    upfront. Only by successfully checking in on that day, you can earn that dollar back.
                 
 
-            / CAROUSEL SLIDE 3
-            .item
-              .carousel-text-content
-                %img.icon(alt="Social Check-in" src="#{ asset_path('transp-image7.png') }")
-                %h2.title Social check-in
-                %p.text
-                  You will have to check in your commitments by posting on Twitter or Facebook. Your family and friends are
-                  gonna to be the best support you need.
+              / CAROUSEL SLIDE 3
+              .item
+                .carousel-text-content
+                  %img.icon(alt="Social Check-in" src="#{ asset_path('transp-image7.png') }")
+                  %h2.title Social check-in
+                  %p.text
+                    You will have to check in your commitments by posting on Twitter or Facebook. Your family and friends are
+                    gonna to be the best support you need.
             
             
-            / CAROUSEL SLIDE 4
-            .item
-              .carousel-text-content
-                %img.icon(alt="Money back" src="#{ asset_path('moneyback.png') }")
-                %h2.title Get money back
-                %p.text
-                  When the goal is completed, the money you've earned back will be refunded. We will only charge for the commitments you missed.
+              / CAROUSEL SLIDE 4
+              .item
+                .carousel-text-content
+                  %img.icon(alt="Money back" src="#{ asset_path('moneyback.png') }")
+                  %h2.title Get money back
+                  %p.text
+                    When the goal is completed, the money you've earned back will be refunded. We will only charge for the commitments you missed.
                   
 
 
-          / Controls
-          %a.left.carousel-control(data-slide="prev" href="#features-carousel")
-          %a.right.carousel-control(data-slide="next" href="#features-carousel")
+            / Controls
+            %a.left.carousel-control(data-slide="prev" href="#features-carousel")
+            %a.right.carousel-control(data-slide="next" href="#features-carousel")
 
     %article#feature.section-wrapper.clearfix(data-custom-background-img="#{ asset_path('bg5.jpg') }")
-      .content-wrapper.clearfix
-        .col-sm-11.col-md-10.pull-right
-          %section.grid.row.clearfix.clearfix-for-2cols
-            / grid item
-            .grid-item.col-md-6
-              .item-content.clearfix
-                %i.icon.fa.fa-bell
-                .text-content
-                  %h4 Get reminded
-                  %p.text We will send you a reminder every day if committed to action. Email or Twitter DM.
+      .wrapper
+        .content-wrapper.clearfix
+          .col-sm-11.col-md-10.pull-right
+            %section.grid.row.clearfix.clearfix-for-2cols
+              / grid item
+              .grid-item.col-md-6
+                .item-content.clearfix
+                  %i.icon.fa.fa-bell
+                  .text-content
+                    %h4 Get reminded
+                    %p.text We will send you a reminder every day if committed to action. SMS, Email or Twitter DM.
 
-            .grid-item.col-md-6
-              .item-content.clearfix
-                %i.icon.fa.fa-usd
-                .text-content
-                  %h4 100% Free
-                  %p.text Our service is 100% free. If you all checked in, you will have every dollar of your deposit back.
+              .grid-item.col-md-6
+                .item-content.clearfix
+                  %i.icon.fa.fa-usd
+                  .text-content
+                    %h4 100% Free
+                    %p.text Our service is 100% free. If you all checked in, you will have every dollar of your deposit back.
 
-            .grid-item.col-md-6
-              .item-content.clearfix
-                %i.icon.fa.fa-paypal
-                .text-content
-                  %h4 Secure payment
-                  %p.text Your payment and refund will be securely processed by Paypal.
+              .grid-item.col-md-6
+                .item-content.clearfix
+                  %i.icon.fa.fa-paypal
+                  .text-content
+                    %h4 Secure payment
+                    %p.text Your payment and refund will be securely processed by Paypal.
 
-            .grid-item.col-md-6
-              .item-content.clearfix
-                %i.icon.fa.fa-share-square-o
-                .text-content
-                  %h4 Simple chech-in
-                  %p.text @upmit #(commitment's hash tag) #(another one) ...
-                  %p.text You can add more text as well as attach a photo.
+              .grid-item.col-md-6
+                .item-content.clearfix
+                  %i.icon.fa.fa-share-square-o
+                  .text-content
+                    %h4 Simple chech-in
+                    %p.text Check in with a tweet or post to @upmit. You can add text as well as attach a photo.
 
     %article#signin.section-wrapper.clearfix(data-custom-background-img="#{ asset_path('bg4.jpg') }")
-      .content-wrapper.clearfix
-        %h1.section-title Start Now!
-        .btns
-          = link_to image_tag(asset_path('twitter.png')) + 'Sign in with Twitter', user_omniauth_connect_path(:twitter), class: 'btn btn-primary'
-          = link_to image_tag(asset_path('facebook.png')) + 'Sign in with Facebook', user_omniauth_connect_path(:facebook), class: 'btn btn-primary'
+      .wrapper
+        .content-wrapper.clearfix
+          %h1.section-title Start Now!
+          .btns
+            = link_to image_tag(asset_path('twitter.png')) + 'Sign in with Twitter', user_omniauth_connect_path(:twitter), class: 'btn btn-primary'
+            = link_to image_tag(asset_path('facebook.png')) + 'Sign in with Facebook', user_omniauth_connect_path(:facebook), class: 'btn btn-primary'
 
 
 

@@ -648,7 +648,7 @@ function set_equal_height_to_all_carousel_slides_on_small_displays()
         $(this).find(".item:not(.active)").attr("style",""); // reset the temporary fix to get the hidden slides' height
 
         // if on small displays or small heights (slide height larger than visible height)
-        if (viewport().width <= window.sm_screen_max || largest_slide_height >= visible_set_height)
+        if (viewport().width <= window.xs_screen_max || largest_slide_height >= visible_set_height)
         {
             $(this).parents(".section-wrapper").addClass("modified-height");
             carousel_slides.height(largest_slide_height); // apply the largest height to all slides

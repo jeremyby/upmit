@@ -1,0 +1,16 @@
+- @title = 'I Will Get Rid of A Bad Habit'
+
+- @body_class = 'landing'
+- @no_nav = 'true'
+
+.landing-wrapper
+  = link_to (image_tag(asset_path('logo-lg.png'), class: 'logo')), root_path
+
+  .box
+    %h2 Your goal: I Will Get Rid of A Bad Habit
+    
+    %h3 Create the goal and make a deposit for $1 a day. Stop doing the bad habit everyday and check in to earn your money back.
+    
+    .button
+      %a.btn.btn-primary.bgn-lg(href='/goals/new?title=stop%20doing%20the%20bad%20habit')
+        Sign in and Create the goal

@@ -67,6 +67,10 @@ Rails.application.routes.draw do
   match '/about' => 'home#about', via: [:get], :as => :about
   match '/help' => 'home#help', via: [:get], :as => :help
   match '/terms' => 'home#terms', via: [:get], :as => :terms
+  match '/no_smoking' => 'home#no_smoking', via: [:get]
+  match '/start_jogging' => 'home#start_jogging', via: [:get]
+  match '/new_habit' => 'home#new_habit', via: [:get]
+  match '/bad_habit' => 'home#bad_habit', via: [:get]
 
   
   resources :users, path: '', only: [:show] do

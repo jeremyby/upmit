@@ -20,4 +20,17 @@ class HomeController < ApplicationController
   
   def terms
   end
+  
+  def no_smoking
+  end
+  
+  def start_jogging
+  end
+  
+  def new_habit
+  end
+  
+  def bad_habit
+    
+  end
 end

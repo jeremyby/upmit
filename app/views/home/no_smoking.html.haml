@@ -1,0 +1,17 @@
+- @title = 'I Will Not Smoke'
+
+- @body_class = 'landing'
+- @no_nav = 'true'
+
+.landing-wrapper
+  = link_to (image_tag(asset_path('logo-lg.png'), class: 'logo')), root_path
+
+  .box
+    %h2 Your Goal: I Will Not Smoke For 21 Days
+    
+    %h3 Create the goal and make a deposit of 21 dollars. Stop smoking and check in everyday to earn your money back.
+    
+    .button
+      %a.btn.btn-primary.bgn-lg(href='/goals/new?title=not%20smoke')
+        Sign in and Create the goal
+    

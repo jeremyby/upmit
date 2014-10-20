@@ -13,6 +13,10 @@ class GoalsController < ApplicationController
 
   def new
     @goal = Goal.new(interval_unit: 'day', duration: 21, interval: 1, duration_desc: 'for 21 days')
+    
+    if params[:title].present?
+      @goal.title = params[:title]
+    end 
   end
 
   def create

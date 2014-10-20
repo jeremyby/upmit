@@ -1,0 +1,16 @@
+- @title = 'I Will Start Jogging'
+
+- @body_class = 'landing'
+- @no_nav = 'true'
+
+.landing-wrapper
+  = link_to (image_tag(asset_path('logo-lg.png'), class: 'logo')), root_path
+
+  .box
+    %h2 Your goal: I Will Start Jogging
+    
+    %h3 Create the goal and make a deposit for $1 a day. Get out and jog then check in everyday to earn your money back.
+    
+    .button
+      %a.btn.btn-primary.bgn-lg(href='/goals/new?title=start%20jog')
+        Sign in and Create the goal

@@ -31,14 +31,20 @@
           .notifications
             %h3 You have #{ unread } new #{ 'notification'.pluralize(notices.size) }
             - notices.each do |n|
-              - if n.event == 'start-refund'              
+              - if n.event == 'start-refund'
                 %a.item(href="#{ refund_goal_deposit_index_path(n.notifyable.goal) }" class="#{ 'unread' unless n.read }")
                   %i.fa.fa-usd
                   You have a deposit refundable.
                   %span.time
                     %i.fa.fa-clock-o
                     = distance_of_time_in_words_to_now(n.created_at)
-
+              - if n.event == 'new-follower'
+                %a.item(href="/people" class="#{ 'unread' unless n.read }")
+                  %i.fa.fa-user
+                  You have a new follower.
+                  %span.time
+                    %i.fa.fa-clock-o
+                    = distance_of_time_in_words_to_now(n.created_at)
             - if false
               .footer
                 %a.logout(href="#") View all notifications

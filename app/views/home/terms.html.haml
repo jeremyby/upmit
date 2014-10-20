@@ -1,0 +1,32 @@
+- @title = 'Terms of Use - Upmit.com'
+
+- @body_class = 'login'
+- @no_nav = 'true'
+  
+.background-image-overlay
+
+
+.login-wrapper.text-wrapper
+  = link_to (image_tag(asset_path('logo-lg.png'), class: 'logo')), root_path
+
+  .text
+    %h2 Upmit.com: Terms of Use
+    %p Before the formal, detailed, and legally binding lawyer version is ready, here is a human-readable summary of some key information about the use of our service:
+    %ol
+      %li The deposit you made up front is always your money. The whole amount will be available to refund and pay for the commitments you missed when the goal is completed.
+      %li You will not be liable to any cost occurs in the process of paying or refunding. Accordingly, there will also not be interests for the period we hold the money.
+      %li After making deposit for a goal, you have a grace period of 3 days to cancel the goal and get an unconditional full refund. After that, however, you can still cancel a goal by submit a request in #{ link_to 'our feedback forum', 'https://upmit.uservoice.com/', target: '_blank' }
+      %li You continue to own the copyrights of the content you submit to Upmit.com. That said, by posting your content on Upmit.com you give us multiple rights to use and change it.
+      %li
+        We value your privacy. Read more at our
+        %a(href='/privacy_policy') Privacy Policy
+      %li
+        If you have a question, concern or want to share your own experience with us, you can email us at
+        upcommit
+        %o.fa.fa-at
+        gmail.com
+      
+    %p
+      %a(href='/')
+        %i.fa.fa-chevron-left
+        home

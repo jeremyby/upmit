@@ -5,18 +5,19 @@
 .background-image-overlay
 
 
-.login-wrapper
+.login-wrapper.text-wrapper
   = link_to (image_tag(asset_path('logo-lg.png'), class: 'logo')), root_path
 
   .text
     %h2 About Upmit.com
+    %p At Upmit.com our mission is to push people to achieve challenging and important personal goals. We hope to do that by providing services like tracking progress and sending reminders, as well as offers strong motivation of the risk of losing your own money by failing your commitments.
     
     
     %h2#contact Contact Us
     
     %p
       If you are interested in reaching us, you can leave us a message by opening up the Uservoice Widget on the bottom right corner of screen after signing in.
-      Or leave suggestions and feedbacks on #{ link_to 'our portal', 'https://upmit.uservoice.com/'} there.
+      Or leave suggestions and feedbacks on #{ link_to 'our portal', 'https://upmit.uservoice.com/', target: '_blank' } there.
       
 
     %p
@@ -26,5 +27,6 @@
       gmail.com
       
     %p
-      return to:
-      %a(href='/') home
+      %a(href='/')
+        %i.fa.fa-chevron-left
+        home

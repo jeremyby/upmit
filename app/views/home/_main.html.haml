@@ -147,7 +147,7 @@
               - unless today.blank? || today.to_ary.select {|c| c.active?}.blank?
                 .yes Yes
                 
-                %span.fa-stack(data-hash-tag='##{ goal.hash_tag }')
+                %span.fa-stack(class='#{ current_user.checkin_with }' data-hash-tag='##{ goal.hash_tag }')
                   %i.fa.fa-check.fa-stack-1x
                   %i.fa.fa-circle-o.fa-stack-2x
 
@@ -166,7 +166,11 @@
                   The check-in feature is not available at the moment for Facebook users. It will be back alive after a review and authorizing process with Facebook. Please go to
                   %a.alert-link(href='#{ current_user.authorizations.find_by(provider: 'facebook').link }') your Facebook account
                   and check in by mentioning our page @upmit and matching hash tags.
-              .form-group= text_area_tag :content, '', rows: 3, class: 'form-control'
+                  
+                .hash_tags Today I did:
+                .form-group= text_area_tag :content, '', rows: 3, class: 'form-control', placeholder: 'Due to their policy, we can not fill in the content that will be published to Facebook on your behalf. Please manually copy the hash tags above here.'
+              - else
+                .form-group= text_area_tag :content, "Today I did:", rows: 3, class: 'form-control'
             .submit.col-md-2
               - if current_user.checkin_with == 'facebook'
                 = submit_tag 'Submit', class: 'btn-glow primary', data: { disable_with: 'Please wait...' }, disabled: "disabled"

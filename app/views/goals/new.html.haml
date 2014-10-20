@@ -108,22 +108,22 @@
                       %button.btn.btn-default#1y(data-value='#{ get_days(1.year) }') 1 year
             
             .actions.col-md-10.col-md-offset-2
+              %span.settings
+                %span.fields
+                  %span.starts.btn-group-sm(data-toggle="buttons")
+                    %label Starting&nbsp;
+                    %label.btn.btn-default.left(class='#{ "active" if @goal.starts != 1 }')>
+                      = f.radio_button :starts, 0
+                      %span Today
+                    %label.btn.btn-default.right(class='#{ "active" if @goal.starts == 1 }')
+                      = f.radio_button :starts, 1
+                      %span Tomorrow
+                  %span.privacy
+                    = f.label :privacy, 'Visibility'
+                    = f.select :privacy, Goal::Privacy.map {|p| [p[1], p[0]] }
+                    
               %button.btn-glow.primary(type='submit' name='commit' data-disable_with='Please wait...')
                 Create & Proceed to Deposit
                 %i.fa.fa-arrow-right
                 
                 
-            %p.help-block.settings
-              %span.title Default:
-              %span.fields
-                %span.starts.btn-group-sm(data-toggle="buttons")
-                  %label Starting&nbsp;
-                  %label.btn.btn-default.left(class='#{ "active" if @goal.starts != 1 }')>
-                    = f.radio_button :starts, 0
-                    %span Today
-                  %label.btn.btn-default.right(class='#{ "active" if @goal.starts == 1 }')
-                    = f.radio_button :starts, 1
-                    %span Tomorrow
-                %span.privacy
-                  = f.label :privacy, 'Visibility'
-                  = f.select :privacy, Goal::Privacy.map {|p| [p[1], p[0]] }

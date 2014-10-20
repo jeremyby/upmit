@@ -116,11 +116,6 @@ $(document).ready ->
     $('body').css('padding-right', '')
   
   
-  $('#lefter .copy').on('click', ->
-    $('#lefter .links').toggleClass('show')
-  )
-  
-  
   
   if $('.panel-content').length
     $('#sidebar-nav').hover(->
@@ -136,13 +131,15 @@ $(document).ready ->
     , 100)
   
   
-  $('.active-goal .check .fa-stack').click ->
-    $(this).toggleClass('active')
+  $(document).on('click', '.active-goal .check .twitter.fa-stack', ->
+    el = $(this)
+    
+    el.toggleClass('active')
     
     textarea = $('.checkin textarea')
   
-    if $(this).hasClass('active')
-      textarea.val(textarea.val() + ' ' + $(this).data('hash-tag'))
+    if el.hasClass('active')
+      textarea.val(textarea.val() + ' ' + el.data('hash-tag'))
       
       if $('.checkin').is(':hidden')
         $('.checkin').fadeIn()
@@ -152,14 +149,39 @@ $(document).ready ->
     
       text = textarea.val()
       
-      n =  text.search($(this).data('hash-tag'))
-      replace_string = if text[n-1] == ' ' then ' ' + $(this).data('hash-tag') else $(this).data('hash-tag')
+      n =  text.search(el.data('hash-tag'))
+      replace_string = if text[n-1] == ' ' then ' ' + el.data('hash-tag') else el.data('hash-tag')
 
       textarea.val(text.replace(replace_string, ''))
+  )
+  
+  
+  $(document).on('click', '.active-goal .check .facebook.fa-stack', ->
+    el = $(this)
+    
+    el.toggleClass('active')
+
+    hash_tags = $('.checkin .hash_tags')
+
+    if el.hasClass('active')
+      hash_tags.html(hash_tags.html() + ' ' + el.data('hash-tag'))
+
+      if $('.checkin').is(':hidden')
+        $('.checkin').fadeIn()
+    else
+      if !$('.active-goal .check .fa-stack').hasClass('active')
+        $('.checkin').fadeOut()
+
+      text = hash_tags.html()
+
+      n =  text.search(el.data('hash-tag'))
+      replace_string = if text[n-1] == ' ' then ' ' + el.data('hash-tag') else el.data('hash-tag')
+
+      hash_tags.html(text.replace(replace_string, ''))
+  )
   
   $('.checkin form').on('submit', ->
     NProgress.start()
-    
   )
 
   

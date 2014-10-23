@@ -162,10 +162,18 @@
                 Check In
             .fields.col-md-7
               - if current_user.checkin_with == 'facebook'
+                .alert.alert-warning
+                  The check-in feature is not available at the moment for Facebook users. It will be back alive after a review and authorizing process with Facebook. Please go to
+                  %a.alert-link(href='#{ current_user.authorizations.find_by(provider: 'facebook').link }') your Facebook account
+                  and check in by mentioning our page @upmit and matching hash tags.
+                  
                 .hash_tags Today I did:
                 .form-group= text_area_tag :content, '', rows: 3, class: 'form-control', placeholder: 'Due to their policy, we can not fill in the content that will be published to Facebook on your behalf. Please manually copy the hash tags above here.'
               - else
                 .form-group= text_area_tag :content, "Today I did:", rows: 3, class: 'form-control'
             .submit.col-md-2
-              = submit_tag 'Submit', class: 'btn-glow primary', data: { disable_with: 'Please wait...' }
+              - if current_user.checkin_with == 'facebook'
+                = submit_tag 'Submit', class: 'btn-glow primary', data: { disable_with: 'Please wait...' }, disabled: "disabled"
+              - else
+                = submit_tag 'Submit', class: 'btn-glow primary', data: { disable_with: 'Please wait...' }
             
